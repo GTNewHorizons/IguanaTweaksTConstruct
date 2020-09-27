@@ -1,12 +1,12 @@
-mininglevel.stone=Камень
-mininglevel.copper=Медь
-mininglevel.iron=Железо
-mininglevel.tin=Олово
-mininglevel.redstone=Красный камень
-mininglevel.obsidian=Обсидиан
-mininglevel.ardite=Ардит
-mininglevel.cobalt=Кобальт
-mininglevel.manyullyn=Мануллин
+mininglevel.stone=00-Камень
+mininglevel.copper=01-Медь
+mininglevel.iron=02-Железо
+mininglevel.tin=03-Олово
+mininglevel.redstone=04-Красный камень
+mininglevel.obsidian=05-Обсидиан
+mininglevel.ardite=06-Ардит
+mininglevel.cobalt=07-Кобальт
+mininglevel.manyullyn=08-Мануллин
 
 message.levelup.2=Вы начинаете чувствовать себя комфортно, держа %s
 message.levelup.3=Теперь Вы привыкли к весу %s
