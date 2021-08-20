@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -11,9 +12,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
+    @SubscribeEvent
+    public void EntityInteract(PlayerInteractEvent event) {
+        Block block = event.world.getBlock(event.x, event.y, event.z);
+        EntityPlayer player = event.entityPlayer;
+        ItemStack equipped = player.getCurrentEquippedItem();
+
+        if(block == null
+                || player == null
+                || equipped == null
+                || !(block instanceof BlockCauldron)
+                || equipped.getItem() != IguanaItems.clayBucketWater
+        ) {
+            return;
+        }
+
+        event.world.setBlockMetadataWithNotify(event.x, event.y, event.z, 3, 2);
+
+        if (equipped.stackSize-- == 1) {
+            player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketFired));
+        }
+    }
+
     // milking cows
     @SubscribeEvent
     public void EntityInteract(EntityInteractEvent event){
