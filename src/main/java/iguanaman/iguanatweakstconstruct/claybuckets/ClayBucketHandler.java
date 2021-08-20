@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -11,9 +12,49 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
+    @SubscribeEvent
+    public void onRightClickBlock(PlayerInteractEvent event) {
+        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+
+        Block block = event.world.getBlock(event.x, event.y, event.z);
+        if (!(block instanceof BlockCauldron))
+        {
+            return;
+        }
+
+        EntityPlayer player = event.entityPlayer;
+        if (player == null)
+        {
+            return;
+        }
+
+        ItemStack equipped = player.getCurrentEquippedItem();
+        if (equipped == null || equipped.getItem() != IguanaItems.clayBucketWater)
+        {
+            return;
+        }
+
+        // if cauldron is full
+        if (event.world.getBlockMetadata(event.x, event.y, event.z) == 3)
+        {
+            return;
+        }
+
+        if (!player.capabilities.isCreativeMode)
+        {
+            player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketFired));
+        }
+
+        // func_150024_a = setWaterLevel
+        ((BlockCauldron) block).func_150024_a(event.world, event.x, event.y, event.z, 3);
+    }
+
     // milking cows
     @SubscribeEvent
     public void EntityInteract(EntityInteractEvent event){
