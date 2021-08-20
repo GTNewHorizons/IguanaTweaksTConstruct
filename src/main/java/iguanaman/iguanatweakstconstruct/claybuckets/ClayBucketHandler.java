@@ -27,6 +27,7 @@ public class ClayBucketHandler {
                 || equipped == null
                 || !(block instanceof BlockCauldron)
                 || equipped.getItem() != IguanaItems.clayBucketWater
+                || event.world.getBlockMetadata(event.x, event.y, event.z) == 3
         ) {
             return;
         }
