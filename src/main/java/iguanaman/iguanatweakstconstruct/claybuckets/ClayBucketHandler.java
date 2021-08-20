@@ -17,26 +17,42 @@ import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
     @SubscribeEvent
-    public void EntityInteract(PlayerInteractEvent event) {
-        Block block = event.world.getBlock(event.x, event.y, event.z);
-        EntityPlayer player = event.entityPlayer;
-        ItemStack equipped = player.getCurrentEquippedItem();
-
-        if(block == null
-                || player == null
-                || equipped == null
-                || !(block instanceof BlockCauldron)
-                || equipped.getItem() != IguanaItems.clayBucketWater
-                || event.world.getBlockMetadata(event.x, event.y, event.z) == 3
-        ) {
+    public void onRightClickBlock(PlayerInteractEvent event) {
+        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
-        event.world.setBlockMetadataWithNotify(event.x, event.y, event.z, 3, 2);
+        Block block = event.world.getBlock(event.x, event.y, event.z);
+        if (!(block instanceof BlockCauldron))
+        {
+            return;
+        }
 
-        if (equipped.stackSize-- == 1) {
+        EntityPlayer player = event.entityPlayer;
+        if (player == null)
+        {
+            return;
+        }
+
+        ItemStack equipped = player.getCurrentEquippedItem();
+        if (equipped == null || equipped.getItem() != IguanaItems.clayBucketWater)
+        {
+            return;
+        }
+
+        // if cauldron is full
+        if (event.world.getBlockMetadata(event.x, event.y, event.z) == 3)
+        {
+            return;
+        }
+
+        if (!player.capabilities.isCreativeMode)
+        {
             player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketFired));
         }
+
+        // func_150024_a = setWaterLevel
+        ((BlockCauldron) block).func_150024_a(event.world, event.x, event.y, event.z, 3);
     }
 
     // milking cows
