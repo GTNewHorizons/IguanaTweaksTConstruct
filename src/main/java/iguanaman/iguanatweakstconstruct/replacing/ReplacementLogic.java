@@ -123,6 +123,7 @@ public final class ReplacementLogic {
 
         // update damage
         updateTag(newTags, tags, "Attack");
+        updateTag(newTags, tags, "BaseAttack");
 
         // update mining speed
         updateTag(newTags, tags, "MiningSpeed");

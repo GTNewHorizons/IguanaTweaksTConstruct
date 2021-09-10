@@ -10,6 +10,7 @@ import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.crafting.ToolRecipe;
 import tconstruct.library.modifier.ItemModifier;
+import tconstruct.library.tools.DualMaterialToolPart;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.library.util.IToolPart;
 import tconstruct.tools.TinkerTools;
@@ -45,7 +46,7 @@ public class ModPartReplacement extends ItemModifier {
             return false;
 
         // check if any of the tools parts contain stone. we have to prevent exchanging that with disabled stone tools
-        // because otherwise the replacement-logic would not be able to obtain neccessary information and crash.
+        // because otherwise the replacement-logic would not be able to obtain necessary information and crash.
         if(Config.disableStoneTools)
         {
             if(tool.getHeadItem() != null && getToolPartMaterial(tags, HEAD) == 1)
@@ -134,6 +135,7 @@ public class ModPartReplacement extends ItemModifier {
                 return false;
 
         // do we have enough modifiers left if we exchange this part?
+        // This probably doesn't work right for bolts (which replace two parts at a time).
         if(hasExtraModifier(oldMatId)) // paper or thaumium. sadly hardcoded.
             modifiers--;
         if(hasExtraModifier(newMatId))
@@ -142,8 +144,18 @@ public class ModPartReplacement extends ItemModifier {
             return false;
 
         // is it the same material as the one we want to replace?
-        if(newMatId == oldMatId)
+        if (newMatId == oldMatId) {
+            // Special case for bolts, which have two materials.
+            if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
+                int newHeadMatId =
+                        ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
+                int oldHeadMatId = getToolPartMaterial(tags, HEAD);
+
+                return newHeadMatId != oldHeadMatId;
+            }
+
             return false;
+        }
 
         return true;
     }
