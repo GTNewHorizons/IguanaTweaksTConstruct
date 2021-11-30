@@ -36,7 +36,7 @@ import mantle.pulsar.pulse.PulseMeta;
 import java.io.File;
 import java.util.Random;
 
-@Mod(modid= Reference.MOD_ID, name= Reference.MOD_NAME, version="${version}",
+@Mod(modid= Reference.MOD_ID, name= Reference.MOD_NAME, version="GRADLETOKEN_VERSION",
 dependencies = "required-after:" + Reference.TCON_MOD_ID + "@[1.7.10-1.8.3,);after:ForgeMultipart@[1.1.1.321,);after:*")
 public class IguanaTweaksTConstruct {
 
