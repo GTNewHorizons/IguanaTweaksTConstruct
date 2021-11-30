@@ -1,0 +1,13 @@
+// Add your dependencies here
+
+dependencies {
+    compile("com.github.GTNewHorizons:TinkersConstruct:master-SNAPSHOT:dev")
+
+    compileOnly("com.github.GTNewHorizons:Battlegear2:master-SNAPSHOT:dev") {
+        transitive = false
+    }
+
+    compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev") {
+        transitive = false
+    }
+}
