@@ -4,6 +4,7 @@ import codechicken.microblock.ItemSaw;
 import codechicken.microblock.Saw;
 import codechicken.microblock.handler.MicroblockProxy;
 import codechicken.multipart.handler.MultipartProxy;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -92,12 +93,14 @@ public class IguanaFMPCompat {
         manyullynSaw = createSaw(TConstructRegistry.getMaterial("Manyullyn"));
 
         // and add recipes for them
-        String[] recipe = { "srr", "sbr"};
+        if (!Loader.isModLoaded("dreamcraft")) {
+            String[] recipe = {"srr", "sbr"};
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(arditeSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 11)));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cobaltSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 10)));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(manyullynSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 12)));
-
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(arditeSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 11)));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cobaltSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 10)));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(manyullynSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 12)));
+        }
+        
         proxy.updateSawRenderers();
     }
 }
