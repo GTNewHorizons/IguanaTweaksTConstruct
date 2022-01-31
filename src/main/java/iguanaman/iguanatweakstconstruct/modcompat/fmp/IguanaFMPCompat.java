@@ -93,14 +93,35 @@ public class IguanaFMPCompat {
         manyullynSaw = createSaw(TConstructRegistry.getMaterial("Manyullyn"));
 
         // and add recipes for them
+        String[] recipe = {"srr", "sbr"};
         if (!Loader.isModLoaded("dreamcraft")) {
-            String[] recipe = {"srr", "sbr"};
-
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(arditeSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 11)));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cobaltSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 10)));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(manyullynSaw), recipe, 's', Items.stick, 'r', "rodStone", 'b', new ItemStack(TinkerTools.toolRod, 1, 12)));
+        }else{
+            GameRegistry.addRecipe(new ShapedOreRecipe(
+                    new ItemStack(arditeSaw),
+                    recipe,
+                    's', "stickWood",
+                    'r', "stickSteel",
+                    'b', "toolHeadSawArdite"));
+
+            GameRegistry.addRecipe(new ShapedOreRecipe(
+                    new ItemStack(cobaltSaw),
+                    recipe,
+                    's', "stickWood",
+                    'r', "stickSteel",
+                    'b', "toolHeadSawCobalt"));
+
+            GameRegistry.addRecipe(new ShapedOreRecipe(
+                    new ItemStack(manyullynSaw),
+                    recipe,
+                    's', "stickWood",
+                    'r', "stickSteel",
+                    'b', "toolHeadSawManyullyn"));
         }
-        
+
+
         proxy.updateSawRenderers();
     }
 }
