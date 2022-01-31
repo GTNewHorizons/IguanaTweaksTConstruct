@@ -1,5 +1,6 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -82,7 +83,9 @@ public class IguanaItems {
         }
 
         // add recipes
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(clayBucketUnfired), "c c", " c ", 'c', new ItemStack(Items.clay_ball)));
+        if (!Loader.isModLoaded("dreamcraft")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(clayBucketUnfired), "c c", " c ", 'c', new ItemStack(Items.clay_ball)));
+        }
         GameRegistry.addSmelting(clayBucketUnfired, new ItemStack(clayBucketFired), 0.0F);
 
         Log.debug("Added Items");
