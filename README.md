@@ -12,3 +12,7 @@ Everything is highly work in Progress.
 * Squeek502 for [TiC Tooltips](https://github.com/squeek502/TiC-Tooltips) which allowed me to do Tooltips properly
 * iguana_man for creating the original Iguana Tweaks for Tinkers Construct
 * MoxieGrrl for lots of testing and being a darling.
+
+## License
+
+This code is licensed CC AT-SA-4.0

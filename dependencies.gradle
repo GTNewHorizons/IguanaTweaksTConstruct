@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:TinkersConstruct:master-SNAPSHOT:dev")
+    compile("com.github.GTNewHorizons:TinkersConstruct:1.9.0.12-GTNH:dev")
 
     compileOnly("com.github.GTNewHorizons:Battlegear2:master-SNAPSHOT:dev") {
         transitive = false
@@ -10,4 +10,5 @@ dependencies {
     compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev") {
         transitive = false
     }
+    compileOnly("curse.maven:cofh-core-69162:2388751")
 }
