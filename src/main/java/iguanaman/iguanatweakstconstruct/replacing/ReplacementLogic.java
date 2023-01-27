@@ -236,12 +236,10 @@ public final class ReplacementLogic {
         }
 
         // handle boost leveling/xp
-        if(LevelingLogic.hasBoostXp(newTags) && Config.levelingPickaxeBoost)
+        if(LevelingLogic.hasBoostXp(tags) && Config.levelingPickaxeBoost)
         {
             float newRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
             float xp = LevelingLogic.getBoostXp(tags);
-
-            float percentage = xp / oldRequiredBoostXp;
 
             // apply transition
             xp *= newRequiredBoostXp / (float) oldRequiredBoostXp;
@@ -265,7 +263,11 @@ public final class ReplacementLogic {
         }
         // add boost xp if its missing. Additional checks are done in the function
         else if(IguanaTweaksTConstruct.pulsar.isPulseLoaded(Reference.PULSE_LEVELING)) {
-            LevelingLogic.addBoostTags(tags, tool);
+            // addBoostTags can reduce the harvest level by 1, which is incorrect here.
+            // So we need to undo that, if it happens.
+            int harvestLevel = tags.getInteger("HarvestLevel");
+            LevelingLogic.addBoostTags(tags, (ToolCore) newTool.getItem());
+            tags.setInteger("HarvestLevel", harvestLevel);
         }
 
         // Update the tool name if we replaced the head and it was a automagic name
