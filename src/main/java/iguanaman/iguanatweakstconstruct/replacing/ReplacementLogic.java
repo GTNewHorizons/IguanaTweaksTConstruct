@@ -245,31 +245,11 @@ public final class ReplacementLogic {
             if (LevelingLogic.isBoosted(tags)) tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + 1);
         }
         // The original tool did not have mining XP boost. Check if the new part should have it.
-        else if (type == HEAD && IguanaTweaksTConstruct.pulsar.isPulseLoaded(Reference.PULSE_LEVELING)) {
-            // The logic here is a bit complex, so here's a long explanation of what's going on.
-            // Normally, when crafting a new tool, the mining XP boost tag is added by
-            // LevelingLogic.addBoostTags.
-            // That method is responsible for both adding the mining XP boost tag, as well as
-            // decreasing the starting harvest level by 1.
-            //
-            // However, for whatever reason, when we get here, newTags has had its harvest level
-            // decreased by 1 already, but the mining XP boost tag has NOT been applied.
-            // So, in order to check if we should have the mining XP boost tag, we need to call
-            // LevelingLogic.addBoostTags, but with the original harvest level prior to decrement.
-            // We have to manually fetch it straight from the registry. We cannot simply increment
-            // newTags's harvest level by 1, because we cannot tell apart the case where the initial
-            // harvest level was 0 and thus never decremented, and the case where the initial
-            // harvest level was 1 and was decremented to 0.
-            //
-            // We also need to preserve the harvest level present in tags, and restore it after, to
-            // avoid clobbering any harvest level bonuses that the tool may have. Though, I don't
-            // believe that it is currently possible to increase the harvest level on a pickaxe or
-            // hammer with no mining XP boost tag.
-            int harvestLevel = tags.getInteger("HarvestLevel");
-            int baseHarvestLevel = TConstructRegistry.getMaterial(getToolPartMaterial(newTags, HEAD)).harvestLevel;
-            tags.setInteger("HarvestLevel", baseHarvestLevel);
-            LevelingLogic.addBoostTags(tags, (ToolCore) newTool.getItem());
-            tags.setInteger("HarvestLevel", harvestLevel);
+        else if (IguanaTweaksTConstruct.pulsar.isPulseLoaded(Reference.PULSE_LEVELING)) {
+            if (LevelingLogic.hasBoostXp(newTags)) {
+                tags.setInteger(LevelingLogic.TAG_BOOST_EXP, newTags.getInteger(LevelingLogic.TAG_BOOST_EXP));
+                tags.setBoolean(LevelingLogic.TAG_IS_BOOSTED, newTags.getBoolean(LevelingLogic.TAG_IS_BOOSTED));
+            }
         }
 
         // Update the tool name if we replaced the head and it was a automagic name
