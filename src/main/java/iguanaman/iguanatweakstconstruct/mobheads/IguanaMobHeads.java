@@ -31,16 +31,16 @@ public class IguanaMobHeads {
     public static Block skullBlock;
     public static Item wearables; // secret thing
 
-    @SidedProxy(clientSide = "iguanaman.iguanatweakstconstruct.mobheads.proxy.MobHeadClientProxy", serverSide = "iguanaman.iguanatweakstconstruct.mobheads.proxy.MobHeadCommonProxy")
+    @SidedProxy(
+            clientSide = "iguanaman.iguanatweakstconstruct.mobheads.proxy.MobHeadClientProxy",
+            serverSide = "iguanaman.iguanatweakstconstruct.mobheads.proxy.MobHeadCommonProxy")
     public static MobHeadCommonProxy proxy;
 
     @Handler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         proxy.initialize();
 
-        if(ModSupportHelper.ThermalFoundation)
-            integrateThermalExpansion();
+        if (ModSupportHelper.ThermalFoundation) integrateThermalExpansion();
 
         skullItem = new IguanaSkull();
         GameRegistry.registerItem(skullItem, "skullItem");
@@ -55,19 +55,21 @@ public class IguanaMobHeads {
     }
 
     @Handler
-    public void postInit(FMLPostInitializationEvent event)
-    {
+    public void postInit(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new MobHeadHandler());
 
         proxy.postInit();
 
         // :>
-        ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH, new WeightedRandomChestContent(new ItemStack(wearables, 1, 0), 0, 1, 1));
-        ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_LIBRARY, new WeightedRandomChestContent(new ItemStack(wearables, 1, 3), 0, 1, 1));
+        ChestGenHooks.addItem(
+                ChestGenHooks.VILLAGE_BLACKSMITH,
+                new WeightedRandomChestContent(new ItemStack(wearables, 1, 0), 0, 1, 1));
+        ChestGenHooks.addItem(
+                ChestGenHooks.STRONGHOLD_LIBRARY,
+                new WeightedRandomChestContent(new ItemStack(wearables, 1, 3), 0, 1, 1));
     }
 
-    private void integrateThermalExpansion()
-    {
+    private void integrateThermalExpansion() {
         Log.debug("Adding Blizz head");
         IguanaSkull.addHead(3, "blizz", "skull_blizz");
     }

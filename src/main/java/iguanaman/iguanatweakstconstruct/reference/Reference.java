@@ -1,7 +1,6 @@
 package iguanaman.iguanatweakstconstruct.reference;
 
 import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
-
 import java.io.File;
 
 public class Reference {
@@ -26,11 +25,15 @@ public class Reference {
     public static final String PROXY_CLIENT_CLASS = "iguanaman.iguanatweakstconstruct.proxy.ClientProxy";
     public static final String PROXY_SERVER_CLASS = "iguanaman.iguanatweakstconstruct.proxy.ServerProxy";
 
-    public static String resource(String res)
-    {
+    public static String resource(String res) {
         return String.format("%s:%s", RESOURCE, res);
     }
-    public static String prefix(String name) { return String.format("iguana.tcon.%s", name);}
 
-    public static File configFile(String fileName) { return new File(IguanaTweaksTConstruct.configPath, fileName); }
+    public static String prefix(String name) {
+        return String.format("iguana.tcon.%s", name);
+    }
+
+    public static File configFile(String fileName) {
+        return new File(IguanaTweaksTConstruct.configPath, fileName);
+    }
 }

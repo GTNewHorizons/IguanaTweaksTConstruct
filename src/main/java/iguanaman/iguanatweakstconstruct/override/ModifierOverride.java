@@ -3,12 +3,11 @@ package iguanaman.iguanatweakstconstruct.override;
 import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.Log;
+import java.util.Map;
+import java.util.Set;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import java.util.Map;
-import java.util.Set;
 
 public class ModifierOverride implements IOverride {
 
@@ -16,10 +15,13 @@ public class ModifierOverride implements IOverride {
     public void createDefault(Configuration config) {
         Log.debug("Creating Modifier Default File");
 
-        config.get("UsageBonus", "bonusWeight", RandomBonuses.usageBonusWeight, "The average amount of weight added if a tool does one action for a whole levelup.");
+        config.get(
+                "UsageBonus",
+                "bonusWeight",
+                RandomBonuses.usageBonusWeight,
+                "The average amount of weight added if a tool does one action for a whole levelup.");
 
-
-        for(RandomBonuses.Modifier mod : RandomBonuses.Modifier.values()) {
+        for (RandomBonuses.Modifier mod : RandomBonuses.Modifier.values()) {
             // tool modifiers
             config.get("ToolWeights", mod.toString(), RandomBonuses.toolWeights.get(mod));
             // weapon modifiers
@@ -43,17 +45,27 @@ public class ModifierOverride implements IOverride {
 
         StringBuilder comment = new StringBuilder();
         comment.append("Tools, Weapons and Bows use separate data to determine which modifier should be rewarded.\n");
-        comment.append("The weights work like this: All weights are summed up to a total. then a random number in between is picked, and depending on where the number is, that modifier is picked.\n");
+        comment.append(
+                "The weights work like this: All weights are summed up to a total. then a random number in between is picked, and depending on where the number is, that modifier is picked.\n");
         comment.append("So basically: Modifier A has a weight of 5, Modifier B has a weight of 20. Sum is 25.\n");
-        comment.append("  -> Modifier A is B times more likely than modifier A, since a number between 0 and 25 has 5/25 chance to be modifier A, but 20/25 chance to be modifier B.\n");
-        comment.append("Additionally a bonus is added to the different weights depending on the tool usage. How big that bonus is, is defined by the usageWeight.");
+        comment.append(
+                "  -> Modifier A is B times more likely than modifier A, since a number between 0 and 25 has 5/25 chance to be modifier A, but 20/25 chance to be modifier B.\n");
+        comment.append(
+                "Additionally a bonus is added to the different weights depending on the tool usage. How big that bonus is, is defined by the usageWeight.");
 
         config.setCategoryComment(" Info", comment.toString());
 
-        config.setCategoryComment("UsageBonus", "Tools gain a bonus for specific modifiers on doing specific things.\nThe value below determines how much weight is added (on average) to a modifier if only that action is done for the whole level.\nAn example: Mining blocks increases the chance to obtain the redstone modifier. If you'd only mine stone blocks from 0xp to levelup, the weigth of the redstone modifier woudl be increased by that amount. (That's why it's relatively low by default)");
+        config.setCategoryComment(
+                "UsageBonus",
+                "Tools gain a bonus for specific modifiers on doing specific things.\nThe value below determines how much weight is added (on average) to a modifier if only that action is done for the whole level.\nAn example: Mining blocks increases the chance to obtain the redstone modifier. If you'd only mine stone blocks from 0xp to levelup, the weigth of the redstone modifier woudl be increased by that amount. (That's why it's relatively low by default)");
 
-        RandomBonuses.usageBonusWeight = config.get("UsageBonus", "bonusWeight", RandomBonuses.usageBonusWeight, "The average amount of weight added if a tool does one action for a whole levelup.").getInt();
-        if(Config.logOverrideChanges)
+        RandomBonuses.usageBonusWeight = config.get(
+                        "UsageBonus",
+                        "bonusWeight",
+                        RandomBonuses.usageBonusWeight,
+                        "The average amount of weight added if a tool does one action for a whole levelup.")
+                .getInt();
+        if (Config.logOverrideChanges)
             Log.info(String.format("Bonus Modifier Override: Set bonus weight to %d", RandomBonuses.usageBonusWeight));
 
         // tool weights
@@ -63,7 +75,7 @@ public class ModifierOverride implements IOverride {
         doWeightUpdate(config, "AmmoWeights", RandomBonuses.ammoWeights);
 
         // useful bonuses
-        for(RandomBonuses.Modifier mod : RandomBonuses.Modifier.values()) {
+        for (RandomBonuses.Modifier mod : RandomBonuses.Modifier.values()) {
             doUsefulnessUpdate(config, "UsefulToolBonuses", mod, RandomBonuses.usefulToolModifiers);
             doUsefulnessUpdate(config, "UsefulWeaponBonuses", mod, RandomBonuses.usefulWeaponModifiers);
             doUsefulnessUpdate(config, "UsefulBowBonuses", mod, RandomBonuses.usefulBowModifiers);
@@ -71,38 +83,38 @@ public class ModifierOverride implements IOverride {
         }
     }
 
-    private void doWeightUpdate(Configuration config, String categoryName, Map<RandomBonuses.Modifier, Integer> map)
-    {
+    private void doWeightUpdate(Configuration config, String categoryName, Map<RandomBonuses.Modifier, Integer> map) {
         ConfigCategory cat = config.getCategory(categoryName);
-        for(Property prop : cat.values())
-        {
+        for (Property prop : cat.values()) {
             try {
                 RandomBonuses.Modifier mod = RandomBonuses.Modifier.getEnumByString(prop.getName());
                 int weight = Math.max(0, prop.getInt());
                 map.put(mod, weight);
 
-                if(Config.logOverrideChanges)
-                    Log.info(String.format("Bonus Modifier Override: [%s] Changed Weight of %s to %d", categoryName, mod.toString(), prop.getInt()));
-            } catch(IllegalArgumentException e)
-            {
+                if (Config.logOverrideChanges)
+                    Log.info(String.format(
+                            "Bonus Modifier Override: [%s] Changed Weight of %s to %d",
+                            categoryName, mod.toString(), prop.getInt()));
+            } catch (IllegalArgumentException e) {
                 Log.error(String.format("Found invalid entry when parsing %s: %s", categoryName, prop.getName()));
             }
         }
     }
 
-    private void doUsefulnessUpdate(Configuration config, String category, RandomBonuses.Modifier mod, Set<RandomBonuses.Modifier> set)
-    {
+    private void doUsefulnessUpdate(
+            Configuration config, String category, RandomBonuses.Modifier mod, Set<RandomBonuses.Modifier> set) {
         boolean useful = config.get(category, mod.toString(), set.contains(mod)).getBoolean();
-        if(useful) {
+        if (useful) {
             set.add(mod);
-            if(Config.logOverrideChanges)
-                Log.info(String.format("Bonus Modifier Override: [%s] Added useful modifier %s", category, mod.toString()));
-        }
-        else {
+            if (Config.logOverrideChanges)
+                Log.info(String.format(
+                        "Bonus Modifier Override: [%s] Added useful modifier %s", category, mod.toString()));
+        } else {
             set.remove(mod);
-            if(Config.logOverrideChanges)
-                Log.info(String.format("Bonus Modifier Override: [%s] Removed modifier %s from useful modifiers", category, mod.toString()));
+            if (Config.logOverrideChanges)
+                Log.info(String.format(
+                        "Bonus Modifier Override: [%s] Removed modifier %s from useful modifiers",
+                        category, mod.toString()));
         }
     }
-
 }

@@ -17,12 +17,14 @@ import tconstruct.util.IMCHandler;
  * - Harvest Levels of all oredict Entries
  * - Harvest Levels of all blocks (overrides oredict)
  */
-@Pulse(id = Reference.PULSE_OVERRIDE, description = "This module allows to override about any values relevant for TConstruct or IguanaTinkerTweaks.", defaultEnable = false)
+@Pulse(
+        id = Reference.PULSE_OVERRIDE,
+        description = "This module allows to override about any values relevant for TConstruct or IguanaTinkerTweaks.",
+        defaultEnable = false)
 public class IguanaOverride {
 
     @Handler
-    public void postInit(FMLPostInitializationEvent event)
-    {
+    public void postInit(FMLPostInitializationEvent event) {
         new ForgeHooks();
         doOverride("Material", new MaterialOverride());
         doOverride("Tool", new ToolOverride());
@@ -33,8 +35,7 @@ public class IguanaOverride {
         MinecraftForge.EVENT_BUS.register(new ExtraHarvestLevelHandler());
     }
 
-    public static void doOverride(String type, IOverride overrider)
-    {
+    public static void doOverride(String type, IOverride overrider) {
         String configFileName = type + "Override.cfg";
         String defaultFileName = type + "Defaults.cfg";
 
@@ -42,7 +43,7 @@ public class IguanaOverride {
             Configuration defaultConfig = new Configuration(Reference.configFile(defaultFileName));
             overrider.createDefault(defaultConfig);
             defaultConfig.save();
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             IMCHandler.bigWarning("An Error occurred while creating default files for the %s Override", type);
             Log.error(e);
         }
@@ -52,9 +53,8 @@ public class IguanaOverride {
             config.load();
             overrider.processConfig(config);
 
-            if(config.hasChanged())
-                config.save();
-        } catch(RuntimeException e) {
+            if (config.hasChanged()) config.save();
+        } catch (RuntimeException e) {
             IMCHandler.bigWarning("An Error occurred while processing the Override for %s", type);
             Log.error(e);
         }

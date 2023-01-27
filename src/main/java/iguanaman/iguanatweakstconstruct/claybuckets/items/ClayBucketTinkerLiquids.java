@@ -25,8 +25,7 @@ public class ClayBucketTinkerLiquids extends FilledBucket {
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
         ItemStack result = super.onItemRightClick(itemStack, world, player);
 
-        if(result.getItem() == Items.bucket)
-        {
+        if (result.getItem() == Items.bucket) {
             itemStack.stackSize--;
             return itemStack;
         }
@@ -35,19 +34,16 @@ public class ClayBucketTinkerLiquids extends FilledBucket {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons (IIconRegister iconRegister)
-    {
+    public void registerIcons(IIconRegister iconRegister) {
         this.icons = new IIcon[textureNames.length];
 
-        for (int i = 0; i < this.icons.length; ++i)
-        {
+        for (int i = 0; i < this.icons.length; ++i) {
             this.icons[i] = iconRegister.registerIcon(Reference.resource("clayBucket_" + textureNames[i]));
         }
     }
 
     @Override
-    public String getUnlocalizedName (ItemStack stack)
-    {
+    public String getUnlocalizedName(ItemStack stack) {
         int arr = MathHelper.clamp_int(stack.getItemDamage(), 0, materialNames.length);
         return getUnlocalizedName() + "." + materialNames[arr];
     }

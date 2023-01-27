@@ -7,8 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
 @SideOnly(Side.CLIENT)
 public class ModelBucketHelmet extends ModelEnderManHead {
 
-    public ModelBucketHelmet()
-    {
+    public ModelBucketHelmet() {
         this.textureWidth = 64;
         this.textureHeight = 32;
         this.endermanHead = new ModelRenderer(this, 0, 0);

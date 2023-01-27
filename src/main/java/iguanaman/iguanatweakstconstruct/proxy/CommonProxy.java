@@ -1,9 +1,8 @@
 package iguanaman.iguanatweakstconstruct.proxy;
 
-public class CommonProxy
-{
+public class CommonProxy {
 
-	public void registerRenderers() {}
+    public void registerRenderers() {}
 
-	public void registerSounds() {}
+    public void registerSounds() {}
 }

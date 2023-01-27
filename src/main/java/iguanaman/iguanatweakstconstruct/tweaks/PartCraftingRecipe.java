@@ -12,7 +12,8 @@ import tconstruct.library.util.IPattern;
 public class PartCraftingRecipe implements IRecipe {
     static {
         // register the recipe with the recipesorter
-        RecipeSorter.register(Reference.MOD_ID + ":part", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
+        RecipeSorter.register(
+                Reference.MOD_ID + ":part", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
     private ItemStack outputPart;
@@ -23,43 +24,35 @@ public class PartCraftingRecipe implements IRecipe {
         ItemStack pattern = null;
         ItemStack input = null;
 
-        for(int i = 0; i < inventoryCrafting.getSizeInventory(); i++)
-        {
+        for (int i = 0; i < inventoryCrafting.getSizeInventory(); i++) {
             ItemStack slot = inventoryCrafting.getStackInSlot(i);
             // empty slot
-            if(slot == null)
-                continue;
+            if (slot == null) continue;
 
             // is it the tool?
-            if(slot.getItem() instanceof IPattern) {
+            if (slot.getItem() instanceof IPattern) {
                 // only one pattern
-                if(pattern != null)
-                    return false;
+                if (pattern != null) return false;
 
                 pattern = slot;
                 // otherwise.. input material
-            }
-            else {
-                if(input != null)
-                    return false;
+            } else {
+                if (input != null) return false;
 
                 input = slot;
             }
         }
 
-        if(pattern == null || input == null)
-            return false;
+        if (pattern == null || input == null) return false;
 
         // make sure it's a valid pattern
-        if(!PatternBuilder.instance.toolPatterns.contains(pattern.getItem()))
-            return false;
+        if (!PatternBuilder.instance.toolPatterns.contains(pattern.getItem())) return false;
 
         ItemStack[] output = PatternBuilder.instance.getToolPart(input, pattern, null);
-        if(output == null)
-            return false;
+        if (output == null) return false;
 
-        for(ItemStack stack : output)
-            if(stack != null) {
+        for (ItemStack stack : output)
+            if (stack != null) {
                 outputPart = stack;
                 return true;
             }

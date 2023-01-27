@@ -4,6 +4,5 @@ import net.minecraft.tileentity.TileEntitySkull;
 
 public class IguanaSkullTileEntity extends TileEntitySkull {
 
-	public IguanaSkullTileEntity() {}
-
+    public IguanaSkullTileEntity() {}
 }

@@ -12,78 +12,74 @@ import net.minecraft.util.StatCollector;
 
 public class CommandIAmADirtyCheater extends CommandBase {
 
-  @Override
-  public String getCommandName() {
-    return "imadirtycheater";
-  }
-
-  @Override
-  public String getCommandUsage(ICommandSender p_71518_1_) {
-    if(isCheater(p_71518_1_)) {
-      return "I heard you like chicken";
+    @Override
+    public String getCommandName() {
+        return "imadirtycheater";
     }
-    else {
-      return "Why are you saying that you're a dirty cheater?";
+
+    @Override
+    public String getCommandUsage(ICommandSender p_71518_1_) {
+        if (isCheater(p_71518_1_)) {
+            return "I heard you like chicken";
+        } else {
+            return "Why are you saying that you're a dirty cheater?";
+        }
     }
-  }
 
-  @Override
-  public int getRequiredPermissionLevel() {
-    return 0;
-  }
-
-  @Override
-  public void processCommand(ICommandSender sender, String[] args) {
-    if(!isCheater(sender)) {
-      sender.addChatMessage(new ChatComponentText(EnumChatFormatting.ITALIC + "You don't look like a cheater to me"));
-    } else {
-      String cmd = getCommandName();
-      String arg = StatCollector.translateToLocal("message.apology");
-
-      StringBuilder sb = new StringBuilder();
-      for(String s : args) {
-        sb.append(s);
-        sb.append(" ");
-      }
-
-      if(arg.toLowerCase().trim().equals(sb.toString().toLowerCase().trim())) {
-        sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("message.apologyaccepted")));
-        convertTool(sender, getCurrentItem(sender));
-      } else {
-        sender.addChatMessage(
-            new ChatComponentText(EnumChatFormatting.ITALIC + "If you're really sorry, type:"));
-        sender.addChatMessage(new ChatComponentText("/" + cmd + " " + arg));
-      }
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
     }
-  }
 
-  public ItemStack getCurrentItem(ICommandSender sender) {
-    EntityPlayerMP player = getCommandSenderAsPlayer(sender);
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
+        if (!isCheater(sender)) {
+            sender.addChatMessage(
+                    new ChatComponentText(EnumChatFormatting.ITALIC + "You don't look like a cheater to me"));
+        } else {
+            String cmd = getCommandName();
+            String arg = StatCollector.translateToLocal("message.apology");
 
-    return player.getCurrentEquippedItem();
-  }
+            StringBuilder sb = new StringBuilder();
+            for (String s : args) {
+                sb.append(s);
+                sb.append(" ");
+            }
 
-  public boolean isCheater(ICommandSender sender) {
-    ItemStack stack = getCurrentItem(sender);
-    return stack != null && stack.getItem() == IguanaToolLeveling.rubberChicken;
-  }
+            if (arg.toLowerCase().trim().equals(sb.toString().toLowerCase().trim())) {
+                sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("message.apologyaccepted")));
+                convertTool(sender, getCurrentItem(sender));
+            } else {
+                sender.addChatMessage(
+                        new ChatComponentText(EnumChatFormatting.ITALIC + "If you're really sorry, type:"));
+                sender.addChatMessage(new ChatComponentText("/" + cmd + " " + arg));
+            }
+        }
+    }
 
-  private void convertTool(ICommandSender sender, ItemStack stack) {
-    if(stack.getItem() != IguanaToolLeveling.rubberChicken)
-      return;
+    public ItemStack getCurrentItem(ICommandSender sender) {
+        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
 
-    if(!stack.hasTagCompound() || !stack.getTagCompound().getCompoundTag("InfiTool").hasKey("Original"))
-      return;
+        return player.getCurrentEquippedItem();
+    }
 
+    public boolean isCheater(ICommandSender sender) {
+        ItemStack stack = getCurrentItem(sender);
+        return stack != null && stack.getItem() == IguanaToolLeveling.rubberChicken;
+    }
 
+    private void convertTool(ICommandSender sender, ItemStack stack) {
+        if (stack.getItem() != IguanaToolLeveling.rubberChicken) return;
 
-    String unloc = stack.getTagCompound().getCompoundTag("InfiTool").getString("Original");
-    Item.itemRegistry.containsKey(unloc);
-    Item item = getItemByText(sender, unloc);
-    if(item == null)
-      return;
+        if (!stack.hasTagCompound()
+                || !stack.getTagCompound().getCompoundTag("InfiTool").hasKey("Original")) return;
 
-    stack.func_150996_a(item);
-    stack.getTagCompound().getCompoundTag("InfiTool").setInteger("CheatyXP", 0);
-  }
+        String unloc = stack.getTagCompound().getCompoundTag("InfiTool").getString("Original");
+        Item.itemRegistry.containsKey(unloc);
+        Item item = getItemByText(sender, unloc);
+        if (item == null) return;
+
+        stack.func_150996_a(item);
+        stack.getTagCompound().getCompoundTag("InfiTool").setInteger("CheatyXP", 0);
+    }
 }

@@ -1,10 +1,9 @@
 package iguanaman.iguanatweakstconstruct;
 
+import java.io.File;
 import mantle.pulsar.config.IConfiguration;
 import mantle.pulsar.pulse.PulseMeta;
 import net.minecraftforge.common.config.Configuration;
-
-import java.io.File;
 
 /** Reimplementation of mantle.pulsar.config because static config */
 public class PulsarCFG implements IConfiguration {
@@ -20,7 +19,7 @@ public class PulsarCFG implements IConfiguration {
      * @param confFile The config file
      * @param description The description for the group that the config entries will be placed in.
      */
-    public PulsarCFG (File confFile, String description) {
+    public PulsarCFG(File confFile, String description) {
         this.confFile = confFile;
         this.description = description;
     }
@@ -33,12 +32,12 @@ public class PulsarCFG implements IConfiguration {
 
     @Override
     public boolean isModuleEnabled(PulseMeta meta) {
-        return config.get(description, meta.getId(), meta.isEnabled(), meta.getDescription()).getBoolean(meta.isEnabled());
+        return config.get(description, meta.getId(), meta.isEnabled(), meta.getDescription())
+                .getBoolean(meta.isEnabled());
     }
 
     @Override
     public void flush() {
-        if(config.hasChanged())
-            config.save();
+        if (config.hasChanged()) config.save();
     }
 }

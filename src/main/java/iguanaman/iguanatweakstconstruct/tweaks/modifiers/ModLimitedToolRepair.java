@@ -10,11 +10,8 @@ public class ModLimitedToolRepair extends ModToolRepair {
     protected boolean canModify(ItemStack tool, ItemStack[] input) {
         NBTTagCompound tags = tool.getTagCompound().getCompoundTag("InfiTool");
         int repairCount = tags.getInteger("RepairCount");
-        if(repairCount >= Config.maxToolRepairs)
-            return false;
+        if (repairCount >= Config.maxToolRepairs) return false;
 
         return super.canModify(tool, input);
     }
-
-
 }

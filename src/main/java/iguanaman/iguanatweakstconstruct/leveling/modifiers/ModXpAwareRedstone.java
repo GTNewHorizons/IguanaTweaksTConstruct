@@ -1,11 +1,10 @@
 package iguanaman.iguanatweakstconstruct.leveling.modifiers;
 
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import tconstruct.modifiers.tools.ModRedstone;
-
-import java.util.List;
 
 /**
  * The same as the redstone modifier, but translates current XP on modifying.
@@ -29,7 +28,7 @@ public class ModXpAwareRedstone extends ModRedstone {
         super.modify(input, tool);
 
         // update regular xp
-        if(LevelingLogic.hasXp(tags)) {
+        if (LevelingLogic.hasXp(tags)) {
             long newXP = LevelingLogic.getRequiredXp(tool, tags);
             float xp = LevelingLogic.getXp(tags);
             xp *= (float) newXP / (float) oldXP;
@@ -37,8 +36,7 @@ public class ModXpAwareRedstone extends ModRedstone {
         }
 
         // update boost xp
-        if(LevelingLogic.hasBoostXp(tags))
-        {
+        if (LevelingLogic.hasBoostXp(tags)) {
             long newBoostXP = LevelingLogic.getRequiredBoostXp(tool);
             float xp = LevelingLogic.getBoostXp(tags);
             xp *= (float) newBoostXP / (float) oldBoostXP;
@@ -46,21 +44,18 @@ public class ModXpAwareRedstone extends ModRedstone {
         }
     }
 
-    // we need this because the constructor expects an int[] array, although it uses Integer internally, and Integer[] can't be casted to int[]...
-    static int[] ListIntToIntArray(List<Integer> list)
-    {
+    // we need this because the constructor expects an int[] array, although it uses Integer internally, and Integer[]
+    // can't be casted to int[]...
+    static int[] ListIntToIntArray(List<Integer> list) {
         int[] arr = new int[list.size()];
-        for(int i = 0; i < list.size(); i++)
-            arr[i] = list.get(i);
+        for (int i = 0; i < list.size(); i++) arr[i] = list.get(i);
 
         return arr;
     }
 
-    static ItemStack[] ListStackToStackArray(List<ItemStack> list)
-    {
+    static ItemStack[] ListStackToStackArray(List<ItemStack> list) {
         ItemStack[] arr = new ItemStack[list.size()];
-        for(int i = 0; i < list.size(); i++)
-            arr[i] = list.get(i);
+        for (int i = 0; i < list.size(); i++) arr[i] = list.get(i);
 
         return arr;
     }

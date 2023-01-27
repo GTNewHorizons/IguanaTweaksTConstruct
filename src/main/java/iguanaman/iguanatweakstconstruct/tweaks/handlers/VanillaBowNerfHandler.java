@@ -11,39 +11,30 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 public class VanillaBowNerfHandler {
     @SubscribeEvent
-    public void onArrowNock(ArrowNockEvent event)
-    {
-        if(event.entityPlayer == null)
-            return;
+    public void onArrowNock(ArrowNockEvent event) {
+        if (event.entityPlayer == null) return;
 
-        if(event.result == null)
-            return;
+        if (event.result == null) return;
 
-        if(isUselessBow(event.result.getItem()))
-            event.setCanceled(true);
+        if (isUselessBow(event.result.getItem())) event.setCanceled(true);
     }
 
     @SubscribeEvent
     public void onItemToolTip(ItemTooltipEvent event) {
-        if (event.entityPlayer == null)
-            return;
+        if (event.entityPlayer == null) return;
 
-        if(isUselessBow(event.itemStack.getItem())) {
+        if (isUselessBow(event.itemStack.getItem())) {
             event.toolTip.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.uselessBow1"));
             event.toolTip.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.uselessTool2"));
         }
     }
 
-    public static boolean isUselessBow(Item item)
-    {
-        if(item == null)
-            return false;
+    public static boolean isUselessBow(Item item) {
+        if (item == null) return false;
 
-        if(IguanaTweaks.toolWhitelist.contains(item))
-            return false;
+        if (IguanaTweaks.toolWhitelist.contains(item)) return false;
 
-        if(item instanceof ItemBow)
-            return true;
+        if (item instanceof ItemBow) return true;
 
         return false;
     }
