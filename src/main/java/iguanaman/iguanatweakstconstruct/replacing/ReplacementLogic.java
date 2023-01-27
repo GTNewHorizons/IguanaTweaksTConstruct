@@ -260,9 +260,16 @@ public final class ReplacementLogic {
             // newTags's harvest level by 1, because we cannot tell apart the case where the initial
             // harvest level was 0 and thus never decremented, and the case where the initial
             // harvest level was 1 and was decremented to 0.
-            int harvestLevel = TConstructRegistry.getMaterial(getToolPartMaterial(newTags, HEAD)).harvestLevel;
-            tags.setInteger("HarvestLevel", harvestLevel);
+            //
+            // We also need to preserve the harvest level present in tags, and restore it after, to
+            // avoid clobbering any harvest level bonuses that the tool may have. Though, I don't
+            // believe that it is currently possible to increase the harvest level on a pickaxe or
+            // hammer with no mining XP boost tag.
+            int harvestLevel = tags.getInteger("HarvestLevel");
+            int baseHarvestLevel = TConstructRegistry.getMaterial(getToolPartMaterial(newTags, HEAD)).harvestLevel;
+            tags.setInteger("HarvestLevel", baseHarvestLevel);
             LevelingLogic.addBoostTags(tags, (ToolCore) newTool.getItem());
+            tags.setInteger("HarvestLevel", harvestLevel);
         }
 
         // Update the tool name if we replaced the head and it was a automagic name
