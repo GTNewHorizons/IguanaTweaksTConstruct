@@ -1,13 +1,14 @@
 package iguanaman.iguanatweakstconstruct.tweaks.handlers;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.event.ToolBuildEvent;
 import tconstruct.library.event.ToolCraftEvent;
 import tconstruct.tools.TinkerTools;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class StringBindingHandler {
 

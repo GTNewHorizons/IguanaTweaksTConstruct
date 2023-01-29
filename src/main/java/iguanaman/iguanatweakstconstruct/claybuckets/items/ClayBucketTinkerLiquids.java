@@ -1,8 +1,5 @@
 package iguanaman.iguanatweakstconstruct.claybuckets.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,9 +8,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import tconstruct.smeltery.items.FilledBucket;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class ClayBucketTinkerLiquids extends FilledBucket {
+
     public ClayBucketTinkerLiquids(Block b) {
         super(b);
 

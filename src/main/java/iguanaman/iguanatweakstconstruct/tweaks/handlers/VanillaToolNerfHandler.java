@@ -1,7 +1,5 @@
 package iguanaman.iguanatweakstconstruct.tweaks.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -10,7 +8,11 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
+
 public class VanillaToolNerfHandler {
+
     @SubscribeEvent
     public void breakSpeed(PlayerEvent.BreakSpeed event) {
         if (event.entityPlayer == null) return;

@@ -1,9 +1,11 @@
 package iguanaman.iguanatweakstconstruct.util;
 
 import net.minecraft.client.Minecraft;
+
 import org.lwjgl.input.Keyboard;
 
 public final class TooltipHelper {
+
     private TooltipHelper() {} // non-instantiable
 
     // all hail TiC-Tooltips for that information ;)

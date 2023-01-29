@@ -1,21 +1,20 @@
 package iguanaman.iguanatweakstconstruct.override;
 
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import mantle.pulsar.pulse.Handler;
 import mantle.pulsar.pulse.Pulse;
+
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+
 import tconstruct.util.IMCHandler;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 /**
- * Allows to override:
- * - All material properties
- * - Mining Levels of all tools
- * - Harvest Levels of all oredict Entries
- * - Harvest Levels of all blocks (overrides oredict)
+ * Allows to override: - All material properties - Mining Levels of all tools - Harvest Levels of all oredict Entries -
+ * Harvest Levels of all blocks (overrides oredict)
  */
 @Pulse(
         id = Reference.PULSE_OVERRIDE,

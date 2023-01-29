@@ -1,13 +1,15 @@
 package iguanaman.iguanatweakstconstruct.leveling.modifiers;
 
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.reference.Config;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+
 import tconstruct.modifiers.tools.ModBoolean;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 
 public class ModMiningLevelBoost extends ModBoolean {
+
     // the maximum mining level obtainable with this head
     private int maxLvl = 0;
 

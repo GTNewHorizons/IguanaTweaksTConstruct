@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 public final class Log {
+
     private Log() {} // non-instantiable
 
     // initialized by preinit

@@ -1,5 +1,15 @@
 package iguanaman.iguanatweakstconstruct.mobheads;
 
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -13,20 +23,13 @@ import iguanaman.iguanatweakstconstruct.mobheads.tileentities.IguanaSkullTileEnt
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Adds additional MobHeads and controls MobHead dropping.
  */
 @Pulse(id = Reference.PULSE_MOBHEADS, description = "Adds additional MobHeads and control over MobHead drops.")
 public class IguanaMobHeads {
+
     public static Item skullItem;
     public static Block skullBlock;
     public static Item wearables; // secret thing

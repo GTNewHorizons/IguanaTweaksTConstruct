@@ -1,14 +1,16 @@
 package iguanaman.iguanatweakstconstruct.claybuckets.items;
 
-import iguanaman.iguanatweakstconstruct.claybuckets.IguanaItems;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucketMilk;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import iguanaman.iguanatweakstconstruct.claybuckets.IguanaItems;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+
 public class ClayBucketMilk extends ItemBucketMilk {
+
     public ClayBucketMilk() {
         this.setContainerItem(IguanaItems.clayBucketFired);
 
