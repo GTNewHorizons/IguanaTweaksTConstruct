@@ -1,9 +1,7 @@
 package iguanaman.iguanatweakstconstruct.tweaks.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import iguanaman.iguanatweakstconstruct.leveling.handlers.LevelingToolTipHandler;
-import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
 import java.util.ListIterator;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +11,12 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import iguanaman.iguanatweakstconstruct.leveling.handlers.LevelingToolTipHandler;
+import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
+
 public class VanillaSwordNerfHandler {
+
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
         if (!(event.source.damageType.equals("player"))) return;

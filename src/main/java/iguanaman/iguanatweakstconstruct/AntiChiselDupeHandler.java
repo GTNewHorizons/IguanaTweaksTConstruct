@@ -1,11 +1,13 @@
 package iguanaman.iguanatweakstconstruct;
 
+import net.minecraft.item.ItemStack;
+
+import tconstruct.tools.TinkerTools;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
-import net.minecraft.item.ItemStack;
-import tconstruct.tools.TinkerTools;
 
 public class AntiChiselDupeHandler {
+
     @SubscribeEvent
     public void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
         if (event.crafting == null || event.crafting.getItem() != TinkerTools.chisel) return;

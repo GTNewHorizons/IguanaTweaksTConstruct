@@ -1,16 +1,19 @@
 package iguanaman.iguanatweakstconstruct.reference;
 
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
+
 public class Config {
+
     private Configuration configfile;
 
     // leveling
@@ -146,38 +149,40 @@ public class Config {
                 "If true, only the heads of tools are examined when determining how much XP it takes to level up. (This only matters if you manually specify that some material types level faster than others using the override module)");
 
         // tooltip things
-        showTooltipXP = configfile.getBoolean(
-                "showTooltipXP", CATEGORY_Leveling, true, "Current XP is shown when hovering over a tool");
+        showTooltipXP = configfile
+                .getBoolean("showTooltipXP", CATEGORY_Leveling, true, "Current XP is shown when hovering over a tool");
         detailedXpTooltip = configfile.getBoolean(
-                "detailedXpTooltip", CATEGORY_Leveling, true, "XP tooltip shows numbers, in addition to percentage");
-        showMinimalTooltipXP = configfile.getBoolean(
-                "showMinimalTooltipXP", CATEGORY_Leveling, false, "Current XP% is shown after the level");
+                "detailedXpTooltip",
+                CATEGORY_Leveling,
+                true,
+                "XP tooltip shows numbers, in addition to percentage");
+        showMinimalTooltipXP = configfile
+                .getBoolean("showMinimalTooltipXP", CATEGORY_Leveling, false, "Current XP% is shown after the level");
 
         // levelup behaviour
         maxToolLevel = configfile.getInt("maxToolLevel", CATEGORY_Leveling, 6, 1, 99, "");
         toolLeveling = configfile.getBoolean(
-                "toolLeveling", CATEGORY_Leveling, true, "Can your skill with tools 'level up' as you use them?");
-        toolLevelingExtraModifiers = configfile.getInt(
-                "ExtraModifiers", CATEGORY_Leveling, 0, 0, 9, "The amount of modifiers new tools have.");
-        toolModifiersAtLevels = configfile
-                .get(
-                        CATEGORY_Leveling,
-                        "ModifiersAtLevels",
-                        new int[] {2, 4, 6},
-                        "Adds an extra modifier on these levelups if 'ExtraModifiers' is enabled")
-                .getIntList();
+                "toolLeveling",
+                CATEGORY_Leveling,
+                true,
+                "Can your skill with tools 'level up' as you use them?");
+        toolLevelingExtraModifiers = configfile
+                .getInt("ExtraModifiers", CATEGORY_Leveling, 0, 0, 9, "The amount of modifiers new tools have.");
+        toolModifiersAtLevels = configfile.get(
+                CATEGORY_Leveling,
+                "ModifiersAtLevels",
+                new int[] { 2, 4, 6 },
+                "Adds an extra modifier on these levelups if 'ExtraModifiers' is enabled").getIntList();
         toolLevelingRandomBonuses = configfile.getBoolean(
                 "RandomBonuses",
                 CATEGORY_Leveling,
                 true,
                 "Gives a random bonus every level, if false and levelling is on modifiers are given at levels 2 and 4 (requires 'toolLeveling=true')");
-        randomBonusesAtlevels = configfile
-                .get(
-                        CATEGORY_Leveling,
-                        "BonusesAtLevels",
-                        new int[] {2, 3, 4, 5, 6},
-                        "Adds a random bonus on these levelups if 'RandomBonuses' is enabled")
-                .getIntList();
+        randomBonusesAtlevels = configfile.get(
+                CATEGORY_Leveling,
+                "BonusesAtLevels",
+                new int[] { 2, 3, 4, 5, 6 },
+                "Adds a random bonus on these levelups if 'RandomBonuses' is enabled").getIntList();
         randomBonusesAreUseful = configfile.getBoolean(
                 "UsefulBonuses",
                 CATEGORY_Leveling,
@@ -191,7 +196,8 @@ public class Config {
 
         /** Random Bonuses **/
         configfile.setCategoryComment(
-                CATEGORY_Bonuses, "Leveling Module: Allows to completely deactivate specific modifiers on levelup.");
+                CATEGORY_Bonuses,
+                "Leveling Module: Allows to completely deactivate specific modifiers on levelup.");
 
         for (RandomBonuses.Modifier mod : RandomBonuses.Modifier.values()) {
             // we use this way of obtaining the values because it doesn't create the empty lines and comments
@@ -212,7 +218,10 @@ public class Config {
                 true,
                 "Every Pickaxes Mining Level is reduced by 1 and needs a mining levelup (separate from tool level) or, if enabled, a mob head modifier to advance");
         levelingPickaxeBoost = configfile.getBoolean(
-                "allowLevelingBoost", CATEGORY_PickLeveling, true, "Pickaxes gain Mining Xp by using the pickaxe.");
+                "allowLevelingBoost",
+                CATEGORY_PickLeveling,
+                true,
+                "Pickaxes gain Mining Xp by using the pickaxe.");
         mobHeadPickaxeBoost = configfile.getBoolean(
                 "addMobHeadBoost",
                 CATEGORY_PickLeveling,
@@ -241,7 +250,8 @@ public class Config {
 
         /** HarvestLevel Module **/
         configfile.setCategoryComment(
-                CATEGORY_HarvestLevels, "Harvest Level Tweak Module: Introduces a slower mining level progression.");
+                CATEGORY_HarvestLevels,
+                "Harvest Level Tweak Module: Introduces a slower mining level progression.");
 
         // changed diamond/emerald modifier
         changeDiamondModifier = configfile.getBoolean(
@@ -291,8 +301,8 @@ public class Config {
         configfile.setCategoryComment(CATEGORY_Heads, "Mob Head Module: Adds additional Mob heads and drops");
 
         // drop behaviour
-        baseHeadDropChance =
-                configfile.getInt("baseDropChange", CATEGORY_Heads, 5, 0, 100, "Base percentage for a head to drop");
+        baseHeadDropChance = configfile
+                .getInt("baseDropChange", CATEGORY_Heads, 5, 0, 100, "Base percentage for a head to drop");
         beheadingHeadDropChance = configfile.getInt(
                 "beheadingDropChange",
                 CATEGORY_Heads,
@@ -303,10 +313,14 @@ public class Config {
 
         /** Vanilla/TConstruct Tweaks **/
         configfile.setCategoryComment(
-                CATEGORY_Tweaks, "Tweak Module: Tweaks to vanilla Minecraft and Tinker's Construct");
+                CATEGORY_Tweaks,
+                "Tweak Module: Tweaks to vanilla Minecraft and Tinker's Construct");
 
         nerfVanillaTools = configfile.getBoolean(
-                "disableRegularTools", CATEGORY_Tweaks, true, "Makes all non-TConstruct tools mine nothing");
+                "disableRegularTools",
+                CATEGORY_Tweaks,
+                true,
+                "Makes all non-TConstruct tools mine nothing");
         nerfVanillaHoes = configfile.getBoolean(
                 "disableRegularHoes",
                 CATEGORY_Tweaks,
@@ -325,11 +339,17 @@ public class Config {
 
         // gravel/flint tweaks
         removeFlintDrop = configfile.getBoolean(
-                "removeFlintDrop", CATEGORY_Tweaks, true, "Removes the random chance of getting flint from gravel");
+                "removeFlintDrop",
+                CATEGORY_Tweaks,
+                true,
+                "Removes the random chance of getting flint from gravel");
         addFlintRecipe = configfile.getBoolean(
-                "addFlintRecipe", CATEGORY_Tweaks, true, "Adds a shapeless recipe to get flint from gravel");
-        recipeGravelPerFlint = configfile.getInt(
-                "gravelPerFlint", CATEGORY_Tweaks, 3, 1, 9, "How many gravel are required to craft one Flint");
+                "addFlintRecipe",
+                CATEGORY_Tweaks,
+                true,
+                "Adds a shapeless recipe to get flint from gravel");
+        recipeGravelPerFlint = configfile
+                .getInt("gravelPerFlint", CATEGORY_Tweaks, 3, 1, 9, "How many gravel are required to craft one Flint");
 
         removeObsidianAlloy = configfile.getBoolean(
                 "removeObsidianAlloy",
@@ -359,7 +379,10 @@ public class Config {
                 true,
                 "Allows toolparts to be used as material in the Part Builder. Like, turn a Pick head into a Shovel head.!");
         allowStringBinding = configfile.getBoolean(
-                "allowStringBinding", CATEGORY_Tweaks, true, "Allows you to use a piece of string as a binding");
+                "allowStringBinding",
+                CATEGORY_Tweaks,
+                true,
+                "Allows you to use a piece of string as a binding");
         disableBonusMods = configfile.getBoolean(
                 "disableBonusModifierModifiers",
                 CATEGORY_Tweaks,
@@ -395,7 +418,10 @@ public class Config {
                 false,
                 "Removes the recipe for Tinker's Construct's stone torch");
         moreExpensiveSilkyCloth = configfile.getBoolean(
-                "moreExpensiveSilkyCloth", CATEGORY_Tweaks, true, "Silky Cloth needs gold ingots, instead of nuggets");
+                "moreExpensiveSilkyCloth",
+                CATEGORY_Tweaks,
+                true,
+                "Silky Cloth needs gold ingots, instead of nuggets");
         moreExpensiveSilkyJewel = configfile.getBoolean(
                 "moreExpensiveSilkyJewel",
                 CATEGORY_Tweaks,
@@ -429,7 +455,7 @@ public class Config {
                     CATEGORY_AllowedTools,
                     "blacklist",
                     "Change the type of the exclusion.\n'blacklist' means the listed tools are made unusable.\n'whitelist' means ALL tools except the listed ones are unusable.",
-                    new String[] {"whitelist", "blacklist"});
+                    new String[] { "whitelist", "blacklist" });
             excludedToolsIsWhitelist = "whitelist".equals(type);
 
             String[] tools = configfile.getStringList(
@@ -453,11 +479,13 @@ public class Config {
                     defaultExcludedHoes,
                     "Hoes that are excluded if the option to nerf non-tinkers hoes is enabled.");
 
-            excludedModTools.addAll(Arrays.asList(configfile.getStringList(
-                    "mods",
-                    CATEGORY_AllowedTools,
-                    defaultAllowMod,
-                    "Here you can exclude entire mods by adding their mod-id (the first part of the string).")));
+            excludedModTools.addAll(
+                    Arrays.asList(
+                            configfile.getStringList(
+                                    "mods",
+                                    CATEGORY_AllowedTools,
+                                    defaultAllowMod,
+                                    "Here you can exclude entire mods by adding their mod-id (the first part of the string).")));
 
             if (nerfVanillaTools) excludedTools.addAll(Arrays.asList(tools));
             if (nerfVanillaSwords) excludedTools.addAll(Arrays.asList(swords));
@@ -468,8 +496,8 @@ public class Config {
         /** Debug **/
         configfile.setCategoryComment(CATEGORY_Debug, "Stuff to give you/me more information");
 
-        showDebugXP = configfile.getBoolean(
-                "showDebugXP", CATEGORY_Debug, false, "Current Tool/Pick XP is shown as debug (F3) text");
+        showDebugXP = configfile
+                .getBoolean("showDebugXP", CATEGORY_Debug, false, "Current Tool/Pick XP is shown as debug (F3) text");
 
         logHarvestLevelChanges = configfile.getBoolean(
                 "logBlockHarvestLevelChange",
@@ -506,47 +534,22 @@ public class Config {
     }
 
     private static String[] defaultExcludedTools = new String[] {
-        // botania
-        "Botania:manasteelAxe",
-        "Botania:manasteelPick",
-        "Botania:manasteelShovel",
-        // Flaxbeards Steam Power
-        "Steamcraft:axeGildedGold",
-        "Steamcraft:pickGildedGold",
-        "Steamcraft:shovelGildedGold",
-        "Steamcraft:axeBrass",
-        "Steamcraft:pickBrass",
-        "Steamcraft:shovelBrass",
-        // IC2
-        "IC2:itemToolBronzeAxe",
-        "IC2:itemToolBronzePickaxe",
-        "IC2:itemToolBronzeSpade",
-        // Railcraft
-        "Railcraft:tool.steel.axe",
-        "Railcraft:tool.steel.pickaxe",
-        "Railcraft:tool.steel.shovel"
-    };
-    private static String[] defaultExcludedHoes = new String[] {
-        "Steamcraft:hoeGildedGold", "Steamcraft:hoeBrass", "IC2:itemToolBronzeHoe", "Railcraft:tool.steel.hoe"
-    };
-    private static String[] defaultExcludedSwords = new String[] {
-        "Botania:manasteelSword",
-        "Steamcraft:swordGildedGold",
-        "Steamcraft:swordBrass",
-        "ThermalExpansion:tool.battleWrenchInvar",
-        "IC2:itemToolBronzeSword",
-        "Railcraft:tool.steel.sword"
-    };
+            // botania
+            "Botania:manasteelAxe", "Botania:manasteelPick", "Botania:manasteelShovel",
+            // Flaxbeards Steam Power
+            "Steamcraft:axeGildedGold", "Steamcraft:pickGildedGold", "Steamcraft:shovelGildedGold",
+            "Steamcraft:axeBrass", "Steamcraft:pickBrass", "Steamcraft:shovelBrass",
+            // IC2
+            "IC2:itemToolBronzeAxe", "IC2:itemToolBronzePickaxe", "IC2:itemToolBronzeSpade",
+            // Railcraft
+            "Railcraft:tool.steel.axe", "Railcraft:tool.steel.pickaxe", "Railcraft:tool.steel.shovel" };
+    private static String[] defaultExcludedHoes = new String[] { "Steamcraft:hoeGildedGold", "Steamcraft:hoeBrass",
+            "IC2:itemToolBronzeHoe", "Railcraft:tool.steel.hoe" };
+    private static String[] defaultExcludedSwords = new String[] { "Botania:manasteelSword",
+            "Steamcraft:swordGildedGold", "Steamcraft:swordBrass", "ThermalExpansion:tool.battleWrenchInvar",
+            "IC2:itemToolBronzeSword", "Railcraft:tool.steel.sword" };
     private static String[] defaultExcludedBows = new String[] {};
 
-    private static String[] defaultAllowMod = new String[] {
-        "minecraft",
-        "Metallurgy",
-        "Natura",
-        "BiomesOPlenty",
-        "ProjRed|Exploration",
-        "appliedenergistics2",
-        "MekanismTool",
-        "ThermalFoundation"
-    };
+    private static String[] defaultAllowMod = new String[] { "minecraft", "Metallurgy", "Natura", "BiomesOPlenty",
+            "ProjRed|Exploration", "appliedenergistics2", "MekanismTool", "ThermalFoundation" };
 }

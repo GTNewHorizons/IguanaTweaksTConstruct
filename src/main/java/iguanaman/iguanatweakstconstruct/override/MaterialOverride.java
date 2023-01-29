@@ -1,17 +1,20 @@
 package iguanaman.iguanatweakstconstruct.override;
 
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.tools.ToolMaterial;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public class MaterialOverride implements IOverride {
+
     @Override
     public void createDefault(Configuration config) {
         Log.info("Creating Material Default File");
@@ -102,15 +105,12 @@ public class MaterialOverride implements IOverride {
 
     private ToolMaterial processMaterial(String category, ToolMaterial mat, Configuration config) {
         // get material stats
-        int harvestLevel =
-                config.get(category, "harvestLevel", mat.harvestLevel()).getInt();
-        float xpAmount = (float) config.get(category, "xpAmount", XPAdjustmentMap.get(mat.materialName))
-                .getDouble();
+        int harvestLevel = config.get(category, "harvestLevel", mat.harvestLevel()).getInt();
+        float xpAmount = (float) config.get(category, "xpAmount", XPAdjustmentMap.get(mat.materialName)).getDouble();
         int durability = config.get(category, "durability", mat.durability()).getInt();
         int miningspeed = config.get(category, "miningSpeed", mat.toolSpeed()).getInt();
         int attack = config.get(category, "attack", mat.attack()).getInt();
-        float handleModifier = (float)
-                config.get(category, "handleModifier", mat.handleDurability()).getDouble();
+        float handleModifier = (float) config.get(category, "handleModifier", mat.handleDurability()).getDouble();
         int reinforced = config.get(category, "reinforced", mat.reinforced()).getInt();
         float stonebound = (float) config.get(category, "shoddy", mat.shoddy()).getDouble();
         String tipStyle; // enum
@@ -141,15 +141,13 @@ public class MaterialOverride implements IOverride {
     }
 
     private EnumChatFormatting stringToEnum(String s) {
-        for (EnumChatFormatting color : EnumChatFormatting.values())
-            if (color.toString().equals(s)) return color;
+        for (EnumChatFormatting color : EnumChatFormatting.values()) if (color.toString().equals(s)) return color;
 
         return EnumChatFormatting.GRAY;
     }
 
     private boolean isEqual(ToolMaterial mat1, ToolMaterial mat2) {
-        return mat1.harvestLevel() == mat2.harvestLevel()
-                && mat1.style().equals(mat2.style())
+        return mat1.harvestLevel() == mat2.harvestLevel() && mat1.style().equals(mat2.style())
                 && mat1.ability().equals(mat2.ability())
                 && mat1.attack() == mat2.attack()
                 && mat1.durability() == mat2.durability()

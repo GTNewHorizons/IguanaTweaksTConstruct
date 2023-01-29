@@ -1,19 +1,12 @@
 package iguanaman.iguanatweakstconstruct;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.Arrays;
 import java.util.UUID;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import tconstruct.armor.player.TPlayerStats;
 import tconstruct.items.tools.Hammer;
 import tconstruct.items.tools.Pickaxe;
@@ -24,16 +17,25 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.tools.TinkerTools;
 import tconstruct.util.config.PHConstruct;
 import tconstruct.weaponry.ammo.BoltAmmo;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public class OldToolConversionHandler {
+
     // todo: re-enable when this stuff is 100% reliable >_<
     // @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         IInventory inventory = event.player.inventory;
         // scan all items in the players inventory on login
-        for (int i = 0; i < inventory.getSizeInventory(); i++)
-            if (inventory.getStackInSlot(i) != null)
-                if (toolNeedsUpdating(inventory.getStackInSlot(i))) updateItem(inventory.getStackInSlot(i));
+        for (int i = 0; i < inventory.getSizeInventory(); i++) if (inventory.getStackInSlot(i) != null)
+            if (toolNeedsUpdating(inventory.getStackInSlot(i))) updateItem(inventory.getStackInSlot(i));
     }
 
     public static boolean toolNeedsUpdating(ItemStack itemStack) {
@@ -73,8 +75,7 @@ public class OldToolConversionHandler {
         int realHlvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
 
         // unboosted but boost requires -> we need to reduce the hlvl by 1
-        if (Config.pickaxeBoostRequired
-                && !LevelingLogic.isBoosted(tags)
+        if (Config.pickaxeBoostRequired && !LevelingLogic.isBoosted(tags)
                 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer)) {
             int min = 0;
             if (PHConstruct.miningLevelIncrease) {
@@ -97,7 +98,7 @@ public class OldToolConversionHandler {
                     || !IguanaTweaksTConstruct.pulsar.isPulseLoaded(Reference.PULSE_HARVESTTWEAKS)) {
                 // was the tool boosted with a diamond?
                 if (tags.getBoolean("Diamond") && hlvl < 3) // returns false if tag is not present
-                return true;
+                    return true;
                 // ...with an emerald?
                 if (tags.getBoolean("Emerald") && hlvl < 2) return true;
             }
@@ -135,9 +136,8 @@ public class OldToolConversionHandler {
         ItemStack newHead = new ItemStack(tool.getHeadItem(), 1, tags.getInteger("Head"));
 
         // bolts are special..
-        if (tool instanceof BoltAmmo)
-            newHead = DualMaterialToolPart.createDualMaterial(
-                    tool.getHeadItem(), tags.getInteger("Handle"), tags.getInteger("Head"));
+        if (tool instanceof BoltAmmo) newHead = DualMaterialToolPart
+                .createDualMaterial(tool.getHeadItem(), tags.getInteger("Handle"), tags.getInteger("Head"));
 
         // and replace. We can always do this, since it shouldn't have any unwanted side effects if we disable the
         // reduction

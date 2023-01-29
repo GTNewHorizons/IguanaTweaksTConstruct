@@ -1,5 +1,11 @@
 package iguanaman.iguanatweakstconstruct;
 
+import java.io.File;
+import java.util.Random;
+
+import mantle.pulsar.config.IConfiguration;
+import mantle.pulsar.control.PulseManager;
+import mantle.pulsar.pulse.PulseMeta;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -29,11 +35,6 @@ import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.worldgen.IguanaWorldGen;
-import java.io.File;
-import java.util.Random;
-import mantle.pulsar.config.IConfiguration;
-import mantle.pulsar.control.PulseManager;
-import mantle.pulsar.pulse.PulseMeta;
 
 @Mod(
         modid = Reference.MOD_ID,
@@ -72,7 +73,8 @@ public class IguanaTweaksTConstruct {
 
         // init pulse manager
         pulseCFG = new PulsarCFG(
-                Reference.configFile("Modules.cfg"), "Tinker's Construct Addon: Iguana Tweaks for Tinkers Construct");
+                Reference.configFile("Modules.cfg"),
+                "Tinker's Construct Addon: Iguana Tweaks for Tinkers Construct");
         pulseCFG.load();
         pulsar = new PulseManager(Reference.MOD_ID, pulseCFG);
 

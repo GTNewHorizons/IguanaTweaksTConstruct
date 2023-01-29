@@ -1,16 +1,19 @@
 package iguanaman.iguanatweakstconstruct.leveling.modifiers;
 
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import tconstruct.modifiers.tools.ModRedstone;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 
 /**
- * The same as the redstone modifier, but translates current XP on modifying.
- * Basically: You get XP when applying it, because the required XP for the next level also increases. XP% stays the same.
+ * The same as the redstone modifier, but translates current XP on modifying. Basically: You get XP when applying it,
+ * because the required XP for the next level also increases. XP% stays the same.
  */
 public class ModXpAwareRedstone extends ModRedstone {
+
     public final ModRedstone originalModifier;
 
     public ModXpAwareRedstone(ModRedstone modifier) {

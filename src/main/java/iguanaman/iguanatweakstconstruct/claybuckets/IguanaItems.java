@@ -2,17 +2,9 @@ package iguanaman.iguanatweakstconstruct.claybuckets;
 
 import static tconstruct.smeltery.TinkerSmeltery.*;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucket;
-import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketMilk;
-import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketTinkerLiquids;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import mantle.pulsar.pulse.Handler;
 import mantle.pulsar.pulse.Pulse;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -24,11 +16,22 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
 import tconstruct.smeltery.TinkerSmeltery;
 import tconstruct.world.TinkerWorld;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucket;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketMilk;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketTinkerLiquids;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 @Pulse(id = Reference.PULSE_ITEMS, description = "All the Items Iguana Tweaks for TConstruct adds (Clay Buckets,...)")
 public class IguanaItems {
+
     public static Item clayBucketUnfired;
     public static Item clayBucketFired;
     public static Item clayBucketWater;
@@ -40,10 +43,8 @@ public class IguanaItems {
     public void preInit(FMLPreInitializationEvent event) {
         Log.debug("Adding Items");
         // unfired clay bucket is a regular item
-        clayBucketUnfired = new Item()
-                .setUnlocalizedName(Reference.prefix("clayBucketUnfired"))
-                .setTextureName(Reference.resource("clayBucketUnfired"))
-                .setMaxStackSize(16)
+        clayBucketUnfired = new Item().setUnlocalizedName(Reference.prefix("clayBucketUnfired"))
+                .setTextureName(Reference.resource("clayBucketUnfired")).setMaxStackSize(16)
                 .setCreativeTab(CreativeTabs.tabMisc);
         GameRegistry.registerItem(clayBucketUnfired, "clayBucketUnfired");
 
@@ -66,54 +67,36 @@ public class IguanaItems {
 
         // register the buckets with the fluid container registry
         ItemStack emptyClayBucket = new ItemStack(clayBucketFired);
+        FluidContainerRegistry
+                .registerFluidContainer(FluidRegistry.WATER, new ItemStack(clayBucketWater), emptyClayBucket);
         FluidContainerRegistry.registerFluidContainer(
-                FluidRegistry.WATER, new ItemStack(clayBucketWater), emptyClayBucket);
-        FluidContainerRegistry.registerFluidContainer(
-                FluidRegistry.LAVA, new ItemStack(clayBucketLava), new ItemStack(clayBucketFired, 0));
+                FluidRegistry.LAVA,
+                new ItemStack(clayBucketLava),
+                new ItemStack(clayBucketFired, 0));
 
         // only integrate tcon metals if they actually exist
         if (TinkerSmeltery.buckets != null) {
             // tinker metals
-            Fluid[] tinkerFluids = new Fluid[] {
-                moltenIronFluid,
-                moltenGoldFluid,
-                moltenCopperFluid,
-                moltenTinFluid,
-                moltenAluminumFluid,
-                moltenCobaltFluid,
-                moltenArditeFluid,
-                moltenBronzeFluid,
-                moltenAlubrassFluid,
-                moltenManyullynFluid,
-                moltenAlumiteFluid,
-                moltenObsidianFluid,
-                moltenSteelFluid,
-                moltenGlassFluid,
-                moltenStoneFluid,
-                moltenEmeraldFluid,
-                bloodFluid,
-                moltenNickelFluid,
-                moltenLeadFluid,
-                moltenSilverFluid,
-                moltenShinyFluid,
-                moltenInvarFluid,
-                moltenElectrumFluid,
-                moltenEnderFluid,
-                TinkerWorld.blueSlimeFluid,
-                glueFluid,
-                pigIronFluid
-            };
+            Fluid[] tinkerFluids = new Fluid[] { moltenIronFluid, moltenGoldFluid, moltenCopperFluid, moltenTinFluid,
+                    moltenAluminumFluid, moltenCobaltFluid, moltenArditeFluid, moltenBronzeFluid, moltenAlubrassFluid,
+                    moltenManyullynFluid, moltenAlumiteFluid, moltenObsidianFluid, moltenSteelFluid, moltenGlassFluid,
+                    moltenStoneFluid, moltenEmeraldFluid, bloodFluid, moltenNickelFluid, moltenLeadFluid,
+                    moltenSilverFluid, moltenShinyFluid, moltenInvarFluid, moltenElectrumFluid, moltenEnderFluid,
+                    TinkerWorld.blueSlimeFluid, glueFluid, pigIronFluid };
 
-            for (int i = 0; i < tinkerFluids.length; i++)
-                if (tinkerFluids[i] != null)
-                    FluidContainerRegistry.registerFluidContainer(
-                            tinkerFluids[i], new ItemStack(clayBucketsTinkers, 1, i), emptyClayBucket);
+            for (int i = 0; i < tinkerFluids.length; i++) if (tinkerFluids[i] != null) FluidContainerRegistry
+                    .registerFluidContainer(tinkerFluids[i], new ItemStack(clayBucketsTinkers, 1, i), emptyClayBucket);
         }
 
         // add recipes
         if (!Loader.isModLoaded("dreamcraft")) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(clayBucketUnfired), "c c", " c ", 'c', new ItemStack(Items.clay_ball)));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(clayBucketUnfired),
+                            "c c",
+                            " c ",
+                            'c',
+                            new ItemStack(Items.clay_ball)));
         }
         GameRegistry.addSmelting(clayBucketUnfired, new ItemStack(clayBucketFired), 0.0F);
 

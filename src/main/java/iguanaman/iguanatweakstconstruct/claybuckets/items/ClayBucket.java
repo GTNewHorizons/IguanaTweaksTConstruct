@@ -1,9 +1,5 @@
 package iguanaman.iguanatweakstconstruct.claybuckets.items;
 
-import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
-import iguanaman.iguanatweakstconstruct.claybuckets.IguanaItems;
-import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -12,7 +8,13 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
+import iguanaman.iguanatweakstconstruct.claybuckets.IguanaItems;
+import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+
 public class ClayBucket extends ItemBucket {
+
     private final boolean isHot;
 
     public ClayBucket(Block contents, String name, String texture) {
@@ -44,8 +46,7 @@ public class ClayBucket extends ItemBucket {
                 itemStack.stackSize--;
 
                 // very very rarely, you'll get a broken bucket!
-                if (IguanaTweaksTConstruct.pulsar.isPulseLoaded(Reference.PULSE_MOBHEADS)
-                        && itemStack.stackSize == 0
+                if (IguanaTweaksTConstruct.pulsar.isPulseLoaded(Reference.PULSE_MOBHEADS) && itemStack.stackSize == 0
                         && IguanaTweaksTConstruct.random.nextInt(1000) == 0)
                     return new ItemStack(IguanaMobHeads.wearables, 1, 1);
 

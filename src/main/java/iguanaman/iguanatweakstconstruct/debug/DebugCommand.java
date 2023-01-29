@@ -1,16 +1,18 @@
 package iguanaman.iguanatweakstconstruct.debug;
 
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
+
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.tools.TinkerTools;
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 
 public class DebugCommand extends CommandBase {
 
@@ -29,8 +31,8 @@ public class DebugCommand extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender icommandsender, String[] astring) {
-        EntityPlayerMP entityplayermp =
-                astring.length >= 1 ? getPlayer(icommandsender, astring[0]) : getCommandSenderAsPlayer(icommandsender);
+        EntityPlayerMP entityplayermp = astring.length >= 1 ? getPlayer(icommandsender, astring[0])
+                : getCommandSenderAsPlayer(icommandsender);
         ItemStack equipped = entityplayermp.getCurrentEquippedItem();
         if (equipped != null && equipped.getItem() instanceof ToolCore) {
             // Config.randomBonusesAreUseful = true;
@@ -62,27 +64,12 @@ public class DebugCommand extends CommandBase {
             for (Map.Entry<RandomBonuses.Modifier, Integer> bar : foo.entrySet())
                 icommandsender.addChatMessage(new ChatComponentText(bar.getKey().toString() + ": " + bar.getValue()));
             /*
-            NBTTagCompound tags = equipped.getTagCompound().getCompoundTag("InfiTool");
-            int tipNum = 0;
-            while (true) {
-                tipNum++;
-                String tip = "Tooltip" + tipNum;
-                String modTip = "ModifierTip" + tipNum;
-
-                boolean found = false;
-                if (tags.hasKey(tip)) {
-                    Log.info(tip + ": " + tags.getString(tip));
-                    found = true;
-                }
-                if (tags.hasKey(modTip)) {
-                    Log.info(modTip + ": " + tags.getString(tip));
-                    found = true;
-                }
-
-                if (!found)
-                    break;
-            }
-            */
+             * NBTTagCompound tags = equipped.getTagCompound().getCompoundTag("InfiTool"); int tipNum = 0; while (true)
+             * { tipNum++; String tip = "Tooltip" + tipNum; String modTip = "ModifierTip" + tipNum; boolean found =
+             * false; if (tags.hasKey(tip)) { Log.info(tip + ": " + tags.getString(tip)); found = true; } if
+             * (tags.hasKey(modTip)) { Log.info(modTip + ": " + tags.getString(tip)); found = true; } if (!found) break;
+             * }
+             */
         }
     }
 

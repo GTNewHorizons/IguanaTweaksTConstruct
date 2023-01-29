@@ -3,12 +3,11 @@ package iguanaman.iguanatweakstconstruct.replacing;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.*;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.*;
 
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.reference.Config;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.crafting.ToolRecipe;
@@ -18,8 +17,11 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.util.IToolPart;
 import tconstruct.tools.TinkerTools;
 import tconstruct.weaponry.TinkerWeaponry;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 
 public class ModPartReplacement extends ItemModifier {
+
     public ModPartReplacement() {
         // applicable for all items. canModify decides
         super(new ItemStack[0], 0, "");
@@ -46,14 +48,12 @@ public class ModPartReplacement extends ItemModifier {
         // because otherwise the replacement-logic would not be able to obtain necessary information and crash.
         if (Config.disableStoneTools) {
             if (tool.getHeadItem() != null && getToolPartMaterial(tags, HEAD) == 1) return false;
-            if (tool.getHandleItem() != null
-                    && getToolPartMaterial(tags, HANDLE) == 1
+            if (tool.getHandleItem() != null && getToolPartMaterial(tags, HANDLE) == 1
                     && tool.getHandleItem() != TinkerWeaponry.bowstring
                     && tool.getHandleItem() != TinkerWeaponry.partArrowShaft) {
                 return false;
             }
-            if (tool.getAccessoryItem() != null
-                    && getToolPartMaterial(tags, ACCESSORY) == 1
+            if (tool.getAccessoryItem() != null && getToolPartMaterial(tags, ACCESSORY) == 1
                     && tool.getAccessoryItem() != TinkerWeaponry.bowstring
                     && tool.getAccessoryItem() != TinkerWeaponry.fletching) {
                 return false;
@@ -125,7 +125,7 @@ public class ModPartReplacement extends ItemModifier {
         // do we have enough modifiers left if we exchange this part?
         // This probably doesn't work right for bolts (which replace two parts at a time).
         if (hasExtraModifier(oldMatId)) // paper or thaumium. sadly hardcoded.
-        modifiers--;
+            modifiers--;
         if (hasExtraModifier(newMatId)) modifiers++;
         if (modifiers < 0) return false;
 
@@ -162,10 +162,10 @@ public class ModPartReplacement extends ItemModifier {
         }
 
         if (tool == TinkerWeaponry.arrowAmmo)
-            if (replacementPartItem == Items.reeds
-                    || replacementPartItem == Items.blaze_rod
+            if (replacementPartItem == Items.reeds || replacementPartItem == Items.blaze_rod
                     || replacementPartItem == Items.bone
-                    || replacementPartItem == Items.stick) replacementPartItem = TinkerWeaponry.partArrowShaft;
+                    || replacementPartItem == Items.stick)
+                replacementPartItem = TinkerWeaponry.partArrowShaft;
 
         if (replacementPartItem == Items.bone || replacementPartItem == Items.stick)
             replacementPartItem = TinkerTools.toolRod;
@@ -184,11 +184,10 @@ public class ModPartReplacement extends ItemModifier {
         recipe = ToolBuilder.instance.recipeList.get(tool.getToolName());
         if (recipe == null) {
             // do a more elaborate check
-            for (ToolRecipe r : ToolBuilder.instance.combos)
-                if (r.getType().getClass().equals(tool.getClass())) {
-                    recipe = r;
-                    break;
-                }
+            for (ToolRecipe r : ToolBuilder.instance.combos) if (r.getType().getClass().equals(tool.getClass())) {
+                recipe = r;
+                break;
+            }
         }
 
         return recipe;

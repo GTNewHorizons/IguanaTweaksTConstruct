@@ -1,16 +1,18 @@
 package iguanaman.iguanatweakstconstruct.override;
 
-import iguanaman.iguanatweakstconstruct.harvestlevels.HarvestLevelTweaks;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
+import iguanaman.iguanatweakstconstruct.harvestlevels.HarvestLevelTweaks;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
+
 public class ToolOverride implements IOverride {
+
     @Override
     public void createDefault(Configuration config) {
         Log.debug("Creating Tool Default File");
@@ -20,8 +22,8 @@ public class ToolOverride implements IOverride {
             if (!(o instanceof Item) || o instanceof ItemBlock) continue;
 
             Item item = (Item) o;
-            ItemStack stack = new ItemStack(
-                    item); // let's assume there are no sick bastards who use metadata to group tools into a singular id
+            ItemStack stack = new ItemStack(item); // let's assume there are no sick bastards who use metadata to group
+                                                   // tools into a singular id
             // ._.
 
             String saneCategory = buildCategory(identifier.toString());
@@ -54,7 +56,10 @@ public class ToolOverride implements IOverride {
         boolean fillWithDefault = prop.getBoolean();
         prop.set(false);
         prop = config.get(
-                " Info", "removeDefaultValues", false, "Removes all entries that correspond to the default values.");
+                " Info",
+                "removeDefaultValues",
+                false,
+                "Removes all entries that correspond to the default values.");
         boolean cleanup = prop.getBoolean();
         prop.set(false);
 
@@ -67,8 +72,8 @@ public class ToolOverride implements IOverride {
             if (!config.hasCategory(saneCategory) && !fillWithDefault) continue;
 
             Item item = (Item) o;
-            ItemStack stack = new ItemStack(
-                    item); // let's assume there are no sick bastards who use metadata to group tools into a singular id
+            ItemStack stack = new ItemStack(item); // let's assume there are no sick bastards who use metadata to group
+                                                   // tools into a singular id
             // ._.
 
             boolean changed = false;
@@ -80,10 +85,11 @@ public class ToolOverride implements IOverride {
                 // update tool
                 if (level != newLevel) {
                     HarvestLevelTweaks.updateToolHarvestLevel(item, tool, newLevel);
-                    if (Config.logOverrideChanges)
-                        Log.info(String.format(
-                                "Tool Override: Changed harvest level of %s to %d",
-                                item.getUnlocalizedName(), newLevel));
+                    if (Config.logOverrideChanges) Log.info(
+                            String.format(
+                                    "Tool Override: Changed harvest level of %s to %d",
+                                    item.getUnlocalizedName(),
+                                    newLevel));
                     changed = true;
                 }
             }
@@ -93,8 +99,8 @@ public class ToolOverride implements IOverride {
 
     private String buildCategory(String identifier) {
         // make it sane
-        String cat =
-                identifier.replace(Configuration.CATEGORY_SPLITTER, "_"); // replace '.' in string.. blah. this sucks
+        String cat = identifier.replace(Configuration.CATEGORY_SPLITTER, "_"); // replace '.' in string.. blah. this
+                                                                               // sucks
         // then split it into subcategory of mod-id
         return cat.replaceFirst(":", Configuration.CATEGORY_SPLITTER).toLowerCase();
     }

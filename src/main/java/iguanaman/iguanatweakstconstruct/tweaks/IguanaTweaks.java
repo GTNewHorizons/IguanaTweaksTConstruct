@@ -1,17 +1,11 @@
 package iguanaman.iguanatweakstconstruct.tweaks;
 
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.tweaks.handlers.*;
-import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModFluxExpensive;
-import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModLimitedToolRepair;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.*;
+
 import mantle.pulsar.pulse.Handler;
 import mantle.pulsar.pulse.Pulse;
 import mantle.utils.RecipeRemover;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
@@ -20,6 +14,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.client.TConstructClientRegistry;
 import tconstruct.library.crafting.*;
@@ -31,6 +26,14 @@ import tconstruct.modifiers.tools.ModToolRepair;
 import tconstruct.smeltery.TinkerSmeltery;
 import tconstruct.tools.TinkerTools;
 import tconstruct.world.TinkerWorld;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.tweaks.handlers.*;
+import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModFluxExpensive;
+import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModLimitedToolRepair;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 /**
  * Various Tweaks for Tinkers Construct and Vanilla Minecraft. See Config.
@@ -39,6 +42,7 @@ import tconstruct.world.TinkerWorld;
         id = Reference.PULSE_TWEAKS,
         description = "Various Tweaks for vanilla Minecraft and Tinker's Construct. See Config.")
 public class IguanaTweaks {
+
     public static Set<Item> toolWhitelist = new HashSet<Item>();
 
     @Handler
@@ -50,7 +54,17 @@ public class IguanaTweaks {
         if (Config.allowStringBinding) {
             Log.debug("Register String binding");
             TConstructRegistry.addToolMaterial(
-                    40, "String", 0, 33, 1, 0, 0.01F, 0, 0f, EnumChatFormatting.WHITE.toString(), 0xFFFFFF);
+                    40,
+                    "String",
+                    0,
+                    33,
+                    1,
+                    0,
+                    0.01F,
+                    0,
+                    0f,
+                    EnumChatFormatting.WHITE.toString(),
+                    0xFFFFFF);
             TConstructClientRegistry.addMaterialRenderMapping(40, "tinker", "paper", true);
             MinecraftForge.EVENT_BUS.register(new StringBindingHandler());
         }
@@ -115,9 +129,8 @@ public class IguanaTweaks {
                         new ItemStack(TinkerTools.toolRod, 1, 0),
                         null,
                         "");
-                if (stonePick != null)
-                    ChestGenHooks.addItem(
-                            ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(stonePick, 1, 1, 5));
+                if (stonePick != null) ChestGenHooks
+                        .addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(stonePick, 1, 1, 5));
                 if (stoneAxe != null)
                     ChestGenHooks.addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(stoneAxe, 1, 1, 5));
             }
@@ -149,7 +162,7 @@ public class IguanaTweaks {
         if (Config.moreExpensiveSilkyCloth) {
             Log.debug("Making Silky Cloth more expensive");
             RecipeRemover.removeAnyRecipe(new ItemStack(TinkerTools.materials, 1, 25));
-            String[] patSurround = {"###", "#m#", "###"};
+            String[] patSurround = { "###", "#m#", "###" };
             GameRegistry.addRecipe(
                     new ItemStack(TinkerTools.materials, 1, 25),
                     patSurround,
@@ -157,13 +170,14 @@ public class IguanaTweaks {
                     new ItemStack(TinkerTools.materials, 1, 14),
                     '#',
                     new ItemStack(Items.string));
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(TinkerTools.materials, 1, 25),
-                    patSurround,
-                    'm',
-                    "ingotGold",
-                    '#',
-                    new ItemStack(Items.string)));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(TinkerTools.materials, 1, 25),
+                            patSurround,
+                            'm',
+                            "ingotGold",
+                            '#',
+                            new ItemStack(Items.string)));
         }
         if (Config.moreExpensiveSilkyJewel) {
             Log.debug("Making Silky Jewel more expensive");
@@ -226,15 +240,15 @@ public class IguanaTweaks {
             int cost = ((IPattern) pattern).getPatternCost(new ItemStack(pattern, 1, meta)); // the cost is 0.5*2
             if (cost <= 0) continue;
 
-            PatternBuilder.instance.registerMaterial(
-                    toolPart, cost, TConstructRegistry.getMaterial(matID).materialName);
+            PatternBuilder.instance
+                    .registerMaterial(toolPart, cost, TConstructRegistry.getMaterial(matID).materialName);
         }
     }
 
     private void exchangeFluxModifier() {
 
         List<ItemModifier> mods = ModifyBuilder.instance.itemModifiers;
-        for (ListIterator<ItemModifier> iter = mods.listIterator(); iter.hasNext(); ) {
+        for (ListIterator<ItemModifier> iter = mods.listIterator(); iter.hasNext();) {
             ItemModifier mod = iter.next();
             // flux mod
             if (mod instanceof ModFlux) {
@@ -247,7 +261,7 @@ public class IguanaTweaks {
     private void removeBonusModifierModifiers() {
         Log.debug("Removing bonus modifier modifiers");
         List<ItemModifier> mods = ModifyBuilder.instance.itemModifiers;
-        for (ListIterator<ItemModifier> iter = mods.listIterator(); iter.hasNext(); ) {
+        for (ListIterator<ItemModifier> iter = mods.listIterator(); iter.hasNext();) {
             ItemModifier mod = iter.next();
             // flux mod
             if (mod instanceof ModExtraModifier) {
@@ -259,7 +273,7 @@ public class IguanaTweaks {
     private void limitToolRepair() {
 
         List<ItemModifier> mods = ModifyBuilder.instance.itemModifiers;
-        for (ListIterator<ItemModifier> iter = mods.listIterator(); iter.hasNext(); ) {
+        for (ListIterator<ItemModifier> iter = mods.listIterator(); iter.hasNext();) {
             ItemModifier mod = iter.next();
             // flux mod
             if (mod instanceof ModToolRepair) {
@@ -276,10 +290,10 @@ public class IguanaTweaks {
         for (Object identifier : Item.itemRegistry.getKeys()) {
             Object item = Item.itemRegistry.getObject(identifier);
             // do we care about this item?
-            if (!(item instanceof ItemTool
-                    || item instanceof ItemHoe
+            if (!(item instanceof ItemTool || item instanceof ItemHoe
                     || item instanceof ItemSword
-                    || item instanceof ItemBow)) continue;
+                    || item instanceof ItemBow))
+                continue;
 
             String mod = identifier.toString().split(":")[0]; // should always be non-null... I think
 

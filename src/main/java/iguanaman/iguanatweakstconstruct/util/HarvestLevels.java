@@ -3,11 +3,14 @@ package iguanaman.iguanatweakstconstruct.util;
 import static net.minecraft.util.EnumChatFormatting.*;
 
 import java.util.Map;
+
 import net.minecraft.util.StatCollector;
+
 import tconstruct.library.tools.ToolMaterial;
 
 // strength of the tool-material. stone == strength of a stone pick etc.
 public final class HarvestLevels {
+
     private HarvestLevels() {} // non-instantiable
 
     public static int _0_stone = 0;
@@ -73,7 +76,7 @@ public final class HarvestLevels {
 
     public static void setCustomHarvestLevelNames(Map<Integer, ToolMaterial> mats) {
         for (Map.Entry<Integer, ToolMaterial> mat : mats.entrySet())
-            tconstruct.library.util.HarvestLevels.harvestLevelNames.put(
-                    mat.getKey(), mat.getValue().style() + mat.getValue().localizedName());
+            tconstruct.library.util.HarvestLevels.harvestLevelNames
+                    .put(mat.getKey(), mat.getValue().style() + mat.getValue().localizedName());
     }
 }

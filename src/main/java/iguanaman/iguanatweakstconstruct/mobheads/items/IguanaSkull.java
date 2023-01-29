@@ -1,12 +1,9 @@
 package iguanaman.iguanatweakstconstruct.mobheads.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.minecraft.block.BlockSkull;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,7 +19,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+
 public class IguanaSkull extends ItemSkull {
+
     public static final int META_ENDERMAN = 0;
     public static final int META_PIGZOMBIE = 1;
     public static final int META_BLAZE = 2;
@@ -30,6 +33,7 @@ public class IguanaSkull extends ItemSkull {
 
     // an entry for a head
     public static class HeadEntry {
+
         public String name;
         public String iconString;
         public IIcon icon;
@@ -82,7 +86,7 @@ public class IguanaSkull extends ItemSkull {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (Integer meta : headEntries.keySet()) par3List.add(new ItemStack(par1, 1, meta));
     }
@@ -111,23 +115,11 @@ public class IguanaSkull extends ItemSkull {
     }
 
     // copy'n'paste of the ItemSkull method, but places our own skull instead of the vanilla one
-    public boolean onItemUse(
-            ItemStack p_77648_1_,
-            EntityPlayer p_77648_2_,
-            World p_77648_3_,
-            int p_77648_4_,
-            int p_77648_5_,
-            int p_77648_6_,
-            int p_77648_7_,
-            float p_77648_8_,
-            float p_77648_9_,
-            float p_77648_10_) {
+    public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_,
+            int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
         if (p_77648_7_ == 0) {
             return false;
-        } else if (!p_77648_3_
-                .getBlock(p_77648_4_, p_77648_5_, p_77648_6_)
-                .getMaterial()
-                .isSolid()) {
+        } else if (!p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_).getMaterial().isSolid()) {
             return false;
         } else {
             if (p_77648_7_ == 1) {
@@ -165,9 +157,12 @@ public class IguanaSkull extends ItemSkull {
                     ((TileEntitySkull) tileentity).func_152107_a(p_77648_1_.getItemDamage());
 
                     ((TileEntitySkull) tileentity).func_145903_a(i1);
-                    ((BlockSkull) IguanaMobHeads.skullBlock)
-                            .func_149965_a(
-                                    p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, (TileEntitySkull) tileentity);
+                    ((BlockSkull) IguanaMobHeads.skullBlock).func_149965_a(
+                            p_77648_3_,
+                            p_77648_4_,
+                            p_77648_5_,
+                            p_77648_6_,
+                            (TileEntitySkull) tileentity);
                 }
 
                 --p_77648_1_.stackSize;

@@ -1,10 +1,7 @@
 package iguanaman.iguanatweakstconstruct.mobheads.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -15,9 +12,15 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+
 public class Wearable extends Item {
-    private static final String[] textureTypes =
-            new String[] {"bucketHoley", "clayBucketCracked", "endermanJaw", "bathat"};
+
+    private static final String[] textureTypes = new String[] { "bucketHoley", "clayBucketCracked", "endermanJaw",
+            "bathat" };
     private IIcon[] icons;
 
     public Wearable() {
@@ -37,8 +40,9 @@ public class Wearable extends Item {
     @Override
     public void addInformation(ItemStack item, EntityPlayer player, List tooltips, boolean advanced) {
         // specul tooltips
-        tooltips.add(EnumChatFormatting.DARK_GRAY
-                + StatCollector.translateToLocal("tooltip." + textureTypes[item.getItemDamage()]));
+        tooltips.add(
+                EnumChatFormatting.DARK_GRAY
+                        + StatCollector.translateToLocal("tooltip." + textureTypes[item.getItemDamage()]));
     }
 
     @Override
@@ -52,7 +56,7 @@ public class Wearable extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int j = 0; j < textureTypes.length; ++j) par3List.add(new ItemStack(par1, 1, j));
     }

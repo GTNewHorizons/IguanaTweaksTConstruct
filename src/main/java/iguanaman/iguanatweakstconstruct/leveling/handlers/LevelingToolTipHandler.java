@@ -1,5 +1,17 @@
 package iguanaman.iguanatweakstconstruct.leveling.handlers;
 
+import java.util.List;
+import java.util.ListIterator;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+import tconstruct.items.tools.Hammer;
+import tconstruct.items.tools.Pickaxe;
+import tconstruct.library.tools.ToolCore;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iguanaman.iguanatweakstconstruct.OldToolConversionHandler;
@@ -9,18 +21,9 @@ import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import iguanaman.iguanatweakstconstruct.util.TooltipHelper;
-import java.util.List;
-import java.util.ListIterator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import tconstruct.items.tools.Hammer;
-import tconstruct.items.tools.Pickaxe;
-import tconstruct.library.tools.ToolCore;
 
 public class LevelingToolTipHandler {
+
     // the prefix used for "+ X attack damage". Thanks Tic Tooltips ;)
     public static String plusPrefix = "\u00A79+";
 
@@ -30,13 +33,11 @@ public class LevelingToolTipHandler {
 
         ItemStack stack = event.itemStack;
 
-        if (stack.getItem() == IguanaToolLeveling.rubberChicken
-                && stack.hasTagCompound()
+        if (stack.getItem() == IguanaToolLeveling.rubberChicken && stack.hasTagCompound()
                 && stack.getTagCompound().getCompoundTag("InfiTool").hasKey("Original")) {
             event.toolTip.add(
                     1,
-                    EnumChatFormatting.DARK_RED.toString()
-                            + EnumChatFormatting.ITALIC
+                    EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.ITALIC
                             + StatCollector.translateToLocal("tooltip.chicken1"));
             event.toolTip.add(2, EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.chicken2"));
             return;
@@ -50,10 +51,10 @@ public class LevelingToolTipHandler {
 
         // first off, let's check if we have to display a warning.
         if (OldToolConversionHandler.toolNeedsUpdating(stack)) {
-            event.toolTip.add(
-                    1, EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.oldToolWarning1"));
-            event.toolTip.add(
-                    2, EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.oldToolWarning2"));
+            event.toolTip
+                    .add(1, EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.oldToolWarning1"));
+            event.toolTip
+                    .add(2, EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.oldToolWarning2"));
         }
 
         ToolCore tool = (ToolCore) event.itemStack.getItem();
@@ -69,8 +70,7 @@ public class LevelingToolTipHandler {
         // only allow advanced (xp) tooltip if config option is set
         advanced &= Config.showTooltipXP;
 
-        boolean hasMiningLevel = tool.getHarvestLevel(event.itemStack, "pickaxe") >= 0
-                || tool instanceof Pickaxe
+        boolean hasMiningLevel = tool.getHarvestLevel(event.itemStack, "pickaxe") >= 0 || tool instanceof Pickaxe
                 || tool instanceof Hammer;
 
         // add mining level if applicable
@@ -112,14 +112,16 @@ public class LevelingToolTipHandler {
         inserter.add("");
 
         // add info that you can hold shift for more details
-        if (!advanced
-                && Config.showTooltipXP
-                && !ModSupportHelper.tiCTooltips
-                && Config.toolLeveling) // don't display if TicToolTips is installed
-        inserter.add(StatCollector.translateToLocalFormatted(
-                "tooltip.level.advanced",
-                EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET
-                        + EnumChatFormatting.GRAY));
+        if (!advanced && Config.showTooltipXP && !ModSupportHelper.tiCTooltips && Config.toolLeveling) // don't display
+                                                                                                       // if TicToolTips
+                                                                                                       // is installed
+            inserter.add(
+                    StatCollector.translateToLocalFormatted(
+                            "tooltip.level.advanced",
+                            EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.ITALIC
+                                    + "Shift"
+                                    + EnumChatFormatting.RESET
+                                    + EnumChatFormatting.GRAY));
 
         // remove the trailing empty line we used as insert reference n stuff
         String empty = inserter.next();
@@ -137,13 +139,11 @@ public class LevelingToolTipHandler {
                 break;
             }
             /*
-            else if(Loader.isModLoaded("TiCTooltips") && str.contains("Shift")) {
-                iterator.previous();
-                break;
-            }*/
+             * else if(Loader.isModLoaded("TiCTooltips") && str.contains("Shift")) { iterator.previous(); break; }
+             */
         }
 
-        //  iterator.previous();
+        // iterator.previous();
 
         // we're either directly before the "+ damage" or at the end now
 

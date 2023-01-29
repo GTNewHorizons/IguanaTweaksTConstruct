@@ -1,10 +1,12 @@
 package iguanaman.iguanatweakstconstruct.restriction;
 
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.*;
+
 import mantle.utils.ItemMetaWrapper;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.CastingRecipe;
 import tconstruct.library.tools.BowstringMaterial;
@@ -17,19 +19,21 @@ import tconstruct.smeltery.items.MetalPattern;
 import tconstruct.tools.TinkerTools;
 import tconstruct.tools.items.Pattern;
 import tconstruct.weaponry.TinkerWeaponry;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public final class RestrictionHelper {
+
     private RestrictionHelper() {} // non-instantiable
 
-    public static Map<String, ItemMetaWrapper>
-            configNameToPattern; // holds the names that can be used in the config and maps them to item-meta
+    public static Map<String, ItemMetaWrapper> configNameToPattern; // holds the names that can be used in the config
+                                                                    // and maps them to item-meta
     // combinations to retrieve the materials
     public static Map<String, ItemMetaWrapper> configNameToCast; // same as above but for metal casts
     // this list contains all ALLOWED pattern - material combinations
-    public static Map<ItemMetaWrapper, List<ToolMaterial>>
-            patternMaterialLookup; // item+metadata -> List of applicable materials
-    public static Map<ItemMetaWrapper, List<CustomMaterial>>
-            patternCustomMaterialLookup; // item+metadata -> List of applicable custom materials
+    public static Map<ItemMetaWrapper, List<ToolMaterial>> patternMaterialLookup; // item+metadata -> List of applicable
+                                                                                  // materials
+    public static Map<ItemMetaWrapper, List<CustomMaterial>> patternCustomMaterialLookup; // item+metadata -> List of
+                                                                                          // applicable custom materials
 
     static {
         configNameToPattern = new HashMap<String, ItemMetaWrapper>();
@@ -42,11 +46,10 @@ public final class RestrictionHelper {
         boolean restricted = true;
         List<ToolMaterial> matIDs = patternMaterialLookup.get(new ItemMetaWrapper(pattern));
         if (matIDs != null) {
-            for (ToolMaterial mat : matIDs)
-                if (mat.materialName.equals(material.materialName)) {
-                    restricted = false;
-                    break;
-                }
+            for (ToolMaterial mat : matIDs) if (mat.materialName.equals(material.materialName)) {
+                restricted = false;
+                break;
+            }
         }
 
         return restricted;
@@ -112,8 +115,7 @@ public final class RestrictionHelper {
 
                 int matID = ((IToolPart) recipe.output.getItem()).getMaterialID(recipe.output);
 
-                if (key.item == recipe.cast.getItem()
-                        && key.meta == recipe.cast.getItemDamage()
+                if (key.item == recipe.cast.getItem() && key.meta == recipe.cast.getItemDamage()
                         && TConstructRegistry.getMaterial(matID).materialName.equals(material.materialName)) {
                     allowed = true;
                     break;
@@ -130,8 +132,7 @@ public final class RestrictionHelper {
                 int meta = (Integer) entry.get(1); // metadata of the pattern
                 int matID = (Integer) entry.get(2); // Material-ID of the material needed to craft
 
-                if (key.item == pattern
-                        && key.meta == meta
+                if (key.item == pattern && key.meta == meta
                         && TConstructRegistry.getMaterial(matID).materialName.equals(material.materialName)) {
                     allowed = true;
                     break;
@@ -267,6 +268,7 @@ public final class RestrictionHelper {
     // the whole purpose of this is so that each tooltip has the same order >_<
     public static void sortEntries() {
         Comparator<ToolMaterial> comparator = new Comparator<ToolMaterial>() {
+
             @Override
             public int compare(ToolMaterial m1, ToolMaterial m2) {
                 Integer id1 = null;
@@ -286,140 +288,80 @@ public final class RestrictionHelper {
     }
 
     // the tool parts
-    public static final String[] patternNames = new String[] {
-        "ingot", //  0
-        "rod", //  1
-        "pickaxe", //  2
-        "shovel", //  3
-        "axe", //  4
-        "swordblade", //  5
-        "largeguard", //  6
-        "mediumguard", //  7
-        "crossbar", //  8
-        "binding", //  9
-        "frypan", // 10
-        "sign", // 11
-        "knifeblade", // 12
-        "chisel", // 13
-        "largerod", // 14
-        "toughbinding", // 15
-        "largeplate", // 16
-        "broadaxe", // 17
-        "scythe", // 18
-        "excavator", // 19
-        "largeblade", // 20
-        "hammerhead", // 21
-        "fullguard", // 22
-        "bowstring", // 23
-        "fletching", // 24
-        "arrowhead" // 25
+    public static final String[] patternNames = new String[] { "ingot", // 0
+            "rod", // 1
+            "pickaxe", // 2
+            "shovel", // 3
+            "axe", // 4
+            "swordblade", // 5
+            "largeguard", // 6
+            "mediumguard", // 7
+            "crossbar", // 8
+            "binding", // 9
+            "frypan", // 10
+            "sign", // 11
+            "knifeblade", // 12
+            "chisel", // 13
+            "largerod", // 14
+            "toughbinding", // 15
+            "largeplate", // 16
+            "broadaxe", // 17
+            "scythe", // 18
+            "excavator", // 19
+            "largeblade", // 20
+            "hammerhead", // 21
+            "fullguard", // 22
+            "bowstring", // 23
+            "fletching", // 24
+            "arrowhead" // 25
     };
 
-    public static final String[] patternNamesWeaponry = new String[] {
-        "shuriken", //  0
-        "crossbowlimb", //  1
-        "crossbowbody", //  2
-        "bowlimb" //  3
+    public static final String[] patternNamesWeaponry = new String[] { "shuriken", // 0
+            "crossbowlimb", // 1
+            "crossbowbody", // 2
+            "bowlimb" // 3
     };
 
     public static final String[] defaultRestrictions = new String[] {
-                // removed because it confused people.
-            };
+            // removed because it confused people.
+    };
 
     public static final String[] defaultAllowed = new String[] {
-        // Wood:
-        "Wood:rod",
-        "Wood:crossbar",
-        "Wood:binding",
-        "Wood:sign",
-        "Wood:bowlimb",
-        "Wood:crossbowlimb",
-        "Wood:crossbowbody",
+            // Wood:
+            "Wood:rod", "Wood:crossbar", "Wood:binding", "Wood:sign", "Wood:bowlimb", "Wood:crossbowlimb",
+            "Wood:crossbowbody",
 
-        // Flint:
-        "Flint:pickaxe",
-        "Flint:shovel",
-        "Flint:axe",
-        "Flint:knifeblade",
-        "Flint:arrowhead",
-        "Flint:shuriken",
+            // Flint:
+            "Flint:pickaxe", "Flint:shovel", "Flint:axe", "Flint:knifeblade", "Flint:arrowhead", "Flint:shuriken",
 
-        // Bone
-        "Bone:rod",
-        "Bone:shovel",
-        "Bone:axe",
-        "Bone:crossbar",
-        "Bone:knifeblade",
-        "Bone:arrowhead",
-        "Bone:bowlimb",
-        "Bone:crossbowlimb",
-        "Bone:crossbowbody",
+            // Bone
+            "Bone:rod", "Bone:shovel", "Bone:axe", "Bone:crossbar", "Bone:knifeblade", "Bone:arrowhead", "Bone:bowlimb",
+            "Bone:crossbowlimb", "Bone:crossbowbody",
 
-        // Cactus
-        "Cactus:rod",
-        "Cactus:binding",
-        "Cactus:knifeblade",
-        "Cactus:shuriken",
+            // Cactus
+            "Cactus:rod", "Cactus:binding", "Cactus:knifeblade", "Cactus:shuriken",
 
-        // Paper:
-        "Paper:rod",
-        "Paper:binding",
+            // Paper:
+            "Paper:rod", "Paper:binding",
 
-        // Slime:
-        "Slime:rod",
-        "Slime:sign",
-        "Slime:binding",
-        "Slime:bowlimb",
-        "Slime:crossbowlimb",
-        "Slime:crossbowbody",
+            // Slime:
+            "Slime:rod", "Slime:sign", "Slime:binding", "Slime:bowlimb", "Slime:crossbowlimb", "Slime:crossbowbody",
 
-        // BlueSlime
-        "BlueSlime:rod",
-        "BlueSlime:binding",
-        "BlueSlime:bowlimb",
-        "BlueSlime:crossbowlimb",
-        "BlueSlime:crossbowbody",
+            // BlueSlime
+            "BlueSlime:rod", "BlueSlime:binding", "BlueSlime:bowlimb", "BlueSlime:crossbowlimb",
+            "BlueSlime:crossbowbody",
 
-        // Netherrack
-        "Netherrack:rod",
-        "Netherrack:pickaxe",
-        "Netherrack:shovel",
-        "Netherrack:axe",
-        "Netherrack:largeguard",
-        "Netherrack:mediumguard",
-        "Netherrack:crossbar",
-        "Netherrack:binding",
-        "Netherrack:sign",
-        "Netherrack:largerod",
-        "Netherrack:toughbinding",
-        "Netherrack:largeplate",
-        "Netherrack:broadaxe",
-        "Netherrack:scythe",
-        "Netherrack:excavator",
-        "Netherrack:fullguard",
-        "Netherrack:arrowhead",
-        "Netherrack:crossbowbody",
+            // Netherrack
+            "Netherrack:rod", "Netherrack:pickaxe", "Netherrack:shovel", "Netherrack:axe", "Netherrack:largeguard",
+            "Netherrack:mediumguard", "Netherrack:crossbar", "Netherrack:binding", "Netherrack:sign",
+            "Netherrack:largerod", "Netherrack:toughbinding", "Netherrack:largeplate", "Netherrack:broadaxe",
+            "Netherrack:scythe", "Netherrack:excavator", "Netherrack:fullguard", "Netherrack:arrowhead",
+            "Netherrack:crossbowbody",
 
-        // Obsidian
-        "Obsidian:rod",
-        "Obsidian:pickaxe",
-        "Obsidian:shovel",
-        "Obsidian:axe",
-        "Obsidian:largeguard",
-        "Obsidian:mediumguard",
-        "Obsidian:crossbar",
-        "Obsidian:binding",
-        "Obsidian:sign",
-        "Obsidian:largerod",
-        "Obsidian:toughbinding",
-        "Obsidian:largeplate",
-        "Obsidian:broadaxe",
-        "Obsidian:scythe",
-        "Obsidian:excavator",
-        "Obsidian:hammerhead",
-        "Obsidian:fullguard",
-        "Obsidian:arrowhead",
-        "Obsidian:crossbowbody",
-        "Obsidian:shuriken"
-    };
+            // Obsidian
+            "Obsidian:rod", "Obsidian:pickaxe", "Obsidian:shovel", "Obsidian:axe", "Obsidian:largeguard",
+            "Obsidian:mediumguard", "Obsidian:crossbar", "Obsidian:binding", "Obsidian:sign", "Obsidian:largerod",
+            "Obsidian:toughbinding", "Obsidian:largeplate", "Obsidian:broadaxe", "Obsidian:scythe",
+            "Obsidian:excavator", "Obsidian:hammerhead", "Obsidian:fullguard", "Obsidian:arrowhead",
+            "Obsidian:crossbowbody", "Obsidian:shuriken" };
 }

@@ -1,14 +1,15 @@
 package iguanaman.iguanatweakstconstruct.leveling.commands;
 
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.tools.ToolCore;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 
 public class IguanaCommandToolXP extends CommandBase {
 
@@ -28,11 +29,9 @@ public class IguanaCommandToolXP extends CommandBase {
     @Override
     public void processCommand(ICommandSender icommandsender, String[] astring) {
         if (astring.length > 0) {
-            EntityPlayerMP entityplayermp = astring.length >= 2
-                    ? getPlayer(icommandsender, astring[0])
+            EntityPlayerMP entityplayermp = astring.length >= 2 ? getPlayer(icommandsender, astring[0])
                     : getCommandSenderAsPlayer(icommandsender);
-            int xp = astring.length >= 2
-                    ? parseIntWithMinMax(icommandsender, astring[1], 0, Integer.MAX_VALUE)
+            int xp = astring.length >= 2 ? parseIntWithMinMax(icommandsender, astring[1], 0, Integer.MAX_VALUE)
                     : parseIntWithMinMax(icommandsender, astring[0], 0, Integer.MAX_VALUE);
             ItemStack equipped = entityplayermp.getCurrentEquippedItem();
             if (equipped != null && equipped.getItem() instanceof ToolCore) {
@@ -41,12 +40,8 @@ public class IguanaCommandToolXP extends CommandBase {
                     int level = tags.getInteger("ToolLevel");
                     int hLevel = tags.hasKey("HarvestLevel") ? hLevel = tags.getInteger("HarvestLevel") : -1;
 
-                    if (level >= 1 && level <= 5
-                            || hLevel
-                                    >= TConstructRegistry.getMaterial("Copper").harvestLevel()
-                            || hLevel
-                                    < TConstructRegistry.getMaterial("Manyullyn")
-                                            .harvestLevel()) {
+                    if (level >= 1 && level <= 5 || hLevel >= TConstructRegistry.getMaterial("Copper").harvestLevel()
+                            || hLevel < TConstructRegistry.getMaterial("Manyullyn").harvestLevel()) {
                         Long toolXP = tags.hasKey("ToolEXP") ? tags.getLong("ToolEXP") : -1;
                         Long headXP = tags.hasKey("HeadEXP") ? tags.getLong("HeadEXP") : -1;
 
@@ -62,9 +57,9 @@ public class IguanaCommandToolXP extends CommandBase {
                             // notifyAdmins(icommandsender, 1, "Added " + xp + " to their own tool", new Object[]{});
                         }
                     } else throw new WrongUsageException("Players tool is already max level", new Object[0]);
-                } else
-                    throw new WrongUsageException(
-                            "Player must have a levelable Tinker's Construct tool in hand", new Object[0]);
+                } else throw new WrongUsageException(
+                        "Player must have a levelable Tinker's Construct tool in hand",
+                        new Object[0]);
             } else throw new WrongUsageException("Player must have a Tinker's Construct tool in hand", new Object[0]);
         } else throw new WrongUsageException("toolxp [player] <value>", new Object[0]);
     }

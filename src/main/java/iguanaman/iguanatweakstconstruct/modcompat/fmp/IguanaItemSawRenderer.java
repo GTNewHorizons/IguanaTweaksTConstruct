@@ -1,18 +1,22 @@
 package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.uv.UVTranslation;
 import codechicken.lib.vec.*;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
-import org.lwjgl.opengl.GL11;
 
 public class IguanaItemSawRenderer implements IItemRenderer {
-    private static Map<String, CCModel> models =
-            CCModel.parseObjModels(new ResourceLocation("microblock", "models/saw.obj"), 7, new SwapYZ());
+
+    private static Map<String, CCModel> models = CCModel
+            .parseObjModels(new ResourceLocation("microblock", "models/saw.obj"), 7, new SwapYZ());
     private static CCModel handle = models.get("Handle");
     private static CCModel holder = models.get("BladeSupport");
     private static CCModel blade = models.get("Blade");
@@ -48,7 +52,9 @@ public class IguanaItemSawRenderer implements IItemRenderer {
                 break;
             case ENTITY:
                 t = new TransformationList(
-                        new Scale(1), new Translation(0, 0, -0.25), new Rotation(-Math.PI / 4d, 1, 0, 0));
+                        new Scale(1),
+                        new Translation(0, 0, -0.25),
+                        new Rotation(-Math.PI / 4d, 1, 0, 0));
                 break;
             case EQUIPPED_FIRST_PERSON:
                 t = new TransformationList(

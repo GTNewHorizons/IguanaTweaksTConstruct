@@ -1,11 +1,13 @@
 package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
-import codechicken.microblock.handler.MicroblockProxy$;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+import codechicken.microblock.handler.MicroblockProxy$;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+
 public class ClientFMPProxy extends CommonFMPProxy {
+
     @Override
     public void updateSawRenderers() {
         Item stoneSaw = MicroblockProxy$.MODULE$.sawStone();
@@ -17,12 +19,13 @@ public class ClientFMPProxy extends CommonFMPProxy {
             IguanaFMPCompat.cobaltSaw.setTextureName(Reference.resource("sawCobalt"));
             IguanaFMPCompat.manyullynSaw.setTextureName(Reference.resource("sawManyullyn"));
         } else {
+            MinecraftForgeClient
+                    .registerItemRenderer(stoneSaw, new IguanaItemSawRenderer("microblock:textures/items/saw.png", 0));
+            MinecraftForgeClient
+                    .registerItemRenderer(ironSaw, new IguanaItemSawRenderer("microblock:textures/items/saw.png", 1));
             MinecraftForgeClient.registerItemRenderer(
-                    stoneSaw, new IguanaItemSawRenderer("microblock:textures/items/saw.png", 0));
-            MinecraftForgeClient.registerItemRenderer(
-                    ironSaw, new IguanaItemSawRenderer("microblock:textures/items/saw.png", 1));
-            MinecraftForgeClient.registerItemRenderer(
-                    diamondSaw, new IguanaItemSawRenderer("microblock:textures/items/saw.png", 2));
+                    diamondSaw,
+                    new IguanaItemSawRenderer("microblock:textures/items/saw.png", 2));
 
             MinecraftForgeClient.registerItemRenderer(
                     IguanaFMPCompat.arditeSaw,

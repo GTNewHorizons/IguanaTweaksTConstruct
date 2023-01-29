@@ -1,19 +1,21 @@
 package iguanaman.iguanatweakstconstruct.tweaks;
 
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
+
 import tconstruct.library.crafting.PatternBuilder;
 import tconstruct.library.util.IPattern;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class PartCraftingRecipe implements IRecipe {
+
     static {
         // register the recipe with the recipesorter
-        RecipeSorter.register(
-                Reference.MOD_ID + ":part", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
+        RecipeSorter
+                .register(Reference.MOD_ID + ":part", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
     private ItemStack outputPart;
@@ -51,11 +53,10 @@ public class PartCraftingRecipe implements IRecipe {
         ItemStack[] output = PatternBuilder.instance.getToolPart(input, pattern, null);
         if (output == null) return false;
 
-        for (ItemStack stack : output)
-            if (stack != null) {
-                outputPart = stack;
-                return true;
-            }
+        for (ItemStack stack : output) if (stack != null) {
+            outputPart = stack;
+            return true;
+        }
 
         return false;
     }

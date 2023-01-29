@@ -1,5 +1,19 @@
 package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
+import java.lang.reflect.Field;
+
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.tools.ToolMaterial;
+import tconstruct.tools.TinkerTools;
 import codechicken.microblock.ItemSaw;
 import codechicken.microblock.Saw;
 import codechicken.microblock.handler.MicroblockProxy;
@@ -13,17 +27,6 @@ import iguanaman.iguanatweakstconstruct.harvestlevels.HarvestLevelTweaks;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
-import java.lang.reflect.Field;
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.tools.ToolMaterial;
-import tconstruct.tools.TinkerTools;
 
 @Pulse(
         id = Reference.PULSE_COMPAT_FMP,
@@ -31,6 +34,7 @@ import tconstruct.tools.TinkerTools;
         pulsesRequired = Reference.PULSE_HARVESTTWEAKS,
         modsRequired = "ForgeMultipart")
 public class IguanaFMPCompat {
+
     @SidedProxy(
             clientSide = "iguanaman.iguanatweakstconstruct.modcompat.fmp.ClientFMPProxy",
             serverSide = "iguanaman.iguanatweakstconstruct.modcompat.fmp.CommonFMPProxy")
@@ -76,9 +80,12 @@ public class IguanaFMPCompat {
 
                     // update the value
                     hlvlField.set(o, hlvl);
-                    if (Config.logMiningLevelChanges)
-                        Log.info(String.format(
-                                "Changed Cutting Strength for %s from %d to %d", item.getUnlocalizedName(), old, hlvl));
+                    if (Config.logMiningLevelChanges) Log.info(
+                            String.format(
+                                    "Changed Cutting Strength for %s from %d to %d",
+                                    item.getUnlocalizedName(),
+                                    old,
+                                    hlvl));
                 } catch (Exception e) {
                     // something failed :(
                     Log.error(String.format("Couldn't update FMP saw %s", item.getUnlocalizedName()));
@@ -93,51 +100,71 @@ public class IguanaFMPCompat {
         manyullynSaw = createSaw(TConstructRegistry.getMaterial("Manyullyn"));
 
         // and add recipes for them
-        String[] recipe = {"srr", "sbr"};
+        String[] recipe = { "srr", "sbr" };
         if (!Loader.isModLoaded("dreamcraft")) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(arditeSaw),
-                    recipe,
-                    's',
-                    Items.stick,
-                    'r',
-                    "rodStone",
-                    'b',
-                    new ItemStack(TinkerTools.toolRod, 1, 11)));
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(cobaltSaw),
-                    recipe,
-                    's',
-                    Items.stick,
-                    'r',
-                    "rodStone",
-                    'b',
-                    new ItemStack(TinkerTools.toolRod, 1, 10)));
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(manyullynSaw),
-                    recipe,
-                    's',
-                    Items.stick,
-                    'r',
-                    "rodStone",
-                    'b',
-                    new ItemStack(TinkerTools.toolRod, 1, 12)));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(arditeSaw),
+                            recipe,
+                            's',
+                            Items.stick,
+                            'r',
+                            "rodStone",
+                            'b',
+                            new ItemStack(TinkerTools.toolRod, 1, 11)));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(cobaltSaw),
+                            recipe,
+                            's',
+                            Items.stick,
+                            'r',
+                            "rodStone",
+                            'b',
+                            new ItemStack(TinkerTools.toolRod, 1, 10)));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(manyullynSaw),
+                            recipe,
+                            's',
+                            Items.stick,
+                            'r',
+                            "rodStone",
+                            'b',
+                            new ItemStack(TinkerTools.toolRod, 1, 12)));
         } else {
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(arditeSaw), recipe, 's', "stickWood", 'r', "stickSteel", 'b', "toolHeadSawArdite"));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(arditeSaw),
+                            recipe,
+                            's',
+                            "stickWood",
+                            'r',
+                            "stickSteel",
+                            'b',
+                            "toolHeadSawArdite"));
 
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(cobaltSaw), recipe, 's', "stickWood", 'r', "stickSteel", 'b', "toolHeadSawCobalt"));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(cobaltSaw),
+                            recipe,
+                            's',
+                            "stickWood",
+                            'r',
+                            "stickSteel",
+                            'b',
+                            "toolHeadSawCobalt"));
 
-            GameRegistry.addRecipe(new ShapedOreRecipe(
-                    new ItemStack(manyullynSaw),
-                    recipe,
-                    's',
-                    "stickWood",
-                    'r',
-                    "stickSteel",
-                    'b',
-                    "toolHeadSawManyullyn"));
+            GameRegistry.addRecipe(
+                    new ShapedOreRecipe(
+                            new ItemStack(manyullynSaw),
+                            recipe,
+                            's',
+                            "stickWood",
+                            'r',
+                            "stickSteel",
+                            'b',
+                            "toolHeadSawManyullyn"));
         }
 
         proxy.updateSawRenderers();

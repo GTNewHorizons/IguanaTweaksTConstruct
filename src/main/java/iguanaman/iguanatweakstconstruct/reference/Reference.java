@@ -1,9 +1,11 @@
 package iguanaman.iguanatweakstconstruct.reference;
 
-import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
 import java.io.File;
 
+import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
+
 public class Reference {
+
     public static final String MOD_ID = "IguanaTweaksTConstruct";
     public static final String MOD_NAME = "Iguana Tinker Tweaks";
     public static final String TCON_MOD_ID = "TConstruct";

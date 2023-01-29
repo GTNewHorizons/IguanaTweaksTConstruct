@@ -1,17 +1,21 @@
 package iguanaman.iguanatweakstconstruct.restriction;
 
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.HashSet;
 import java.util.Set;
+
 import mantle.utils.ItemMetaWrapper;
+
 import net.minecraftforge.common.config.Configuration;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.tools.ToolMaterial;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public class RestrictionConfig {
+
     private Configuration configfile;
-    //    public static Map<String, Set<Integer>> restrictedParts = new HashMap<String, Set<Integer>>();
+    // public static Map<String, Set<Integer>> restrictedParts = new HashMap<String, Set<Integer>>();
 
     public void init(String fileName) {
         configfile = new Configuration(Reference.configFile(fileName));
@@ -35,8 +39,7 @@ public class RestrictionConfig {
         comment.append("The format is <materialname>:<partname>\n");
         // material names
         comment.append("materialnames are: ");
-        ToolMaterial[] mats = TConstructRegistry.toolMaterials
-                .values()
+        ToolMaterial[] mats = TConstructRegistry.toolMaterials.values()
                 .toArray(new ToolMaterial[TConstructRegistry.toolMaterials.size()]);
         for (int i = 0; i < mats.length; i++) {
             comment.append(mats[i].materialName);
@@ -56,8 +59,8 @@ public class RestrictionConfig {
         comment.append("\n");
 
         // load the actual config after creating this long information comment ._.
-        String[] input = configfile.getStringList(
-                "restricted", "ToolParts", RestrictionHelper.defaultRestrictions, comment.toString());
+        String[] input = configfile
+                .getStringList("restricted", "ToolParts", RestrictionHelper.defaultRestrictions, comment.toString());
 
         // work through the entries
         for (String str : input) {
@@ -88,8 +91,7 @@ public class RestrictionConfig {
             }
 
             // check if valid part
-            boolean validPattern =
-                    RestrictionHelper.configNameToPattern.keySet().contains(restriction[1]);
+            boolean validPattern = RestrictionHelper.configNameToPattern.keySet().contains(restriction[1]);
             boolean validCast = RestrictionHelper.configNameToCast.keySet().contains(restriction[1]);
 
             if (!validPattern && !validCast) {
@@ -116,8 +118,8 @@ public class RestrictionConfig {
         comment.append(
                 "ATTENTION: THIS DOES NOT ALLOW YOU TO ADD NEW RECIPES. ONLY EXISTING ONES WORK. This exists purely for convenience.");
         comment.append("(materialnames and partnames are the same as restricted parts)");
-        String[] input =
-                configfile.getStringList("allowed", "ToolParts", RestrictionHelper.defaultAllowed, comment.toString());
+        String[] input = configfile
+                .getStringList("allowed", "ToolParts", RestrictionHelper.defaultAllowed, comment.toString());
 
         // set of already encountered materials
         Set<ToolMaterial> memory = new HashSet<ToolMaterial>();
@@ -142,8 +144,7 @@ public class RestrictionConfig {
             }
 
             // check if valid part
-            boolean validPattern =
-                    RestrictionHelper.configNameToPattern.keySet().contains(restriction[1]);
+            boolean validPattern = RestrictionHelper.configNameToPattern.keySet().contains(restriction[1]);
             boolean validCast = RestrictionHelper.configNameToCast.keySet().contains(restriction[1]);
 
             if (!validPattern && !validCast) {
@@ -159,12 +160,10 @@ public class RestrictionConfig {
 
             boolean success = false;
             // then allow it
-            if (validPattern)
-                success |= RestrictionHelper.addAllowed(
-                        RestrictionHelper.configNameToPattern.get(restriction[1]), material);
-            if (validCast)
-                success |=
-                        RestrictionHelper.addAllowed(RestrictionHelper.configNameToCast.get(restriction[1]), material);
+            if (validPattern) success |= RestrictionHelper
+                    .addAllowed(RestrictionHelper.configNameToPattern.get(restriction[1]), material);
+            if (validCast) success |= RestrictionHelper
+                    .addAllowed(RestrictionHelper.configNameToCast.get(restriction[1]), material);
 
             if (!success) Log.error(String.format("You're trying to allow an invalid recipe: %s", str));
         }

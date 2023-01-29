@@ -1,8 +1,5 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
@@ -13,9 +10,14 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
 import tconstruct.smeltery.TinkerSmeltery;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ClayBucketHandler {
+
     @SubscribeEvent
     public void onRightClickBlock(PlayerInteractEvent event) {
         if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
@@ -43,8 +45,8 @@ public class ClayBucketHandler {
         }
 
         if (!player.capabilities.isCreativeMode) {
-            player.inventory.setInventorySlotContents(
-                    player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketFired));
+            player.inventory
+                    .setInventorySlotContents(player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketFired));
         }
 
         // func_150024_a = setWaterLevel
@@ -64,8 +66,8 @@ public class ClayBucketHandler {
         EntityPlayer player = event.entityPlayer;
 
         if (equipped.stackSize-- == 1) {
-            player.inventory.setInventorySlotContents(
-                    player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketMilk));
+            player.inventory
+                    .setInventorySlotContents(player.inventory.currentItem, new ItemStack(IguanaItems.clayBucketMilk));
         } else if (!player.inventory.addItemStackToInventory(new ItemStack(IguanaItems.clayBucketMilk))) {
             player.dropPlayerItemWithRandomChoice(new ItemStack(IguanaItems.clayBucketMilk, 1, 0), false);
         }

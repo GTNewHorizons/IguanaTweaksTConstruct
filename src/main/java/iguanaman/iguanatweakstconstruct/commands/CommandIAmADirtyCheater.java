@@ -1,6 +1,5 @@
 package iguanaman.iguanatweakstconstruct.commands;
 
-import iguanaman.iguanatweakstconstruct.leveling.IguanaToolLeveling;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -9,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
+import iguanaman.iguanatweakstconstruct.leveling.IguanaToolLeveling;
 
 public class CommandIAmADirtyCheater extends CommandBase {
 
@@ -71,8 +72,7 @@ public class CommandIAmADirtyCheater extends CommandBase {
     private void convertTool(ICommandSender sender, ItemStack stack) {
         if (stack.getItem() != IguanaToolLeveling.rubberChicken) return;
 
-        if (!stack.hasTagCompound()
-                || !stack.getTagCompound().getCompoundTag("InfiTool").hasKey("Original")) return;
+        if (!stack.hasTagCompound() || !stack.getTagCompound().getCompoundTag("InfiTool").hasKey("Original")) return;
 
         String unloc = stack.getTagCompound().getCompoundTag("InfiTool").getString("Original");
         Item.itemRegistry.containsKey(unloc);

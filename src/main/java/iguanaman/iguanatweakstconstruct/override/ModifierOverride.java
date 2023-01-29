@@ -1,13 +1,15 @@
 package iguanaman.iguanatweakstconstruct.override;
 
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public class ModifierOverride implements IOverride {
 
@@ -60,11 +62,10 @@ public class ModifierOverride implements IOverride {
                 "Tools gain a bonus for specific modifiers on doing specific things.\nThe value below determines how much weight is added (on average) to a modifier if only that action is done for the whole level.\nAn example: Mining blocks increases the chance to obtain the redstone modifier. If you'd only mine stone blocks from 0xp to levelup, the weigth of the redstone modifier woudl be increased by that amount. (That's why it's relatively low by default)");
 
         RandomBonuses.usageBonusWeight = config.get(
-                        "UsageBonus",
-                        "bonusWeight",
-                        RandomBonuses.usageBonusWeight,
-                        "The average amount of weight added if a tool does one action for a whole levelup.")
-                .getInt();
+                "UsageBonus",
+                "bonusWeight",
+                RandomBonuses.usageBonusWeight,
+                "The average amount of weight added if a tool does one action for a whole levelup.").getInt();
         if (Config.logOverrideChanges)
             Log.info(String.format("Bonus Modifier Override: Set bonus weight to %d", RandomBonuses.usageBonusWeight));
 
@@ -91,30 +92,32 @@ public class ModifierOverride implements IOverride {
                 int weight = Math.max(0, prop.getInt());
                 map.put(mod, weight);
 
-                if (Config.logOverrideChanges)
-                    Log.info(String.format(
-                            "Bonus Modifier Override: [%s] Changed Weight of %s to %d",
-                            categoryName, mod.toString(), prop.getInt()));
+                if (Config.logOverrideChanges) Log.info(
+                        String.format(
+                                "Bonus Modifier Override: [%s] Changed Weight of %s to %d",
+                                categoryName,
+                                mod.toString(),
+                                prop.getInt()));
             } catch (IllegalArgumentException e) {
                 Log.error(String.format("Found invalid entry when parsing %s: %s", categoryName, prop.getName()));
             }
         }
     }
 
-    private void doUsefulnessUpdate(
-            Configuration config, String category, RandomBonuses.Modifier mod, Set<RandomBonuses.Modifier> set) {
+    private void doUsefulnessUpdate(Configuration config, String category, RandomBonuses.Modifier mod,
+            Set<RandomBonuses.Modifier> set) {
         boolean useful = config.get(category, mod.toString(), set.contains(mod)).getBoolean();
         if (useful) {
             set.add(mod);
-            if (Config.logOverrideChanges)
-                Log.info(String.format(
-                        "Bonus Modifier Override: [%s] Added useful modifier %s", category, mod.toString()));
+            if (Config.logOverrideChanges) Log.info(
+                    String.format("Bonus Modifier Override: [%s] Added useful modifier %s", category, mod.toString()));
         } else {
             set.remove(mod);
-            if (Config.logOverrideChanges)
-                Log.info(String.format(
-                        "Bonus Modifier Override: [%s] Removed modifier %s from useful modifiers",
-                        category, mod.toString()));
+            if (Config.logOverrideChanges) Log.info(
+                    String.format(
+                            "Bonus Modifier Override: [%s] Removed modifier %s from useful modifiers",
+                            category,
+                            mod.toString()));
         }
     }
 }

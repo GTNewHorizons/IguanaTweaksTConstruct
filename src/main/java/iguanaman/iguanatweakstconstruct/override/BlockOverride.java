@@ -1,10 +1,7 @@
 package iguanaman.iguanatweakstconstruct.override;
 
-import iguanaman.iguanatweakstconstruct.harvestlevels.HarvestLevelTweaks;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.LinkedList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -12,7 +9,13 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 
+import iguanaman.iguanatweakstconstruct.harvestlevels.HarvestLevelTweaks;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
+
 public class BlockOverride implements IOverride {
+
     @Override
     public void createDefault(Configuration config) {
         Log.debug("Creating Block Default File");
@@ -33,8 +36,8 @@ public class BlockOverride implements IOverride {
                 try {
                     String s = new ItemStack(block, 1, meta).getDisplayName();
                     if (s == null || s.isEmpty()) continue;
-                } catch (
-                        Exception e) // bad practice to catch exception, but it ensures that mc doesn't crash if modders
+                } catch (Exception e) // bad practice to catch exception, but it ensures that mc doesn't crash if
+                                      // modders
                 // do weird stuff
                 {
                     continue;
@@ -121,16 +124,20 @@ public class BlockOverride implements IOverride {
                 int lvl = prop.getInt();
                 if (meta == -1) {
                     block.setHarvestLevel(tool, prop.getInt());
-                    if (Config.logOverrideChanges)
-                        Log.info(String.format(
-                                "Block Override: Changed Harvest Level of %s:%d to %d",
-                                block.getUnlocalizedName(), meta, lvl));
+                    if (Config.logOverrideChanges) Log.info(
+                            String.format(
+                                    "Block Override: Changed Harvest Level of %s:%d to %d",
+                                    block.getUnlocalizedName(),
+                                    meta,
+                                    lvl));
                 } else {
                     block.setHarvestLevel(tool, prop.getInt(), meta);
-                    if (Config.logOverrideChanges)
-                        Log.info(String.format(
-                                "Block Override: Changed Harvest Level of %s:%d to %d",
-                                block.getUnlocalizedName(), meta, lvl));
+                    if (Config.logOverrideChanges) Log.info(
+                            String.format(
+                                    "Block Override: Changed Harvest Level of %s:%d to %d",
+                                    block.getUnlocalizedName(),
+                                    meta,
+                                    lvl));
                 }
             }
         }

@@ -1,18 +1,21 @@
 package iguanaman.iguanatweakstconstruct.commands;
 
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.*;
 import net.minecraft.util.ChatComponentText;
 
+import iguanaman.iguanatweakstconstruct.util.Log;
+
 public class CommandDumpTools extends CommandBase {
+
     @Override
     public String getCommandName() {
         return "dumpTools";
@@ -36,14 +39,14 @@ public class CommandDumpTools extends CommandBase {
                 // get the object for the key
                 Object item = Item.itemRegistry.getObject(key);
                 // if the object is a tool, we dump it
-                if (item instanceof ItemTool
-                        || item instanceof ItemHoe
+                if (item instanceof ItemTool || item instanceof ItemHoe
                         || item instanceof ItemSword
-                        || item instanceof ItemBow) pw.println(key.toString());
+                        || item instanceof ItemBow)
+                    pw.println(key.toString());
                 // if it's not one of these, but still has a toolclass, we consider it tool.
                 // else if(item instanceof Item)
-                //  if(!((Item) item).getToolClasses(null).isEmpty())
-                //    pw.println(key.toString());
+                // if(!((Item) item).getToolClasses(null).isEmpty())
+                // pw.println(key.toString());
             }
 
             pw.close();

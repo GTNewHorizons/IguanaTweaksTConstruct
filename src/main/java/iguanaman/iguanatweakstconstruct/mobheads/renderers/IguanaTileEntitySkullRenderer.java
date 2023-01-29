@@ -1,12 +1,5 @@
 package iguanaman.iguanatweakstconstruct.mobheads.renderers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import iguanaman.iguanatweakstconstruct.mobheads.items.IguanaSkull;
-import iguanaman.iguanatweakstconstruct.mobheads.models.ModelBucketHelmet;
-import iguanaman.iguanatweakstconstruct.mobheads.models.ModelEnderManHead;
-import iguanaman.iguanatweakstconstruct.mobheads.models.ModelHeadwear;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -14,11 +7,21 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import iguanaman.iguanatweakstconstruct.mobheads.items.IguanaSkull;
+import iguanaman.iguanatweakstconstruct.mobheads.models.ModelBucketHelmet;
+import iguanaman.iguanatweakstconstruct.mobheads.models.ModelEnderManHead;
+import iguanaman.iguanatweakstconstruct.mobheads.models.ModelHeadwear;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+
 @SideOnly(Side.CLIENT)
 public class IguanaTileEntitySkullRenderer extends TileEntitySpecialRenderer {
+
     public static IguanaTileEntitySkullRenderer renderer = new IguanaTileEntitySkullRenderer();
 
     // Skull stuff
@@ -27,22 +30,23 @@ public class IguanaTileEntitySkullRenderer extends TileEntitySpecialRenderer {
     private final ModelEnderManHead modelEnderManHead = new ModelEnderManHead();
 
     private final ResourceLocation[] textures = new ResourceLocation[] {
-        new ResourceLocation("textures/entity/enderman/enderman.png"),
-        new ResourceLocation("textures/entity/zombie_pigman.png"),
-        new ResourceLocation("textures/entity/blaze.png"),
-        // modsupport: Thermal Expansion
-        new ResourceLocation("thermalfoundation", "textures/entity/Blizz.png")
-    };
+            new ResourceLocation("textures/entity/enderman/enderman.png"),
+            new ResourceLocation("textures/entity/zombie_pigman.png"),
+            new ResourceLocation("textures/entity/blaze.png"),
+            // modsupport: Thermal Expansion
+            new ResourceLocation("thermalfoundation", "textures/entity/Blizz.png") };
 
     private final ResourceLocation enderManEyes = new ResourceLocation("textures/entity/enderman/enderman_eyes.png");
 
     // fun stuff ;)
     private final ModelHeadwear modelEnderManJaw = new ModelHeadwear(0, 16, 64, 32);
     private final ModelBucketHelmet modelBucketHelmet = new ModelBucketHelmet();
-    private final ResourceLocation textureBucketHelmet =
-            new ResourceLocation(Reference.RESOURCE, "textures/models/bucket_helmet.png");
-    private final ResourceLocation textureClayBucketHelmet =
-            new ResourceLocation(Reference.RESOURCE, "textures/models/clayBucket_helmet.png");
+    private final ResourceLocation textureBucketHelmet = new ResourceLocation(
+            Reference.RESOURCE,
+            "textures/models/bucket_helmet.png");
+    private final ResourceLocation textureClayBucketHelmet = new ResourceLocation(
+            Reference.RESOURCE,
+            "textures/models/clayBucket_helmet.png");
 
     public IguanaTileEntitySkullRenderer() {
         this.func_147497_a(TileEntityRendererDispatcher.instance);
@@ -74,8 +78,8 @@ public class IguanaTileEntitySkullRenderer extends TileEntitySpecialRenderer {
         else if (meta == 3) renderSkull(x, y, z, r, sidePlacement, modelSkull, textures[0]);
     }
 
-    public void renderSkull(
-            float x, float y, float z, float r, int sidePlacement, ModelBase model, ResourceLocation texture) {
+    public void renderSkull(float x, float y, float z, float r, int sidePlacement, ModelBase model,
+            ResourceLocation texture) {
         // chose texture
         this.bindTexture(texture);
 

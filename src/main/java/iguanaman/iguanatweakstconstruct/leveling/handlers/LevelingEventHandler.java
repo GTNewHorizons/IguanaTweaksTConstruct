@@ -1,14 +1,7 @@
 package iguanaman.iguanatweakstconstruct.leveling.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
-import iguanaman.iguanatweakstconstruct.reference.Config;
 import java.util.Arrays;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.*;
@@ -21,6 +14,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
+
 import tconstruct.items.tools.Chisel;
 import tconstruct.items.tools.Hammer;
 import tconstruct.items.tools.Pickaxe;
@@ -30,8 +24,17 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.weaponry.ProjectileWeapon;
 import tconstruct.weaponry.entity.ShurikenEntity;
 import tconstruct.weaponry.weapons.Shuriken;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 
 public class LevelingEventHandler {
+
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
         // only player caused damage
@@ -86,7 +89,7 @@ public class LevelingEventHandler {
         }
 
         if (xp > 0) {
-            for (ItemStack itemstack : new ItemStack[] {stack, ammo}) {
+            for (ItemStack itemstack : new ItemStack[] { stack, ammo }) {
                 if (itemstack == null) continue;
 
                 LevelingLogic.addXP(itemstack, player, xp);
@@ -117,14 +120,12 @@ public class LevelingEventHandler {
                     RandomBonuses.addModifierExtraWeight(RandomBonuses.Modifier.SMITE, Math.max(1, xp / 2), tags);
                 // wither skeleton gives lifesteal
                 else if (event.entityLiving instanceof EntitySkeleton) {
-                    if (((EntitySkeleton) event.entityLiving).getSkeletonType() != 0)
-                        RandomBonuses.addModifierExtraWeight(
-                                RandomBonuses.Modifier.LIFESTEAL, Math.max(1, xp / 2) + 2, tags);
+                    if (((EntitySkeleton) event.entityLiving).getSkeletonType() != 0) RandomBonuses
+                            .addModifierExtraWeight(RandomBonuses.Modifier.LIFESTEAL, Math.max(1, xp / 2) + 2, tags);
                 }
                 // enderman gives beheading
-                else if (event.entityLiving instanceof EntityEnderman)
-                    RandomBonuses.addModifierExtraWeight(
-                            RandomBonuses.Modifier.BEHEADING, Math.max(1, xp / 2) + 3, tags);
+                else if (event.entityLiving instanceof EntityEnderman) RandomBonuses
+                        .addModifierExtraWeight(RandomBonuses.Modifier.BEHEADING, Math.max(1, xp / 2) + 3, tags);
 
                 // knocking back enemies with spriting gives knockback chance
                 if (player.isSprinting())
@@ -156,10 +157,9 @@ public class LevelingEventHandler {
 
         // was a chisel involved?
         ItemStack chisel = null;
-        for (int i = 0; i < event.craftMatrix.getSizeInventory(); i++)
-            if (event.craftMatrix.getStackInSlot(i) != null
-                    && event.craftMatrix.getStackInSlot(i).getItem() instanceof Chisel)
-                chisel = event.craftMatrix.getStackInSlot(i);
+        for (int i = 0; i < event.craftMatrix.getSizeInventory(); i++) if (event.craftMatrix.getStackInSlot(i) != null
+                && event.craftMatrix.getStackInSlot(i).getItem() instanceof Chisel)
+            chisel = event.craftMatrix.getStackInSlot(i);
 
         // no chisel found
         if (chisel == null) return;
@@ -178,7 +178,8 @@ public class LevelingEventHandler {
 
         // remove modifiers
         toolTag.setInteger(
-                "Modifiers", Math.max(toolTag.getInteger("Modifiers") - (3 - Config.toolLevelingExtraModifiers), 0));
+                "Modifiers",
+                Math.max(toolTag.getInteger("Modifiers") - (3 - Config.toolLevelingExtraModifiers), 0));
     }
 
     // Display XP of held tool in debug (F3) if config is set
@@ -203,12 +204,8 @@ public class LevelingEventHandler {
                         if (level <= 5) event.left.add(LevelingTooltips.getXpToolTip(equipped, null));
 
                         if (Config.levelingPickaxeBoost)
-                            if (hLevel
-                                            >= TConstructRegistry.getMaterial("Copper")
-                                                    .harvestLevel()
-                                    && hLevel
-                                            < TConstructRegistry.getMaterial("Manyullyn")
-                                                    .harvestLevel()
+                            if (hLevel >= TConstructRegistry.getMaterial("Copper").harvestLevel()
+                                    && hLevel < TConstructRegistry.getMaterial("Manyullyn").harvestLevel()
                                     && !tags.hasKey("HarvestLevelModified")
                                     && (equipped.getItem() instanceof Pickaxe || equipped.getItem() instanceof Hammer))
                                 event.left.add(LevelingTooltips.getBoostXpToolTip(equipped, null));

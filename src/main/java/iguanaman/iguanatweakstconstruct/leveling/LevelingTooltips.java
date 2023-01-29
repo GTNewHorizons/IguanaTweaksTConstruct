@@ -1,26 +1,31 @@
 package iguanaman.iguanatweakstconstruct.leveling;
 
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+
 // utility class for constructing tooltip
 public final class LevelingTooltips {
+
     private LevelingTooltips() {} // non-instantiable
 
     /**
      * Returns only the XP progress. Standard is %.
+     * 
      * @param detailed if true the xp-numbers will be returned too. "X/Y (Z%)"
      * @return
      */
     public static String getXpString(ItemStack tool, NBTTagCompound tags, boolean detailed) {
         return getXpString(tool, tags, detailed, false);
     }
+
     /**
      * Returns only the XP progress for the mining level. Standard is %.
+     * 
      * @param detailed if true the xp-numbers will be returned too. "X/Y (Z%)"
      * @return
      */
@@ -38,7 +43,9 @@ public final class LevelingTooltips {
 
     /**
      * Returns the XP tooltip for the ToolTip.
-     * @param boostXp If true, the xp for the mining level boost will be returned instead of the xp for the next tool level.
+     * 
+     * @param boostXp If true, the xp for the mining level boost will be returned instead of the xp for the next tool
+     *                level.
      */
     private static String getXpToolTip(ItemStack tool, NBTTagCompound tags, boolean boostXp) {
         String prefix = StatCollector.translateToLocal(boostXp ? "tooltip.level.miningxp" : "tooltip.level.skillxp");
@@ -47,8 +54,10 @@ public final class LevelingTooltips {
 
     /**
      * Returns only the xp part of the xp tooltip.
+     * 
      * @param detailed if true the xp-numbers will be returned too.
-     * @param boostXp If true, the xp for the mining level boost will be returned instead of the xp for the next tool level.
+     * @param boostXp  If true, the xp for the mining level boost will be returned instead of the xp for the next tool
+     *                 level.
      * @return
      */
     private static String getXpString(ItemStack tool, NBTTagCompound tags, boolean detailed, boolean boostXp) {
@@ -69,8 +78,8 @@ public final class LevelingTooltips {
         if (!StatCollector.canTranslate("tooltip.level.skill." + level)) str = "???";
         else str = StatCollector.translateToLocal("tooltip.level.skill." + level);
 
-        return String.format(
-                "%s: %s", StatCollector.translateToLocal("tooltip.level.skilllevel"), getLevelString(level));
+        return String
+                .format("%s: %s", StatCollector.translateToLocal("tooltip.level.skilllevel"), getLevelString(level));
     }
 
     public static String getLevelString(int level) {
@@ -130,7 +139,8 @@ public final class LevelingTooltips {
     public static String getMiningLevelTooltip(int hLevel) {
         return String.format(
                 "%s: %s",
-                StatCollector.translateToLocal("tooltip.level.mininglevel"), HarvestLevels.getHarvestLevelName(hLevel));
+                StatCollector.translateToLocal("tooltip.level.mininglevel"),
+                HarvestLevels.getHarvestLevelName(hLevel));
     }
 
     public static String getBoostedTooltip() {
@@ -140,8 +150,8 @@ public final class LevelingTooltips {
                 StatCollector.translateToLocal("tooltip.level.boosted"));
     }
 
-    public static String getInfoString(
-            String base, EnumChatFormatting baseColor, String info, EnumChatFormatting infoColor) {
+    public static String getInfoString(String base, EnumChatFormatting baseColor, String info,
+            EnumChatFormatting infoColor) {
         return getInfoString(base, baseColor, info, infoColor.toString());
     }
 

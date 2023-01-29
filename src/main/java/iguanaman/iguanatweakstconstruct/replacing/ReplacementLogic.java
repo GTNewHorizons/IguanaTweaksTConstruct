@@ -2,18 +2,13 @@ package iguanaman.iguanatweakstconstruct.replacing;
 
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.*;
 
-import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModXpAwareRedstone;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.Arrays;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import tconstruct.TConstruct;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ModifyBuilder;
@@ -29,12 +24,20 @@ import tconstruct.modifiers.tools.ModRedstone;
 import tconstruct.tools.TinkerTools;
 import tconstruct.util.config.PHConstruct;
 import tconstruct.weaponry.TinkerWeaponry;
+import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModXpAwareRedstone;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public final class ReplacementLogic {
+
     private ReplacementLogic() {} // non-instantiable
 
-    public static void exchangeToolPart(
-            ToolCore tool, NBTTagCompound tags, PartTypes type, ItemStack partStack, ItemStack toolStack) {
+    public static void exchangeToolPart(ToolCore tool, NBTTagCompound tags, PartTypes type, ItemStack partStack,
+            ItemStack toolStack) {
         // create a new tool that'd be the old one with the new part exchanged
         ItemStack headStack = null;
         ItemStack handleStack = null;
@@ -53,15 +56,17 @@ public final class ReplacementLogic {
         // extra hack for bolt crafting..
         if (tool == TinkerWeaponry.boltAmmo) {
             headStack = DualMaterialToolPart.createDualMaterial(
-                    TinkerWeaponry.partBolt, getToolPartMaterial(tags, HANDLE), getToolPartMaterial(tags, HEAD));
+                    TinkerWeaponry.partBolt,
+                    getToolPartMaterial(tags, HANDLE),
+                    getToolPartMaterial(tags, HEAD));
             handleStack = accessoryStack;
             accessoryStack = null;
             if (type == ACCESSORY) type = HANDLE;
             else type = HEAD;
         }
 
-        ItemStack originalTool =
-                ToolBuilder.instance.buildTool(headStack, handleStack, accessoryStack, extraStack, "Original Tool");
+        ItemStack originalTool = ToolBuilder.instance
+                .buildTool(headStack, handleStack, accessoryStack, extraStack, "Original Tool");
         if (originalTool == null) {
             Log.error("Tool to modify is impossible?");
             return;
@@ -72,8 +77,8 @@ public final class ReplacementLogic {
         if (type == ACCESSORY && accessoryStack != null) accessoryStack = partStack;
         if (type == EXTRA && extraStack != null) extraStack = partStack;
 
-        ItemStack newTool =
-                ToolBuilder.instance.buildTool(headStack, handleStack, accessoryStack, extraStack, "Modified Tool");
+        ItemStack newTool = ToolBuilder.instance
+                .buildTool(headStack, handleStack, accessoryStack, extraStack, "Modified Tool");
         if (newTool == null) {
             Log.debug("External source prevents creation of tool with replaced parts.");
             return;
@@ -153,8 +158,7 @@ public final class ReplacementLogic {
         // reinforced is kinda complicated, since the actual level you get out of the materials is complicated
         // simply calculate difference between current and newly built tool to know how much has been added afterwards
         int currentReinforced = tags.getInteger("Unbreaking");
-        int oldReinforced =
-                originalTool.getTagCompound().getCompoundTag("InfiTool").getInteger("Unbreaking");
+        int oldReinforced = originalTool.getTagCompound().getCompoundTag("InfiTool").getInteger("Unbreaking");
         int newReinforced = newTags.getInteger("Unbreaking");
         newReinforced += currentReinforced - oldReinforced;
         tags.setInteger("Unbreaking", newReinforced);
@@ -163,15 +167,14 @@ public final class ReplacementLogic {
         // now for the scary part... handle material traits >_<
         handleMaterialTraits(tags, oldMaterialId, partMaterialId);
         // fiery blaze arrows has to be handled separately.. meh
-        if (tool == TinkerWeaponry.arrowAmmo && type == HANDLE)
-            if (oldMaterialId == 3 && partMaterialId != 3) {
-                // remove fiery
-                if (tags.getInteger("Fiery") > 5) tags.setInteger("Fiery", tags.getInteger("Fiery") - 5);
-                else tags.removeTag("Fiery");
-            } else if (partMaterialId == 3 && oldMaterialId != 3) {
-                // add fiery
-                tags.setInteger("Fiery", 5);
-            }
+        if (tool == TinkerWeaponry.arrowAmmo && type == HANDLE) if (oldMaterialId == 3 && partMaterialId != 3) {
+            // remove fiery
+            if (tags.getInteger("Fiery") > 5) tags.setInteger("Fiery", tags.getInteger("Fiery") - 5);
+            else tags.removeTag("Fiery");
+        } else if (partMaterialId == 3 && oldMaterialId != 3) {
+            // add fiery
+            tags.setInteger("Fiery", 5);
+        }
 
         // material tooltips are handled by tcon internally
 
@@ -309,27 +312,27 @@ public final class ReplacementLogic {
         int modifiers = tags.getInteger("Modifiers"); // backup modifiers
 
         // find the redstone modifier
-        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers)
-            if (mod instanceof ModRedstone) {
-                ModRedstone modRedstone = (ModRedstone) mod;
-                if (modRedstone instanceof ModXpAwareRedstone)
-                    modRedstone = ((ModXpAwareRedstone) modRedstone).originalModifier;
-                int[] keyPair = tags.getIntArray("Redstone");
-                // get amount of redstone applied
-                int rLvl = keyPair[0];
-                // reset redstone modifier
-                tags.removeTag("Redstone");
+        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) if (mod instanceof ModRedstone) {
+            ModRedstone modRedstone = (ModRedstone) mod;
+            if (modRedstone instanceof ModXpAwareRedstone)
+                modRedstone = ((ModXpAwareRedstone) modRedstone).originalModifier;
+            int[] keyPair = tags.getIntArray("Redstone");
+            // get amount of redstone applied
+            int rLvl = keyPair[0];
+            // reset redstone modifier
+            tags.removeTag("Redstone");
 
-                // remove the old tooltip
-                int tipIndex = keyPair[2];
-                tags.removeTag("Tooltip" + tipIndex);
-                tags.removeTag("ModifierTip" + tipIndex);
+            // remove the old tooltip
+            int tipIndex = keyPair[2];
+            tags.removeTag("Tooltip" + tipIndex);
+            tags.removeTag("ModifierTip" + tipIndex);
 
-                // reapply redstone
-                while (rLvl-- > 0)
-                    modRedstone.modify(
-                            new ItemStack[] {new ItemStack(Items.redstone)}, itemStack); // tags belong to oldTool
-            }
+            // reapply redstone
+            while (rLvl-- > 0) modRedstone.modify(new ItemStack[] { new ItemStack(Items.redstone) }, itemStack); // tags
+                                                                                                                 // belong
+                                                                                                                 // to
+                                                                                                                 // oldTool
+        }
 
         // restore modifiers
         tags.setInteger("Modifiers", modifiers);
@@ -344,8 +347,7 @@ public final class ReplacementLogic {
 
         ModAttack modAttack = TinkerTools.modAttack;
         // ammo weapons have their own modifier
-        if (itemStack.getItem() instanceof ToolCore
-                && TinkerWeaponry.modAttack != null
+        if (itemStack.getItem() instanceof ToolCore && TinkerWeaponry.modAttack != null
                 && Arrays.asList(((ToolCore) itemStack.getItem()).getTraits()).contains("ammo"))
             modAttack = TinkerWeaponry.modAttack;
 
@@ -361,8 +363,8 @@ public final class ReplacementLogic {
         tags.removeTag("ModifierTip" + tipIndex);
 
         // reapply redstone
-        while (qLvl-- > 0)
-            modAttack.modify(new ItemStack[] {new ItemStack(Items.quartz)}, itemStack); // tags belong to oldTool
+        while (qLvl-- > 0) modAttack.modify(new ItemStack[] { new ItemStack(Items.quartz) }, itemStack); // tags belong
+                                                                                                         // to oldTool
 
         // restore modifiers
         tags.setInteger("Modifiers", modifiers);
@@ -483,6 +485,7 @@ public final class ReplacementLogic {
 
     /**
      * Returns the material id the tool-component is made of.
+     * 
      * @param tags InfiTool Tagcompount of the tool
      */
     public static int getToolPartMaterial(NBTTagCompound tags, PartTypes type) {
@@ -507,9 +510,11 @@ public final class ReplacementLogic {
 
     /**
      * Check if another part type could be employed. basically slot-id = part-placement.
-     * @param recipe Recipe that should be checked
-     * @param part The new part that replaces an old one.
-     * @param currentType Where the part would currently be replaced. Call multiple times with the previous result to check all.
+     * 
+     * @param recipe      Recipe that should be checked
+     * @param part        The new part that replaces an old one.
+     * @param currentType Where the part would currently be replaced. Call multiple times with the previous result to
+     *                    check all.
      * @return The new position that's applicable, or the same if nothing new has been detected.
      */
     public static PartTypes detectAdditionalPartType(ToolRecipe recipe, Item part, PartTypes currentType) {

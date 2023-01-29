@@ -1,21 +1,25 @@
 package iguanaman.iguanatweakstconstruct.restriction;
 
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import java.util.List;
 import java.util.Map;
+
 import mantle.pulsar.pulse.Handler;
 import mantle.pulsar.pulse.Pulse;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.world.TinkerWorld;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 @Pulse(
         id = Reference.PULSE_RESTRICTIONS,
         description = "Various Tweaks for vanilla Minecraft and Tinker's Construct. See Config.")
 public class IguanaPartRestriction {
+
     @Handler
     public void postInit(FMLPostInitializationEvent event) {
         // init the helper

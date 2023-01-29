@@ -1,13 +1,15 @@
 package iguanaman.iguanatweakstconstruct.commands;
 
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.oredict.OreDictionary;
+
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public class CommandDumpOredict extends CommandBase {
 

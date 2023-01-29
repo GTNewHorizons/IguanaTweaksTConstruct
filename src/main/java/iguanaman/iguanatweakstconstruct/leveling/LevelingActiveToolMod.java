@@ -1,9 +1,8 @@
 package iguanaman.iguanatweakstconstruct.leveling;
 
-import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
 import java.util.Arrays;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -14,14 +13,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.oredict.OreDictionary;
+
 import tconstruct.library.ActiveToolMod;
 import tconstruct.library.tools.HarvestTool;
 import tconstruct.library.tools.ToolCore;
+import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
+import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
 
 // This class is responsible for actually getting XP when mining!
 public class LevelingActiveToolMod extends ActiveToolMod {
-    static List<Material> materialBlacklist = Arrays.asList(
-            Material.leaves, Material.vine, Material.circuits, Material.glass, Material.piston, Material.snow);
+
+    static List<Material> materialBlacklist = Arrays
+            .asList(Material.leaves, Material.vine, Material.circuits, Material.glass, Material.piston, Material.snow);
 
     @Override
     public boolean beforeBlockBreak(ToolCore tool, ItemStack stack, int x, int y, int z, EntityLivingBase entity) {
@@ -51,11 +54,10 @@ public class LevelingActiveToolMod extends ActiveToolMod {
         // todo: might actually be worth it caching this stuff
         boolean blockIsOre = false;
         ItemStack blockStack = new ItemStack(Item.getItemFromBlock(block), 1, meta);
-        for (int id : OreDictionary.getOreIDs(blockStack))
-            if (OreDictionary.getOreName(id).startsWith("ore")) {
-                blockIsOre = true;
-                break;
-            }
+        for (int id : OreDictionary.getOreIDs(blockStack)) if (OreDictionary.getOreName(id).startsWith("ore")) {
+            blockIsOre = true;
+            break;
+        }
 
         // only give xp if the use makes sense
         if (harvestable && effective && strong) {
@@ -86,13 +88,8 @@ public class LevelingActiveToolMod extends ActiveToolMod {
     }
 
     @Override
-    public boolean doesCriticalHit(
-            ToolCore tool,
-            NBTTagCompound tags,
-            NBTTagCompound toolTags,
-            ItemStack stack,
-            EntityLivingBase player,
-            Entity entity) {
+    public boolean doesCriticalHit(ToolCore tool, NBTTagCompound tags, NBTTagCompound toolTags, ItemStack stack,
+            EntityLivingBase player, Entity entity) {
         // crit modifier adds additional 10% crit chance
         if (toolTags.hasKey(ModCritical.modCritical.key)) return IguanaTweaksTConstruct.random.nextInt(10) == 0;
 

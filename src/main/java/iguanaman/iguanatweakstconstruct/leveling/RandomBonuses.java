@@ -2,11 +2,8 @@ package iguanaman.iguanatweakstconstruct.leveling;
 
 import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.*;
 
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModShoddy;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.*;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
 import tconstruct.TConstruct;
 import tconstruct.items.tools.Hammer;
 import tconstruct.library.crafting.ModifyBuilder;
@@ -24,27 +22,25 @@ import tconstruct.library.weaponry.IAmmo;
 import tconstruct.modifiers.tools.ModWindup;
 import tconstruct.tools.TinkerTools;
 import tconstruct.weaponry.TinkerWeaponry;
+import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
+import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModShoddy;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 /*
-  On doing stuff, add data what was done. Apply data to weights. Basically on action add an NBT tag that knows how much.
-!  - Redstone: mining a regular block
-!  - Luck: mining a block that drops stuff. Maybe mining an ore. Hitting an enemy (simply assume every enemy drops stuff for simplicity)
-  - autosmelt: ...hitting furnaces maybe? No, digging blocks that are submerged in lava! :D
-  - silktouch: nope. we don't a higher silktouch chance.
-  - diamond: this is probably not useful enough to warrant an increased chance. leave it at base chance.
-  - emerald: same as diamond
-  - repair: repairing the tool maybe? meh. Should probably simply have a good base chance and maybe decrease it once we get one level of it
-!  - attack: critting? or simply doing damage in general?
-!  - blaze: hitting a blaze
-!  - smite: hitting a zombie
-!  - bane: hitting a spider
-!  - beheading: hitting an enderman
-!  - lifesteal: hitting a wither skelly or pigman
-!  - knockback: spring+hitting enemies
-
-    maybe.. add a critical strike modifier, only obtainable through levelup :>
+ * On doing stuff, add data what was done. Apply data to weights. Basically on action add an NBT tag that knows how
+ * much. ! - Redstone: mining a regular block ! - Luck: mining a block that drops stuff. Maybe mining an ore. Hitting an
+ * enemy (simply assume every enemy drops stuff for simplicity) - autosmelt: ...hitting furnaces maybe? No, digging
+ * blocks that are submerged in lava! :D - silktouch: nope. we don't a higher silktouch chance. - diamond: this is
+ * probably not useful enough to warrant an increased chance. leave it at base chance. - emerald: same as diamond -
+ * repair: repairing the tool maybe? meh. Should probably simply have a good base chance and maybe decrease it once we
+ * get one level of it ! - attack: critting? or simply doing damage in general? ! - blaze: hitting a blaze ! - smite:
+ * hitting a zombie ! - bane: hitting a spider ! - beheading: hitting an enderman ! - lifesteal: hitting a wither skelly
+ * or pigman ! - knockback: spring+hitting enemies maybe.. add a critical strike modifier, only obtainable through
+ * levelup :>
  */
 public class RandomBonuses {
+
     // see bottom for initialization of that stuff
     public static Set<Modifier> usefulToolModifiers = new HashSet<Modifier>();
     public static Set<Modifier> usefulWeaponModifiers = new HashSet<Modifier>();
@@ -113,8 +109,9 @@ public class RandomBonuses {
                     else chances[i] = ammoWeights.get(mod);
                 }
                 // weapons
-                else if (hasTrait(toolCore, "weapon")
-                        && !(toolCore instanceof Hammer)) { // hammer is an exception because we want it to be harvest
+                else if (hasTrait(toolCore, "weapon") && !(toolCore instanceof Hammer)) { // hammer is an exception
+                                                                                          // because we want it to be
+                                                                                          // harvest
                     if (Config.randomBonusesAreUseful && !usefulWeaponModifiers.contains(mod)) chances[i] = 0;
                     else chances[i] = weaponWeights.get(mod);
                 }
@@ -177,12 +174,11 @@ public class RandomBonuses {
             if (tries++ > 100) {
                 choice = null;
                 // make sure we really can't apply ANY modifier
-                for (Modifier mod : Modifier.values())
-                    if (applyModifier(mod, player, tool)) {
-                        choice = mod;
-                        modified = true;
-                        break;
-                    }
+                for (Modifier mod : Modifier.values()) if (applyModifier(mod, player, tool)) {
+                    choice = mod;
+                    modified = true;
+                    break;
+                }
 
                 // we really can't apply ANY modifier. whelp.
                 if (!modified) break;
@@ -195,15 +191,19 @@ public class RandomBonuses {
 
         // if we couldn't find any, log an error
         if (!modified) {
-            Log.warn(String.format(
-                    "Couldn't find any applicable modifier to reward for %s's %s",
-                    player.getDisplayName(), tool.getDisplayName()));
+            Log.warn(
+                    String.format(
+                            "Couldn't find any applicable modifier to reward for %s's %s",
+                            player.getDisplayName(),
+                            tool.getDisplayName()));
             return null;
         }
 
-        if (Config.logBonusExtraChance)
-            Log.debug(String.format(
-                    "Chance of getting %s was %f %%", choice.toString(), 100f * chances[i - 1] / (float) total));
+        if (Config.logBonusExtraChance) Log.debug(
+                String.format(
+                        "Chance of getting %s was %f %%",
+                        choice.toString(),
+                        100f * chances[i - 1] / (float) total));
 
         if (Config.logBonusExtraChance && tags.hasKey(String.format("Extra%s", choice.toString()))) {
             // same as above
@@ -213,8 +213,11 @@ public class RandomBonuses {
 
             // now relativize the weight bonus to the total.
             Log.debug(String.format("Bonus weight for getting %s was %f", choice.toString(), bonus));
-            Log.debug(String.format(
-                    "Bonus chance for getting %s was %f %%", choice.toString(), 100f * bonus / (float) total));
+            Log.debug(
+                    String.format(
+                            "Bonus chance for getting %s was %f %%",
+                            choice.toString(),
+                            100f * bonus / (float) total));
         }
 
         // remove the extra chance for the received modifier
@@ -229,7 +232,7 @@ public class RandomBonuses {
 
     private static boolean applyModifier(Modifier modifier, EntityPlayer player, ItemStack tool) {
         switch (modifier) {
-                // mining mods
+            // mining mods
             case REDSTONE:
                 return addRedstoneModifier(player, tool);
             case LAPIS:
@@ -238,7 +241,7 @@ public class RandomBonuses {
                 return addAutoSmeltModifier(player, tool);
             case SILKTOUCH:
                 return addSilktouchModifier(player, tool);
-                // general modifier
+            // general modifier
             case DIAMOND:
                 return addDiamondModifier(player, tool);
             case EMERALD:
@@ -247,7 +250,7 @@ public class RandomBonuses {
                 return addRepairModifier(player, tool);
             case REINFORCED:
                 return addReinforcedModifier(player, tool);
-                // combat modifier
+            // combat modifier
             case ATTACK:
                 return addAttackModifier(player, tool);
             case BLAZE:
@@ -262,7 +265,7 @@ public class RandomBonuses {
                 return addLifeStealModifier(player, tool);
             case KNOCKBACK:
                 return addKnockbackModifier(player, tool);
-                // special modifier
+            // special modifier
             case JAGGED:
                 return addJaggedModifier(player, tool);
             case STONEBOUND:
@@ -277,7 +280,7 @@ public class RandomBonuses {
     /* Mining Enchantments */
 
     public static boolean addRedstoneModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] redstoneStack = new ItemStack[] {new ItemStack(Items.redstone, 1)};
+        ItemStack[] redstoneStack = new ItemStack[] { new ItemStack(Items.redstone, 1) };
 
         String key = "Redstone";
         if (tool.getItem() instanceof ToolCore) if (hasTrait((ToolCore) tool.getItem(), "windup")) key = "Windup";
@@ -286,7 +289,7 @@ public class RandomBonuses {
     }
 
     public static boolean addLapisModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] lapisStack = new ItemStack[] {new ItemStack(Items.dye, 1, 4)};
+        ItemStack[] lapisStack = new ItemStack[] { new ItemStack(Items.dye, 1, 4) };
 
         return addGenericModifier(player, tool, "Lapis", lapisStack, 100, 100, "message.levelup.lapis", "\u00a79");
     }
@@ -324,7 +327,7 @@ public class RandomBonuses {
 
     /* Combat Enchantments */
     public static boolean addAttackModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] quarzStack = new ItemStack[] {new ItemStack(Items.quartz, 1)};
+        ItemStack[] quarzStack = new ItemStack[] { new ItemStack(Items.quartz, 1) };
 
         String key = "ModAttack";
         if (tool.getItem() != null && tool.getItem() instanceof IAmmo) key = "ModAttackAmmo";
@@ -333,23 +336,37 @@ public class RandomBonuses {
     }
 
     public static boolean addBlazeModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] blazePowderStack = new ItemStack[] {new ItemStack(Items.blaze_powder, 1)};
+        ItemStack[] blazePowderStack = new ItemStack[] { new ItemStack(Items.blaze_powder, 1) };
 
         return addGenericModifier(player, tool, "Blaze", blazePowderStack, 25, 1, "message.levelup.blaze", "\u00a76");
     }
 
     public static boolean addSmiteModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] consecratedEartStack = new ItemStack[] {new ItemStack(TinkerTools.craftedSoil, 1, 4)};
+        ItemStack[] consecratedEartStack = new ItemStack[] { new ItemStack(TinkerTools.craftedSoil, 1, 4) };
 
         return addGenericModifier(
-                player, tool, "ModSmite", consecratedEartStack, 36, 1, "message.levelup.smite", "\u00a7e");
+                player,
+                tool,
+                "ModSmite",
+                consecratedEartStack,
+                36,
+                1,
+                "message.levelup.smite",
+                "\u00a7e");
     }
 
     public static boolean addAntiSpiderModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] fermentedEyeStack = new ItemStack[] {new ItemStack(Items.fermented_spider_eye, 1)};
+        ItemStack[] fermentedEyeStack = new ItemStack[] { new ItemStack(Items.fermented_spider_eye, 1) };
 
         return addGenericModifier(
-                player, tool, "ModAntiSpider", fermentedEyeStack, 4, 1, "message.levelup.antispider", "\u00a72");
+                player,
+                tool,
+                "ModAntiSpider",
+                fermentedEyeStack,
+                4,
+                1,
+                "message.levelup.antispider",
+                "\u00a72");
     }
 
     public static boolean addBeheadingModifier(EntityPlayer player, ItemStack tool) {
@@ -361,7 +378,7 @@ public class RandomBonuses {
     }
 
     public static boolean addKnockbackModifier(EntityPlayer player, ItemStack tool) {
-        ItemStack[] pistonStack = new ItemStack[] {new ItemStack(Blocks.piston, 1)};
+        ItemStack[] pistonStack = new ItemStack[] { new ItemStack(Blocks.piston, 1) };
 
         return addGenericModifier(player, tool, "Piston", pistonStack, 10, 1, "message.levelup.knockback", "\u00a77");
     }
@@ -369,7 +386,11 @@ public class RandomBonuses {
     /* Special Enchantments */
     public static boolean addJaggedModifier(EntityPlayer player, ItemStack tool) {
         return addGenericModifier(
-                player, tool, ModShoddy.ModJagged.key, "message.levelup.jagged", EnumChatFormatting.RED.toString());
+                player,
+                tool,
+                ModShoddy.ModJagged.key,
+                "message.levelup.jagged",
+                EnumChatFormatting.RED.toString());
     }
 
     public static boolean addStoneboundModifier(EntityPlayer player, ItemStack tool) {
@@ -396,20 +417,14 @@ public class RandomBonuses {
     /* Backbone ;o */
 
     // simple call
-    private static boolean addGenericModifier(
-            EntityPlayer player, ItemStack tool, String key, String message, String modColor) {
+    private static boolean addGenericModifier(EntityPlayer player, ItemStack tool, String key, String message,
+            String modColor) {
         return addGenericModifier(player, tool, key, null, 1, 1, message, modColor);
     }
+
     // I really didn't want to write the same 15 lines all over again to add a modifier >_<
-    private static boolean addGenericModifier(
-            EntityPlayer player,
-            ItemStack tool,
-            String key,
-            ItemStack[] stacksToAdd,
-            int times,
-            int displayedTimes,
-            String message,
-            String modColor) {
+    private static boolean addGenericModifier(EntityPlayer player, ItemStack tool, String key, ItemStack[] stacksToAdd,
+            int times, int displayedTimes, String message, String modColor) {
         ItemModifier modifier = getModifier(key);
         // something happened. ohshit.
         if (modifier == null) return false;
@@ -419,15 +434,20 @@ public class RandomBonuses {
 
         // can we apply the modifier?
         if (!modifier.matches(stacksToAdd, tool)) // this should call canModify
-        return false;
+            return false;
 
         // message!
         if (player != null && !player.worldObj.isRemote) {
-            player.addChatMessage(new ChatComponentText(LevelingTooltips.getInfoString(
-                    StatCollector.translateToLocal(message),
-                    EnumChatFormatting.DARK_AQUA,
-                    String.format("+%d %s", displayedTimes, StatCollector.translateToLocal(message + ".tag")),
-                    modColor)));
+            player.addChatMessage(
+                    new ChatComponentText(
+                            LevelingTooltips.getInfoString(
+                                    StatCollector.translateToLocal(message),
+                                    EnumChatFormatting.DARK_AQUA,
+                                    String.format(
+                                            "+%d %s",
+                                            displayedTimes,
+                                            StatCollector.translateToLocal(message + ".tag")),
+                                    modColor)));
         }
 
         // apply modifier
@@ -439,6 +459,7 @@ public class RandomBonuses {
 
     /**
      * Returns the cached modifier, or loads it and caches it.
+     * 
      * @return The modifier, or null if it doesn't exist
      */
     private static ItemModifier getModifier(String key) {
@@ -466,9 +487,10 @@ public class RandomBonuses {
 
     /**
      * Used to add an extra chance for getting a specific modifier.
+     * 
      * @param modifier The modifier which gains extra chance
-     * @param amount How much weight shall be added
-     * @param tags The InfiTool tagcompound of the tool
+     * @param amount   How much weight shall be added
+     * @param tags     The InfiTool tagcompound of the tool
      */
     public static void addModifierExtraWeight(Modifier modifier, int amount, NBTTagCompound tags) {
         String key = "Extra" + modifier.toString();
@@ -480,8 +502,9 @@ public class RandomBonuses {
 
     /**
      * Resets the extra chance for a modifier.
+     * 
      * @param modifier The modifier which loses its extra chance
-     * @param tags The InfiTool tagcompound of the tool
+     * @param tags     The InfiTool tagcompound of the tool
      */
     public static void resetModifierExtraWeight(Modifier modifier, NBTTagCompound tags) {
         String key = "Extra" + modifier.toString();
@@ -499,9 +522,8 @@ public class RandomBonuses {
         // in general: take 100 as the baseline for common stuff
 
         // mining mods
-        m.put(
-                REDSTONE,
-                45); // this is so low because basically every mined block will add +1 to this, resulting in ~110
+        m.put(REDSTONE, 45); // this is so low because basically every mined block will add +1 to this, resulting in
+                             // ~110
         m.put(LAPIS, 40); // same here, but the amount added will be lower
         m.put(AUTOSMELT, 3);
         m.put(SILKTOUCH, 2);
@@ -642,6 +664,7 @@ public class RandomBonuses {
     }
 
     public static enum Modifier {
+
         // mining modifiers
         REDSTONE,
         LAPIS,

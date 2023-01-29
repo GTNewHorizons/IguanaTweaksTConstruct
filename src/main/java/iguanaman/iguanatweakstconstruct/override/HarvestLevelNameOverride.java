@@ -1,19 +1,22 @@
 package iguanaman.iguanatweakstconstruct.override;
 
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.tools.ToolMaterial;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
 
 public class HarvestLevelNameOverride implements IOverride {
+
     @Override
     public void createDefault(Configuration config) {
         Log.debug("Creating Harvest Level Name Default File");
@@ -58,9 +61,11 @@ public class HarvestLevelNameOverride implements IOverride {
             for (ToolMaterial mat : TConstructRegistry.toolMaterials.values())
                 if (matName.equals(mat.name().toLowerCase())) {
                     mats.put(lvl, mat);
-                    if (Config.logOverrideChanges)
-                        Log.info(String.format(
-                                "Harvest Level Name Override: Changed Level %s to %s", lvl, mat.materialName));
+                    if (Config.logOverrideChanges) Log.info(
+                            String.format(
+                                    "Harvest Level Name Override: Changed Level %s to %s",
+                                    lvl,
+                                    mat.materialName));
                     found = true;
                     break;
                 }

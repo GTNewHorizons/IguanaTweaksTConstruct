@@ -1,24 +1,27 @@
 package iguanaman.iguanatweakstconstruct.tweaks;
 
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
+
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.util.IToolPart;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class ToolCraftingRecipe implements IRecipe {
+
     static {
         // register the recipe with the recipesorter
-        RecipeSorter.register(
-                Reference.MOD_ID + ":tool", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
+        RecipeSorter
+                .register(Reference.MOD_ID + ":tool", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
     private ItemStack outputTool;

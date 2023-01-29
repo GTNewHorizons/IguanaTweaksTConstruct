@@ -1,18 +1,20 @@
 package iguanaman.iguanatweakstconstruct;
 
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
+
 import tconstruct.library.tools.ToolCore;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class ToolUpdateRecipe implements IRecipe {
+
     static {
         // register the recipe with the recipesorter
-        RecipeSorter.register(
-                Reference.MOD_ID + ":update", ToolUpdateRecipe.class, RecipeSorter.Category.SHAPELESS, "");
+        RecipeSorter
+                .register(Reference.MOD_ID + ":update", ToolUpdateRecipe.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
     private ItemStack updatedTool = null;

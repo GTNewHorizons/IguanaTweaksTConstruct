@@ -1,14 +1,13 @@
 package iguanaman.iguanatweakstconstruct.restriction;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import iguanaman.iguanatweakstconstruct.util.TooltipHelper;
 import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.CastingRecipe;
 import tconstruct.library.crafting.PatternBuilder;
@@ -19,8 +18,12 @@ import tconstruct.library.tools.ToolMaterial;
 import tconstruct.library.util.IPattern;
 import tconstruct.library.util.IToolPart;
 import tconstruct.weaponry.TinkerWeaponry;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import iguanaman.iguanatweakstconstruct.util.TooltipHelper;
 
 public class PartRestrictionHandler {
+
     @SubscribeEvent
     public void onPartBuilding(PartBuilderEvent.NormalPart event) {
         PatternBuilder.ItemKey key = PatternBuilder.instance.getItemKey(event.material);
@@ -29,8 +32,8 @@ public class PartRestrictionHandler {
         // bowstring and fletching
         if (event.pattern.getItemDamage() == 23 || event.pattern.getItemDamage() == 24) return;
 
-        PatternBuilder.MaterialSet set =
-                ((PatternBuilder.MaterialSet) PatternBuilder.instance.materialSets.get(key.key));
+        PatternBuilder.MaterialSet set = ((PatternBuilder.MaterialSet) PatternBuilder.instance.materialSets
+                .get(key.key));
         if (set == null) return;
 
         ToolMaterial mat = TConstructRegistry.getMaterial(set.materialID);
@@ -64,10 +67,13 @@ public class PartRestrictionHandler {
 
         // only display on shift
         if (!TooltipHelper.shiftHeld()) {
-            event.toolTip.add(StatCollector.translateToLocalFormatted(
-                    "tooltip.pattern.advanced",
-                    EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.ITALIC + "Shift"
-                            + EnumChatFormatting.RESET + EnumChatFormatting.GRAY));
+            event.toolTip.add(
+                    StatCollector.translateToLocalFormatted(
+                            "tooltip.pattern.advanced",
+                            EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.ITALIC
+                                    + "Shift"
+                                    + EnumChatFormatting.RESET
+                                    + EnumChatFormatting.GRAY));
             return;
         }
 
@@ -95,8 +101,7 @@ public class PartRestrictionHandler {
             foundMat = true;
         }
 
-        if (!foundMat)
-            event.toolTip.add(
-                    EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.pattern.noMaterials"));
+        if (!foundMat) event.toolTip
+                .add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.pattern.noMaterials"));
     }
 }

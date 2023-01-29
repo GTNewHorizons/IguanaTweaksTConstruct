@@ -1,12 +1,7 @@
 package iguanaman.iguanatweakstconstruct.mobheads.handlers;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
-import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
-import iguanaman.iguanatweakstconstruct.mobheads.items.IguanaSkull;
-import iguanaman.iguanatweakstconstruct.reference.Config;
 import java.util.Iterator;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
@@ -17,10 +12,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+
 import tconstruct.library.tools.ToolCore;
 import tconstruct.tools.TinkerTools;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
+import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
+import iguanaman.iguanatweakstconstruct.mobheads.items.IguanaSkull;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 
 public class MobHeadHandler {
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void LivingDrops(LivingDropsEvent event) {
         // remove regular skull drops (because we modify its drop chance)
@@ -28,11 +31,10 @@ public class MobHeadHandler {
         while (i.hasNext()) {
             EntityItem eitem = i.next();
 
-            if (eitem != null)
-                if (eitem.getEntityItem() != null) {
-                    ItemStack item = eitem.getEntityItem();
-                    if (item.getItem() == Items.skull && item.getItemDamage() != 3) i.remove();
-                }
+            if (eitem != null) if (eitem.getEntityItem() != null) {
+                ItemStack item = eitem.getEntityItem();
+                if (item.getItem() == Items.skull && item.getItemDamage() != 3) i.remove();
+            }
         }
 
         // add our own drops if the damage source was a player (and no fake player)
@@ -50,7 +52,8 @@ public class MobHeadHandler {
         }
         // roll the dice
         if (IguanaTweaksTConstruct.random.nextInt(100)
-                > beheading * Config.beheadingHeadDropChance + Config.baseHeadDropChance) return;
+                > beheading * Config.beheadingHeadDropChance + Config.baseHeadDropChance)
+            return;
 
         Item skullItem = null;
         int skullId = -1;
@@ -96,8 +99,12 @@ public class MobHeadHandler {
         if (skullItem == null) return;
 
         // drop it like it's hot
-        EntityItem entityitem =
-                new EntityItem(mob.worldObj, mob.posX, mob.posY, mob.posZ, new ItemStack(skullItem, 1, skullId));
+        EntityItem entityitem = new EntityItem(
+                mob.worldObj,
+                mob.posX,
+                mob.posY,
+                mob.posZ,
+                new ItemStack(skullItem, 1, skullId));
         entityitem.delayBeforeCanPickup = 10;
         event.drops.add(entityitem);
     }

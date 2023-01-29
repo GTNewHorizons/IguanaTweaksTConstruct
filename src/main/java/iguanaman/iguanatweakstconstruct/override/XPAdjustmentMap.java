@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class XPAdjustmentMap {
+
     private static Map<String, Float> map = new HashMap();
 
     public static float get(String s) {
