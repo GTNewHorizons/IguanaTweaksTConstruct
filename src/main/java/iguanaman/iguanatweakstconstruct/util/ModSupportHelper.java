@@ -3,6 +3,7 @@ package iguanaman.iguanatweakstconstruct.util;
 import cpw.mods.fml.common.Loader;
 
 public final class ModSupportHelper {
+
     private ModSupportHelper() {} // non-instantiable
 
     public static final boolean tiCTooltips = Loader.isModLoaded("TiCTooltips");

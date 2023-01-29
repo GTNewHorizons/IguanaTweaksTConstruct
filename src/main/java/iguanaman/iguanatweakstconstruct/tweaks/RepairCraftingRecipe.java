@@ -1,31 +1,36 @@
 package iguanaman.iguanatweakstconstruct.tweaks;
 
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
+
 import tconstruct.library.crafting.ModifyBuilder;
 import tconstruct.library.modifier.ItemModifier;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.modifiers.tools.ModToolRepair;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class RepairCraftingRecipe implements IRecipe {
+
     static {
         // register the recipe with the recipesorter
-        RecipeSorter.register(Reference.MOD_ID + ":repair", RepairCraftingRecipe.class, RecipeSorter.Category.SHAPELESS, "");
+        RecipeSorter.register(
+                Reference.MOD_ID + ":repair",
+                RepairCraftingRecipe.class,
+                RecipeSorter.Category.SHAPELESS,
+                "");
     }
 
     private ModToolRepair modifier = null;
     private ItemStack modifiedTool = null;
 
     public RepairCraftingRecipe() {
-        for(ItemModifier mod : ModifyBuilder.instance.itemModifiers)
-            if(mod instanceof ModToolRepair) {
-                modifier = (ModToolRepair)mod;
-                break;
-            }
+        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) if (mod instanceof ModToolRepair) {
+            modifier = (ModToolRepair) mod;
+            break;
+        }
     }
 
     @Override
@@ -33,32 +38,25 @@ public class RepairCraftingRecipe implements IRecipe {
         ItemStack tool = null;
         ItemStack[] input = new ItemStack[inventoryCrafting.getSizeInventory()];
 
-        for(int i = 0; i < inventoryCrafting.getSizeInventory(); i++)
-        {
+        for (int i = 0; i < inventoryCrafting.getSizeInventory(); i++) {
             ItemStack slot = inventoryCrafting.getStackInSlot(i);
             // empty slot
-            if(slot == null)
-                continue;
+            if (slot == null) continue;
 
             // is it the tool?
-            if(slot.getItem() instanceof ToolCore)
-                tool = slot;
+            if (slot.getItem() instanceof ToolCore) tool = slot;
             // otherwise.. input material
-            else
-                input[i] = slot;
+            else input[i] = slot;
         }
         // no tool found?
-        if(tool == null)
-            return false;
+        if (tool == null) return false;
 
         // check if applicable, and save result for later
-        if(modifier.matches(input, tool)) {
+        if (modifier.matches(input, tool)) {
             modifiedTool = tool.copy();
             modifier.modify(input, modifiedTool);
             return true;
-        }
-        else
-            modifiedTool = null;
+        } else modifiedTool = null;
 
         return false;
     }

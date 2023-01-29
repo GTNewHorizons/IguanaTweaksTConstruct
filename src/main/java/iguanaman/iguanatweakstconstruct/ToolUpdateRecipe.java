@@ -1,17 +1,20 @@
 package iguanaman.iguanatweakstconstruct;
 
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
+
 import tconstruct.library.tools.ToolCore;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class ToolUpdateRecipe implements IRecipe {
+
     static {
         // register the recipe with the recipesorter
-        RecipeSorter.register(Reference.MOD_ID + ":update", ToolUpdateRecipe.class, RecipeSorter.Category.SHAPELESS, "");
+        RecipeSorter
+                .register(Reference.MOD_ID + ":update", ToolUpdateRecipe.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
     private ItemStack updatedTool = null;
@@ -21,33 +24,26 @@ public class ToolUpdateRecipe implements IRecipe {
         ItemStack tool = null;
 
         // check for a tool
-        for(int i = 0; i < inventoryCrafting.getSizeInventory(); i++)
-        {
+        for (int i = 0; i < inventoryCrafting.getSizeInventory(); i++) {
             ItemStack slot = inventoryCrafting.getStackInSlot(i);
             // empty slot
-            if(slot == null)
-                continue;
+            if (slot == null) continue;
 
             // is it the tool?
-            if(slot.getItem() instanceof ToolCore) {
-                if(tool != null)
-                    return false;
+            if (slot.getItem() instanceof ToolCore) {
+                if (tool != null) return false;
                 tool = slot;
             }
         }
         // no tool found?
-        if(tool == null)
-            return false;
+        if (tool == null) return false;
 
         // check if it needs updating
-        if(OldToolConversionHandler.toolNeedsUpdating(tool))
-        {
+        if (OldToolConversionHandler.toolNeedsUpdating(tool)) {
             updatedTool = tool.copy();
             OldToolConversionHandler.updateItem(updatedTool);
             return true;
-        }
-        else
-            updatedTool = null;
+        } else updatedTool = null;
 
         return false;
     }

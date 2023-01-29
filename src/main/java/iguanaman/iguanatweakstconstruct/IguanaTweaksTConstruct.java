@@ -1,5 +1,11 @@
 package iguanaman.iguanatweakstconstruct;
 
+import java.io.File;
+import java.util.Random;
+
+import mantle.pulsar.config.IConfiguration;
+import mantle.pulsar.control.PulseManager;
+import mantle.pulsar.pulse.PulseMeta;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -29,46 +35,46 @@ import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.worldgen.IguanaWorldGen;
-import mantle.pulsar.config.IConfiguration;
-import mantle.pulsar.control.PulseManager;
-import mantle.pulsar.pulse.PulseMeta;
 
-import java.io.File;
-import java.util.Random;
-
-@Mod(modid= Reference.MOD_ID, name= Reference.MOD_NAME, version="GRADLETOKEN_VERSION",
-dependencies = "required-after:" + Reference.TCON_MOD_ID + "@[1.7.10-1.8.3,);after:ForgeMultipart@[1.1.1.321,);after:*")
+@Mod(
+        modid = Reference.MOD_ID,
+        name = Reference.MOD_NAME,
+        version = "GRADLETOKEN_VERSION",
+        dependencies = "required-after:" + Reference.TCON_MOD_ID
+                + "@[1.7.10-1.8.3,);after:ForgeMultipart@[1.1.1.321,);after:*")
 public class IguanaTweaksTConstruct {
 
-	// The instance of your mod that Forge uses.
-	@Instance(Reference.MOD_ID)
-	public static IguanaTweaksTConstruct instance;
+    // The instance of your mod that Forge uses.
+    @Instance(Reference.MOD_ID)
+    public static IguanaTweaksTConstruct instance;
 
-	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide= Reference.PROXY_CLIENT_CLASS, serverSide= Reference.PROXY_SERVER_CLASS)
-	public static CommonProxy proxy;
+    // Says where the client and server 'proxy' code is loaded.
+    @SidedProxy(clientSide = Reference.PROXY_CLIENT_CLASS, serverSide = Reference.PROXY_SERVER_CLASS)
+    public static CommonProxy proxy;
 
     public static Random random = new Random();
 
-    // use the PulseManager. This allows us to separate the different parts into independend modules and have stuff together. yay.
+    // use the PulseManager. This allows us to separate the different parts into independend modules and have stuff
+    // together. yay.
     private IConfiguration pulseCFG;
     public static PulseManager pulsar;
 
     public static File configPath;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
         Log.init(event.getModLog());
         configPath = new File(event.getModConfigurationDirectory(), "IguanaTinkerTweaks");
         // update old config path
         File oldPath = new File(event.getModConfigurationDirectory(), Reference.MOD_ID);
-        if(oldPath.exists())
-            oldPath.renameTo(configPath);
+        if (oldPath.exists()) oldPath.renameTo(configPath);
 
         configPath.mkdirs();
 
         // init pulse manager
-        pulseCFG = new PulsarCFG(Reference.configFile("Modules.cfg"), "Tinker's Construct Addon: Iguana Tweaks for Tinkers Construct");
+        pulseCFG = new PulsarCFG(
+                Reference.configFile("Modules.cfg"),
+                "Tinker's Construct Addon: Iguana Tweaks for Tinkers Construct");
         pulseCFG.load();
         pulsar = new PulseManager(Reference.MOD_ID, pulseCFG);
 
@@ -94,10 +100,8 @@ public class IguanaTweaksTConstruct {
         // mod compat
         pulsar.registerPulse(new IguanaFMPCompat());
 
-
         // if we don't use our custom harvest levels, we have to adjust what we're using
-        if(!pulsar.isPulseLoaded(Reference.PULSE_HARVESTTWEAKS))
-            HarvestLevels.adjustToVanillaLevels();
+        if (!pulsar.isPulseLoaded(Reference.PULSE_HARVESTTWEAKS)) HarvestLevels.adjustToVanillaLevels();
         // update harvest level strings
         HarvestLevels.updateHarvestLevelNames();
 
@@ -105,49 +109,48 @@ public class IguanaTweaksTConstruct {
         pulsar.preInit(event);
 
         // versionchecker support
-        FMLInterModComms.sendRuntimeMessage(Reference.MOD_ID, "VersionChecker", "addVersionCheck", "https://raw.githubusercontent.com/SlimeKnights/IguanaTweaksTConstruct/master/version.json");
-	}
+        FMLInterModComms.sendRuntimeMessage(
+                Reference.MOD_ID,
+                "VersionChecker",
+                "addVersionCheck",
+                "https://raw.githubusercontent.com/SlimeKnights/IguanaTweaksTConstruct/master/version.json");
+    }
 
-
-	@EventHandler
-	public void load(FMLInitializationEvent event) {
+    @EventHandler
+    public void load(FMLInitializationEvent event) {
         pulsar.init(event);
-	}
+    }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
         pulsar.postInit(event);
 
         FMLCommonHandler.instance().bus().register(new OldToolConversionHandler());
-            FMLCommonHandler.instance().bus().register(new AntiChiselDupeHandler());
+        FMLCommonHandler.instance().bus().register(new AntiChiselDupeHandler());
 
         GameRegistry.addRecipe(new ToolUpdateRecipe());
-	}
+    }
 
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event)
-	{
-		if (pulsar.isPulseLoaded(Reference.PULSE_LEVELING))
-		{
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        if (pulsar.isPulseLoaded(Reference.PULSE_LEVELING)) {
             Log.debug("Adding command: leveluptool");
             event.registerServerCommand(new IguanaCommandLevelUpTool());
             Log.debug("Adding command: toolxp");
             event.registerServerCommand(new IguanaCommandToolXP());
-                    event.registerServerCommand(new CommandIAmADirtyCheater());
-		}
+            event.registerServerCommand(new CommandIAmADirtyCheater());
+        }
 
         Log.debug("Adding command: dumpTools");
         event.registerServerCommand(new CommandDumpTools());
         Log.debug("Adding command: dumpOredict");
         event.registerServerCommand(new CommandDumpOredict());
 
-        if(pulseCFG.isModuleEnabled(new PulseMeta("Debug", "", false, false)))
+        if (pulseCFG.isModuleEnabled(new PulseMeta("Debug", "", false, false)))
             event.registerServerCommand(new DebugCommand());
-	}
+    }
 
-
-    public static String getHarvestLevelName(int num)
-    {
+    public static String getHarvestLevelName(int num) {
         return HarvestLevels.getHarvestLevelName(num);
     }
 }

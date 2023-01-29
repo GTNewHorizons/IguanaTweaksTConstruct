@@ -1,14 +1,16 @@
 package iguanaman.iguanatweakstconstruct.util;
 
-import net.minecraft.util.StatCollector;
-import tconstruct.library.tools.ToolMaterial;
+import static net.minecraft.util.EnumChatFormatting.*;
 
 import java.util.Map;
 
-import static net.minecraft.util.EnumChatFormatting.*;
+import net.minecraft.util.StatCollector;
+
+import tconstruct.library.tools.ToolMaterial;
 
 // strength of the tool-material. stone == strength of a stone pick etc.
 public final class HarvestLevels {
+
     private HarvestLevels() {} // non-instantiable
 
     public static int _0_stone = 0;
@@ -27,8 +29,7 @@ public final class HarvestLevels {
     private static boolean vanilla = false;
 
     // needed if HarvestLevels module is deactivated to achieve vanilla mining levels
-    public static void adjustToVanillaLevels()
-    {
+    public static void adjustToVanillaLevels() {
         _1_flint = 1;
         _2_copper = 1;
         _3_iron = 2;
@@ -44,21 +45,18 @@ public final class HarvestLevels {
         vanilla = true;
     }
 
-    public static void updateHarvestLevelNames()
-    {
+    public static void updateHarvestLevelNames() {
         Map<Integer, String> names = tconstruct.library.util.HarvestLevels.harvestLevelNames;
 
-        if(vanilla)
-        {
-            names.put(0 , GRAY + StatCollector.translateToLocal("mininglevel.stone"));
-            names.put(1 , DARK_RED + StatCollector.translateToLocal("mininglevel.iron"));
-            names.put(2 , RED + StatCollector.translateToLocal("mininglevel.redstone"));
-            names.put(3 , LIGHT_PURPLE + StatCollector.translateToLocal("mininglevel.obsidian"));
-            names.put(4 , BLUE + StatCollector.translateToLocal("mininglevel.cobalt"));
-            names.put(5 , DARK_PURPLE + StatCollector.translateToLocal("mininglevel.manyullyn"));
-            names.put(6 , DARK_PURPLE + StatCollector.translateToLocal("mininglevel.manyullyn") + LIGHT_PURPLE + "+");
-        }
-        else {
+        if (vanilla) {
+            names.put(0, GRAY + StatCollector.translateToLocal("mininglevel.stone"));
+            names.put(1, DARK_RED + StatCollector.translateToLocal("mininglevel.iron"));
+            names.put(2, RED + StatCollector.translateToLocal("mininglevel.redstone"));
+            names.put(3, LIGHT_PURPLE + StatCollector.translateToLocal("mininglevel.obsidian"));
+            names.put(4, BLUE + StatCollector.translateToLocal("mininglevel.cobalt"));
+            names.put(5, DARK_PURPLE + StatCollector.translateToLocal("mininglevel.manyullyn"));
+            names.put(6, DARK_PURPLE + StatCollector.translateToLocal("mininglevel.manyullyn") + LIGHT_PURPLE + "+");
+        } else {
             names.put(0, GRAY + StatCollector.translateToLocal("mininglevel.stone"));
             names.put(1, GOLD + StatCollector.translateToLocal("mininglevel.copper"));
             names.put(2, DARK_GRAY + StatCollector.translateToLocal("mininglevel.iron"));
@@ -72,14 +70,13 @@ public final class HarvestLevels {
         }
     }
 
-    public static String getHarvestLevelName(int num)
-    {
+    public static String getHarvestLevelName(int num) {
         return tconstruct.library.util.HarvestLevels.getHarvestLevelName(num);
     }
 
-    public static void setCustomHarvestLevelNames(Map<Integer, ToolMaterial> mats)
-    {
-        for(Map.Entry<Integer, ToolMaterial> mat : mats.entrySet())
-            tconstruct.library.util.HarvestLevels.harvestLevelNames.put(mat.getKey(), mat.getValue().style() + mat.getValue().localizedName());
+    public static void setCustomHarvestLevelNames(Map<Integer, ToolMaterial> mats) {
+        for (Map.Entry<Integer, ToolMaterial> mat : mats.entrySet())
+            tconstruct.library.util.HarvestLevels.harvestLevelNames
+                    .put(mat.getKey(), mat.getValue().style() + mat.getValue().localizedName());
     }
 }
