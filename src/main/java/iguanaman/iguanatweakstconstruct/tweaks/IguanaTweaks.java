@@ -38,7 +38,6 @@ import iguanaman.iguanatweakstconstruct.util.Log;
 /**
  * Various Tweaks for Tinkers Construct and Vanilla Minecraft. See Config.
  */
-
 @Pulse(
         id = Reference.PULSE_TWEAKS,
         description = "Various Tweaks for vanilla Minecraft and Tinker's Construct. See Config.")

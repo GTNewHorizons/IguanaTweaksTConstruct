@@ -46,5 +46,4 @@ public class CommandDumpOredict extends CommandBase {
     public String getCommandUsage(ICommandSender icommandsender) {
         return "/dumpOredict";
     }
-
 }

@@ -14,14 +14,11 @@ import iguanaman.iguanatweakstconstruct.reference.Reference;
 /**
  * Allows the replacement of toolparts. Basically it adds a modifier that turns each toolpart into a modifier.
  */
-
 @Pulse(id = Reference.PULSE_REPLACING, description = "Replace parts of tools")
 public class IguanaToolPartReplacing {
 
     @Handler
-    public void preInit(FMLPreInitializationEvent event) {
-
-    }
+    public void preInit(FMLPreInitializationEvent event) {}
 
     @Handler
     public void init(FMLInitializationEvent event) {

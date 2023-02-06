@@ -29,7 +29,6 @@ import iguanaman.iguanatweakstconstruct.util.Log;
  *
  * Check the oreDictlevels to get an idea of what can be harvested with each tier.
  */
-
 @Pulse(
         id = Reference.PULSE_HARVESTTWEAKS,
         description = "Modify tool and item mining levels to create a tiered-ish progression")
@@ -78,5 +77,4 @@ public class IguanaHarvestLevelTweaks {
         ModifyBuilder
                 .registerModifier(new ModBonusMiningLevel(new ItemStack[] { new ItemStack(Items.emerald) }, "Emerald"));
     }
-
 }

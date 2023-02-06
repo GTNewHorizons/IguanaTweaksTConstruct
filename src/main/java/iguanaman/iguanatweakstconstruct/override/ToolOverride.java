@@ -23,7 +23,8 @@ public class ToolOverride implements IOverride {
 
             Item item = (Item) o;
             ItemStack stack = new ItemStack(item); // let's assume there are no sick bastards who use metadata to group
-                                                   // tools into a singular id ._.
+                                                   // tools into a singular id
+            // ._.
 
             String saneCategory = buildCategory(identifier.toString());
 
@@ -72,7 +73,8 @@ public class ToolOverride implements IOverride {
 
             Item item = (Item) o;
             ItemStack stack = new ItemStack(item); // let's assume there are no sick bastards who use metadata to group
-                                                   // tools into a singular id ._.
+                                                   // tools into a singular id
+            // ._.
 
             boolean changed = false;
             for (String tool : item.getToolClasses(stack)) {

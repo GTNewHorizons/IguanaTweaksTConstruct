@@ -16,5 +16,4 @@ public class ModLimitedToolRepair extends ModToolRepair {
 
         return super.canModify(tool, input);
     }
-
 }

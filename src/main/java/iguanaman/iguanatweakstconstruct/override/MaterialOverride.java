@@ -157,5 +157,4 @@ public class MaterialOverride implements IOverride {
                 && Float.compare(XPAdjustmentMap.get(mat1.name()), XPAdjustmentMap.get(mat2.name())) == 0
                 && Float.compare(mat1.shoddy(), mat2.shoddy()) == 0;
     }
-
 }

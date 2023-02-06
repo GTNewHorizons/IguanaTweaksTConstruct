@@ -132,7 +132,6 @@ public class LevelingEventHandler {
                     RandomBonuses.addModifierExtraWeight(RandomBonuses.Modifier.KNOCKBACK, xp + 2, tags);
             }
         }
-
     }
 
     @SubscribeEvent

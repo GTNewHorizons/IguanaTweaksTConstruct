@@ -37,7 +37,8 @@ public class BlockOverride implements IOverride {
                     String s = new ItemStack(block, 1, meta).getDisplayName();
                     if (s == null || s.isEmpty()) continue;
                 } catch (Exception e) // bad practice to catch exception, but it ensures that mc doesn't crash if
-                                      // modders do weird stuff
+                                      // modders
+                // do weird stuff
                 {
                     continue;
                 }

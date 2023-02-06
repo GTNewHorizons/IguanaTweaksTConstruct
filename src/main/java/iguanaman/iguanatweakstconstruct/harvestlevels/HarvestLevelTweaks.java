@@ -39,7 +39,7 @@ public final class HarvestLevelTweaks {
     private static void modifyVanillaBlocks() {
         // ensure that the forgehooks are in place
         new ForgeHooks(); // this ensures that the static initializer of ForgeHooks is called already. Otherwise it
-                          // overwrites our Harvestlevel changes.
+        // overwrites our Harvestlevel changes.
         // see ForgeHooks.initTools()
 
         Blocks.iron_ore.setHarvestLevel("pickaxe", HarvestLevels._2_copper);
@@ -143,7 +143,6 @@ public final class HarvestLevelTweaks {
                                 old,
                                 hlvl));
             }
-
         }
 
         if (Config.logMiningLevelChanges) Log.debug("Modified tools");
@@ -290,6 +289,7 @@ public final class HarvestLevelTweaks {
             {} };
 
     public static String[][] allOreDicLevels;
+
     static {
         String[][][] lists = new String[][][] { oreDictLevels, oreDictLevelsMetallurgyFantasy,
                 oreDictLevelsMetallurgyNether, oreDictLevelsMetallurgyEnd };

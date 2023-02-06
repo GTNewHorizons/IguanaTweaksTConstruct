@@ -77,5 +77,4 @@ public class DebugCommand extends CommandBase {
     public String getCommandUsage(ICommandSender icommandsender) {
         return null;
     }
-
 }

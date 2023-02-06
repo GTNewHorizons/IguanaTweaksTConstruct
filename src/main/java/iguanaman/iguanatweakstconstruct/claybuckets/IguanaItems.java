@@ -86,7 +86,6 @@ public class IguanaItems {
 
             for (int i = 0; i < tinkerFluids.length; i++) if (tinkerFluids[i] != null) FluidContainerRegistry
                     .registerFluidContainer(tinkerFluids[i], new ItemStack(clayBucketsTinkers, 1, i), emptyClayBucket);
-
         }
 
         // add recipes

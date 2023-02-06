@@ -548,10 +548,8 @@ public class Config {
     private static String[] defaultExcludedSwords = new String[] { "Botania:manasteelSword",
             "Steamcraft:swordGildedGold", "Steamcraft:swordBrass", "ThermalExpansion:tool.battleWrenchInvar",
             "IC2:itemToolBronzeSword", "Railcraft:tool.steel.sword" };
-    private static String[] defaultExcludedBows = new String[] {
+    private static String[] defaultExcludedBows = new String[] {};
 
-    };
     private static String[] defaultAllowMod = new String[] { "minecraft", "Metallurgy", "Natura", "BiomesOPlenty",
             "ProjRed|Exploration", "appliedenergistics2", "MekanismTool", "ThermalFoundation" };
-
 }

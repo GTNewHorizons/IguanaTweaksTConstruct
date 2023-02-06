@@ -43,7 +43,6 @@ import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
  * The Leveling Pulse. If Leveling were a separate mod instead of pulse-model, this'd be a @Mod This pulse contains all
  * the stuff that has to do with tool leveling.
  */
-
 @Pulse(id = Reference.PULSE_LEVELING, description = "The Iguana Tweaks Leveling System for Tinker's Tools")
 public class IguanaToolLeveling {
 

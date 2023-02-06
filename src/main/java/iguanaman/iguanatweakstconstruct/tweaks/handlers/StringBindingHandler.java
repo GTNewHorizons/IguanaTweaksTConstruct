@@ -18,7 +18,6 @@ public class StringBindingHandler {
 
         if (event.accessoryStack.getItem() == Items.string)
             event.accessoryStack = new ItemStack(TinkerTools.binding, 1, 40); // string binding
-
     }
 
     @SubscribeEvent

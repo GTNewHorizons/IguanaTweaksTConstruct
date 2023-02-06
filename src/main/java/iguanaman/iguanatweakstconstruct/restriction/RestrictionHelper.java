@@ -26,8 +26,8 @@ public final class RestrictionHelper {
     private RestrictionHelper() {} // non-instantiable
 
     public static Map<String, ItemMetaWrapper> configNameToPattern; // holds the names that can be used in the config
-                                                                    // and maps them to item-meta combinations to
-                                                                    // retrieve the materials
+                                                                    // and maps them to item-meta
+    // combinations to retrieve the materials
     public static Map<String, ItemMetaWrapper> configNameToCast; // same as above but for metal casts
     // this list contains all ALLOWED pattern - material combinations
     public static Map<ItemMetaWrapper, List<ToolMaterial>> patternMaterialLookup; // item+metadata -> List of applicable

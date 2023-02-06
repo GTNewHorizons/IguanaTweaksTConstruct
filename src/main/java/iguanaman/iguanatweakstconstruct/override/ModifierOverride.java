@@ -120,5 +120,4 @@ public class ModifierOverride implements IOverride {
                             mod.toString()));
         }
     }
-
 }
