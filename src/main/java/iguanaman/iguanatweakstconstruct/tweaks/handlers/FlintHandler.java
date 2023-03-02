@@ -17,15 +17,17 @@ public class FlintHandler {
         // remove flint drop
         if (event.block != null && event.block == Blocks.gravel) {
             ListIterator<ItemStack> iter = event.drops.listIterator();
-            boolean hasGravel = false;
+            boolean removedFlint = false;
             while (iter.hasNext()) {
                 Item item = iter.next().getItem();
-                if (item == Items.flint) iter.remove();
-                else if (item == Item.getItemFromBlock(Blocks.gravel)) hasGravel = true;
+                if (item == Items.flint) {
+                    iter.remove();
+                    removedFlint = true;
+                }
             }
 
             // ensure that gravel drops
-            if (!hasGravel) event.drops.add(new ItemStack(Blocks.gravel));
+            if (removedFlint) event.drops.add(new ItemStack(Blocks.gravel));
         }
     }
 }
