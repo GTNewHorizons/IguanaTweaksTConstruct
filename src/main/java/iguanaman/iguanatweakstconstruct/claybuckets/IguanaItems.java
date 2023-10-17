@@ -72,7 +72,7 @@ public class IguanaItems {
         FluidContainerRegistry.registerFluidContainer(
                 FluidRegistry.LAVA,
                 new ItemStack(clayBucketLava),
-                new ItemStack(clayBucketFired, 0));
+                new ItemStack(clayBucketFired, 1));
 
         // only integrate tcon metals if they actually exist
         if (TinkerSmeltery.buckets != null) {
