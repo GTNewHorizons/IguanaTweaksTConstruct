@@ -5,8 +5,8 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import tconstruct.modifiers.tools.ModRedstone;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import tconstruct.modifiers.tools.ModRedstone;
 
 /**
  * The same as the redstone modifier, but translates current XP on modifying. Basically: You get XP when applying it,

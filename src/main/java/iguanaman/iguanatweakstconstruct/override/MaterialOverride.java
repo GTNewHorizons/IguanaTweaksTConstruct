@@ -7,11 +7,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.tools.ToolMaterial;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.tools.ToolMaterial;
 
 public class MaterialOverride implements IOverride {
 

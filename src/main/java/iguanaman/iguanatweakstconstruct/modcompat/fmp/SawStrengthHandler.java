@@ -2,10 +2,9 @@ package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
-import codechicken.microblock.Saw;
-
 import com.mojang.realmsclient.gui.ChatFormatting;
 
+import codechicken.microblock.Saw;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 

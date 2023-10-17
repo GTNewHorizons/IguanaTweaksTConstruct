@@ -3,15 +3,16 @@ package iguanaman.iguanatweakstconstruct;
 import java.io.File;
 import java.util.Random;
 
-import mantle.pulsar.config.IConfiguration;
-import mantle.pulsar.control.PulseManager;
-import mantle.pulsar.pulse.PulseMeta;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import iguanaman.iguanatweakstconstruct.claybuckets.IguanaItems;
 import iguanaman.iguanatweakstconstruct.commands.CommandDumpOredict;
@@ -35,6 +36,9 @@ import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.worldgen.IguanaWorldGen;
+import mantle.pulsar.config.IConfiguration;
+import mantle.pulsar.control.PulseManager;
+import mantle.pulsar.pulse.PulseMeta;
 
 @Mod(
         modid = Reference.MOD_ID,

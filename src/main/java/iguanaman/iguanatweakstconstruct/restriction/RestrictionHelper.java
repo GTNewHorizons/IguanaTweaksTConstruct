@@ -1,12 +1,18 @@
 package iguanaman.iguanatweakstconstruct.restriction;
 
-import java.util.*;
-
-import mantle.utils.ItemMetaWrapper;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import iguanaman.iguanatweakstconstruct.util.Log;
+import mantle.utils.ItemMetaWrapper;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.CastingRecipe;
 import tconstruct.library.tools.BowstringMaterial;
@@ -19,7 +25,6 @@ import tconstruct.smeltery.items.MetalPattern;
 import tconstruct.tools.TinkerTools;
 import tconstruct.tools.items.Pattern;
 import tconstruct.weaponry.TinkerWeaponry;
-import iguanaman.iguanatweakstconstruct.util.Log;
 
 public final class RestrictionHelper {
 

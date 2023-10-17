@@ -5,6 +5,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.event.ToolCraftEvent;
 import tconstruct.library.tools.ToolMaterial;
@@ -15,9 +18,6 @@ import tconstruct.weaponry.ammo.BoltAmmo;
 import tconstruct.weaponry.weapons.Crossbow;
 import tconstruct.weaponry.weapons.LongBow;
 import tconstruct.weaponry.weapons.ShortBow;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class StoneToolHandler {
 

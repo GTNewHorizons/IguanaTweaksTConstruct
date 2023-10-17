@@ -10,11 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import thaumcraft.api.crafting.IInfusionStabiliser;
 import cpw.mods.fml.common.Optional;
 import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
 import iguanaman.iguanatweakstconstruct.mobheads.tileentities.IguanaSkullTileEntity;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
+import thaumcraft.api.crafting.IInfusionStabiliser;
 
 @Optional.Interface(modid = "Thaumcraft", iface = "thaumcraft.api.crafting.IInfusionStabiliser")
 public class IguanaSkullBlock extends BlockSkull implements IInfusionStabiliser {

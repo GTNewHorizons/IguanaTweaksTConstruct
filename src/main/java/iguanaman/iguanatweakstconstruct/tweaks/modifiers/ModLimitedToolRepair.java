@@ -3,8 +3,8 @@ package iguanaman.iguanatweakstconstruct.tweaks.modifiers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import tconstruct.modifiers.tools.ModToolRepair;
 import iguanaman.iguanatweakstconstruct.reference.Config;
+import tconstruct.modifiers.tools.ModToolRepair;
 
 public class ModLimitedToolRepair extends ModToolRepair {
 

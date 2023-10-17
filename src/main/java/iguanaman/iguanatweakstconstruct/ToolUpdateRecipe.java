@@ -6,8 +6,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
-import tconstruct.library.tools.ToolCore;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
+import tconstruct.library.tools.ToolCore;
 
 public class ToolUpdateRecipe implements IRecipe {
 

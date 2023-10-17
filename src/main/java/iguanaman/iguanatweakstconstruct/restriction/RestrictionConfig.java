@@ -3,14 +3,13 @@ package iguanaman.iguanatweakstconstruct.restriction;
 import java.util.HashSet;
 import java.util.Set;
 
-import mantle.utils.ItemMetaWrapper;
-
 import net.minecraftforge.common.config.Configuration;
 
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.tools.ToolMaterial;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
+import mantle.utils.ItemMetaWrapper;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.tools.ToolMaterial;
 
 public class RestrictionConfig {
 

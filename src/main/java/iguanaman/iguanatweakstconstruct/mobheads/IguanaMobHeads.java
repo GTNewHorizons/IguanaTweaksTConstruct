@@ -1,8 +1,5 @@
 package iguanaman.iguanatweakstconstruct.mobheads;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +20,8 @@ import iguanaman.iguanatweakstconstruct.mobheads.tileentities.IguanaSkullTileEnt
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
 
 /**
  * Adds additional MobHeads and controls MobHead dropping.

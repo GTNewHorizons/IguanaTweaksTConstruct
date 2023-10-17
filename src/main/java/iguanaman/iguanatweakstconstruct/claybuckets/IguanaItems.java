@@ -2,9 +2,6 @@ package iguanaman.iguanatweakstconstruct.claybuckets;
 
 import static tconstruct.smeltery.TinkerSmeltery.*;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,8 +14,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import tconstruct.smeltery.TinkerSmeltery;
-import tconstruct.world.TinkerWorld;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -28,6 +23,10 @@ import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketMilk;
 import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketTinkerLiquids;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
+import tconstruct.smeltery.TinkerSmeltery;
+import tconstruct.world.TinkerWorld;
 
 @Pulse(id = Reference.PULSE_ITEMS, description = "All the Items Iguana Tweaks for TConstruct adds (Clay Buckets,...)")
 public class IguanaItems {

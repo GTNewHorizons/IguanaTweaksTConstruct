@@ -11,7 +11,11 @@ import org.lwjgl.opengl.GL11;
 import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.uv.UVTranslation;
-import codechicken.lib.vec.*;
+import codechicken.lib.vec.Rotation;
+import codechicken.lib.vec.Scale;
+import codechicken.lib.vec.SwapYZ;
+import codechicken.lib.vec.TransformationList;
+import codechicken.lib.vec.Translation;
 
 public class IguanaItemSawRenderer implements IItemRenderer {
 

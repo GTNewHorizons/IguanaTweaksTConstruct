@@ -12,14 +12,22 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import tconstruct.items.tools.*;
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.tools.ToolCore;
 import iguanaman.iguanatweakstconstruct.override.XPAdjustmentMap;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import tconstruct.items.tools.Cleaver;
+import tconstruct.items.tools.Excavator;
+import tconstruct.items.tools.Hammer;
+import tconstruct.items.tools.Hatchet;
+import tconstruct.items.tools.LumberAxe;
+import tconstruct.items.tools.Mattock;
+import tconstruct.items.tools.Pickaxe;
+import tconstruct.items.tools.Scythe;
+import tconstruct.items.tools.Shovel;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.tools.ToolCore;
 
 /**
  * Utility class that takes care of all the Tool XP related things. Basically how leveling works: - You get XP for doing

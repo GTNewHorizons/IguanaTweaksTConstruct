@@ -3,22 +3,11 @@ package iguanaman.iguanatweakstconstruct.leveling;
 import java.util.List;
 import java.util.ListIterator;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.client.TConstructClientRegistry;
-import tconstruct.library.crafting.ModifyBuilder;
-import tconstruct.library.modifier.ItemModifier;
-import tconstruct.library.tools.ToolCore;
-import tconstruct.modifiers.tools.ModRedstone;
-import tconstruct.modifiers.tools.ModWindup;
-import tconstruct.tools.TinkerTools;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -38,6 +27,16 @@ import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.client.TConstructClientRegistry;
+import tconstruct.library.crafting.ModifyBuilder;
+import tconstruct.library.modifier.ItemModifier;
+import tconstruct.library.tools.ToolCore;
+import tconstruct.modifiers.tools.ModRedstone;
+import tconstruct.modifiers.tools.ModWindup;
+import tconstruct.tools.TinkerTools;
 
 /**
  * The Leveling Pulse. If Leveling were a separate mod instead of pulse-model, this'd be a @Mod This pulse contains all

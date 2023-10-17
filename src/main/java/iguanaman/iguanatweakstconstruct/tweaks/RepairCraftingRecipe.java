@@ -6,11 +6,11 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 import tconstruct.library.crafting.ModifyBuilder;
 import tconstruct.library.modifier.ItemModifier;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.modifiers.tools.ModToolRepair;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class RepairCraftingRecipe implements IRecipe {
 

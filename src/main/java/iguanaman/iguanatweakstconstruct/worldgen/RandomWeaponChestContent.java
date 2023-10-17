@@ -1,6 +1,10 @@
 package iguanaman.iguanatweakstconstruct.worldgen;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -8,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.crafting.ToolRecipe;
@@ -15,7 +20,6 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.tools.ToolMaterial;
 import tconstruct.library.util.IToolPart;
 import tconstruct.tools.TinkerTools;
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 
 public class RandomWeaponChestContent extends WeightedRandomChestContent {
 
