@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.crafting.ToolRecipe;
@@ -15,7 +16,6 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.tools.ToolMaterial;
 import tconstruct.library.util.IToolPart;
 import tconstruct.tools.TinkerTools;
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 
 public class RandomWeaponChestContent extends WeightedRandomChestContent {
 

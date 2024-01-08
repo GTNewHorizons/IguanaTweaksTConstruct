@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.tools.ToolCore;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 
 public class IguanaCommandLevelUpTool extends CommandBase {
 

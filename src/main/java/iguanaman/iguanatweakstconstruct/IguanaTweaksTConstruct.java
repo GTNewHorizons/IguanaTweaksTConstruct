@@ -3,9 +3,6 @@ package iguanaman.iguanatweakstconstruct;
 import java.io.File;
 import java.util.Random;
 
-import mantle.pulsar.config.IConfiguration;
-import mantle.pulsar.control.PulseManager;
-import mantle.pulsar.pulse.PulseMeta;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -35,6 +32,9 @@ import iguanaman.iguanatweakstconstruct.tweaks.IguanaTweaks;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.worldgen.IguanaWorldGen;
+import mantle.pulsar.config.IConfiguration;
+import mantle.pulsar.control.PulseManager;
+import mantle.pulsar.pulse.PulseMeta;
 
 @Mod(
         modid = Reference.MOD_ID,

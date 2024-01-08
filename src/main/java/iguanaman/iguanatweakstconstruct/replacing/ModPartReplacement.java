@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.crafting.ToolRecipe;
@@ -17,8 +19,6 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.util.IToolPart;
 import tconstruct.tools.TinkerTools;
 import tconstruct.weaponry.TinkerWeaponry;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.reference.Config;
 
 public class ModPartReplacement extends ItemModifier {
 

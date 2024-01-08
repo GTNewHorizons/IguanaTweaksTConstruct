@@ -1,9 +1,10 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:TinkersConstruct:1.9.0.12-GTNH:dev")
+    api("com.github.GTNewHorizons:TinkersConstruct:1.11.3-GTNH:dev")
+    api("com.github.GTNewHorizons:NotEnoughItems:2.4.13-GTNH:dev")
 
-    compileOnly("com.github.GTNewHorizons:Battlegear2:master-SNAPSHOT:dev") {
+    compileOnly("com.github.GTNewHorizons:Battlegear2:1.3.0:dev") {
         transitive = false
     }
 
@@ -13,7 +14,7 @@ dependencies {
     compileOnly("curse.maven:cofh-core-69162:2388751")
 
     // For Debug Ruler, to view NBT
-    runtimeOnly("com.github.GTNewHorizons:nei-custom-diagram:1.4.11:dev") {
+    runtimeOnly("com.github.GTNewHorizons:nei-custom-diagram:1.5.14:dev") {
         transitive = false
     }
 }

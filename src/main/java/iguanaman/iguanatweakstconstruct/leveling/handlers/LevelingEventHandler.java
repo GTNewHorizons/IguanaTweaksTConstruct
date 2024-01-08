@@ -15,6 +15,14 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 import tconstruct.items.tools.Chisel;
 import tconstruct.items.tools.Hammer;
 import tconstruct.items.tools.Pickaxe;
@@ -24,14 +32,6 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.weaponry.ProjectileWeapon;
 import tconstruct.weaponry.entity.ShurikenEntity;
 import tconstruct.weaponry.weapons.Shuriken;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
-import iguanaman.iguanatweakstconstruct.reference.Config;
 
 public class LevelingEventHandler {
 

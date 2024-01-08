@@ -2,10 +2,10 @@ package iguanaman.iguanatweakstconstruct;
 
 import java.io.File;
 
+import net.minecraftforge.common.config.Configuration;
+
 import mantle.pulsar.config.IConfiguration;
 import mantle.pulsar.pulse.PulseMeta;
-
-import net.minecraftforge.common.config.Configuration;
 
 /** Reimplementation of mantle.pulsar.config because static config */
 public class PulsarCFG implements IConfiguration {

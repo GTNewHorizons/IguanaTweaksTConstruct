@@ -9,10 +9,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 
+import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import tconstruct.library.crafting.ToolBuilder;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.tools.TinkerTools;
-import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 
 public class DebugCommand extends CommandBase {
 

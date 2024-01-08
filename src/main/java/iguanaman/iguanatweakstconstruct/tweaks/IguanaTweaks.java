@@ -2,10 +2,6 @@ package iguanaman.iguanatweakstconstruct.tweaks;
 
 import java.util.*;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-import mantle.utils.RecipeRemover;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
@@ -15,6 +11,17 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.tweaks.handlers.*;
+import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModFluxExpensive;
+import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModLimitedToolRepair;
+import iguanaman.iguanatweakstconstruct.util.Log;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
+import mantle.utils.RecipeRemover;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.client.TConstructClientRegistry;
 import tconstruct.library.crafting.*;
@@ -26,14 +33,6 @@ import tconstruct.modifiers.tools.ModToolRepair;
 import tconstruct.smeltery.TinkerSmeltery;
 import tconstruct.tools.TinkerTools;
 import tconstruct.world.TinkerWorld;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.tweaks.handlers.*;
-import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModFluxExpensive;
-import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModLimitedToolRepair;
-import iguanaman.iguanatweakstconstruct.util.Log;
 
 /**
  * Various Tweaks for Tinkers Construct and Vanilla Minecraft. See Config.

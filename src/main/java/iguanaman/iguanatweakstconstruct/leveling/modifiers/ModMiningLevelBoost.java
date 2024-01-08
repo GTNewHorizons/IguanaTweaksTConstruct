@@ -4,9 +4,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 
-import tconstruct.modifiers.tools.ModBoolean;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.reference.Config;
+import tconstruct.modifiers.tools.ModBoolean;
 
 public class ModMiningLevelBoost extends ModBoolean {
 
