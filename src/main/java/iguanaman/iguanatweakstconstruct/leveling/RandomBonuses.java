@@ -13,6 +13,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
+import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
+import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModShoddy;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.Log;
 import tconstruct.TConstruct;
 import tconstruct.items.tools.Hammer;
 import tconstruct.library.crafting.ModifyBuilder;
@@ -22,10 +26,6 @@ import tconstruct.library.weaponry.IAmmo;
 import tconstruct.modifiers.tools.ModWindup;
 import tconstruct.tools.TinkerTools;
 import tconstruct.weaponry.TinkerWeaponry;
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModShoddy;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.util.Log;
 
 /*
  * On doing stuff, add data what was done. Apply data to weights. Basically on action add an NBT tag that knows how

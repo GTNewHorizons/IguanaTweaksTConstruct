@@ -5,12 +5,12 @@ import static iguanaman.iguanatweakstconstruct.util.HarvestLevels.*;
 import java.util.Collection;
 import java.util.HashSet;
 
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.tools.ToolMaterial;
-import tconstruct.tools.TinkerTools;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.tools.ToolMaterial;
+import tconstruct.tools.TinkerTools;
 
 /**
  * Used to modify the harvest levels and speeds of the tinker tool parts. Has to be used together with the HarvestLevel

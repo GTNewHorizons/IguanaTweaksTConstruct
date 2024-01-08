@@ -1,8 +1,8 @@
 package iguanaman.iguanatweakstconstruct.tweaks.handlers;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import tconstruct.library.event.SmelteryCastedEvent;
 import tconstruct.library.util.IPattern;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class CastHandler {
 

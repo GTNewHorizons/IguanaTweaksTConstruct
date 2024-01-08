@@ -13,14 +13,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 
-import tconstruct.library.tools.ToolCore;
-import tconstruct.tools.TinkerTools;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
 import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
 import iguanaman.iguanatweakstconstruct.mobheads.items.IguanaSkull;
 import iguanaman.iguanatweakstconstruct.reference.Config;
+import tconstruct.library.tools.ToolCore;
+import tconstruct.tools.TinkerTools;
 
 public class MobHeadHandler {
 

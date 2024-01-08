@@ -9,10 +9,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import tconstruct.smeltery.items.FilledBucket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
+import tconstruct.smeltery.items.FilledBucket;
 
 public class ClayBucketTinkerLiquids extends FilledBucket {
 

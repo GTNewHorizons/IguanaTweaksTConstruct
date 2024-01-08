@@ -2,18 +2,12 @@ package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
 import java.lang.reflect.Field;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.tools.ToolMaterial;
-import tconstruct.tools.TinkerTools;
 import codechicken.microblock.ItemSaw;
 import codechicken.microblock.Saw;
 import codechicken.microblock.handler.MicroblockProxy;
@@ -27,6 +21,11 @@ import iguanaman.iguanatweakstconstruct.harvestlevels.HarvestLevelTweaks;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.tools.ToolMaterial;
+import tconstruct.tools.TinkerTools;
 
 @Pulse(
         id = Reference.PULSE_COMPAT_FMP,

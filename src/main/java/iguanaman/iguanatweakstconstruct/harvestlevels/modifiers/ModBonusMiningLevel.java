@@ -3,9 +3,9 @@ package iguanaman.iguanatweakstconstruct.harvestlevels.modifiers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import tconstruct.library.modifier.ItemModifier;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import tconstruct.library.modifier.ItemModifier;
 
 public class ModBonusMiningLevel extends ItemModifier {
 

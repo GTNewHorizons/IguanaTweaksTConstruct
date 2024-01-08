@@ -10,12 +10,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
 
-import tconstruct.world.blocks.GravelOre;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
+import tconstruct.world.blocks.GravelOre;
 
 /**
  * Used to modify the harvest levels of all known/findable tools and blocks. Vanilla and modded. Has to be used with the

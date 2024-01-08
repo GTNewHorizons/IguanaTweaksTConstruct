@@ -2,13 +2,18 @@ package iguanaman.iguanatweakstconstruct.harvestlevels;
 
 import java.util.Map;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import iguanaman.iguanatweakstconstruct.harvestlevels.modifiers.ModBonusMiningLevel;
+import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import iguanaman.iguanatweakstconstruct.util.Log;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
 import tconstruct.TConstruct;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.ModifyBuilder;
@@ -16,12 +21,6 @@ import tconstruct.library.tools.ToolMaterial;
 import tconstruct.tools.TinkerTools;
 import tconstruct.util.config.PHConstruct;
 import tconstruct.world.TinkerWorld;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import iguanaman.iguanatweakstconstruct.harvestlevels.modifiers.ModBonusMiningLevel;
-import iguanaman.iguanatweakstconstruct.reference.Config;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import iguanaman.iguanatweakstconstruct.util.Log;
 
 /**
  * The Harvest-Tweaks Pulse. If this were a separate mod instead of pulse-module, it'd be a @Mod This pulse modifies the

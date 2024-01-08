@@ -1,13 +1,12 @@
 package iguanaman.iguanatweakstconstruct.worldgen;
 
-import mantle.pulsar.pulse.Handler;
-import mantle.pulsar.pulse.Pulse;
-
 import net.minecraftforge.common.ChestGenHooks;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import mantle.pulsar.pulse.Handler;
+import mantle.pulsar.pulse.Pulse;
 
 @Pulse(id = Reference.PULSE_WORLDGEN, description = "This module takes care of additional awesome dungeon loot.")
 public class IguanaWorldGen {

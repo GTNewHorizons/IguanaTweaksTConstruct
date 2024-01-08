@@ -9,9 +9,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
-import tconstruct.items.tools.Hammer;
-import tconstruct.items.tools.Pickaxe;
-import tconstruct.library.tools.ToolCore;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iguanaman.iguanatweakstconstruct.OldToolConversionHandler;
@@ -21,6 +18,9 @@ import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import iguanaman.iguanatweakstconstruct.util.TooltipHelper;
+import tconstruct.items.tools.Hammer;
+import tconstruct.items.tools.Pickaxe;
+import tconstruct.library.tools.ToolCore;
 
 public class LevelingToolTipHandler {
 

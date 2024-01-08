@@ -11,10 +11,10 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
-import tconstruct.library.crafting.ToolBuilder;
-import tconstruct.library.util.IToolPart;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
+import tconstruct.library.crafting.ToolBuilder;
+import tconstruct.library.util.IToolPart;
 
 public class ToolCraftingRecipe implements IRecipe {
 
