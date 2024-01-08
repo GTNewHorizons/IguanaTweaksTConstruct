@@ -2,6 +2,7 @@
 
 dependencies {
     api("com.github.GTNewHorizons:TinkersConstruct:1.11.3-GTNH:dev")
+    api("com.github.GTNewHorizons:NotEnoughItems:2.4.13-GTNH:dev")
 
     compileOnly("com.github.GTNewHorizons:Battlegear2:1.3.0:dev") {
         transitive = false
