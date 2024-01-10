@@ -1,7 +1,14 @@
 package iguanaman.iguanatweakstconstruct.replacing;
 
-import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.*;
-import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.*;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.ACCESSORY;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.EXTRA;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HANDLE;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.detectAdditionalPartType;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.exchangeToolPart;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getToolPartMaterial;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.hasExtraModifier;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

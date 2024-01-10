@@ -1,6 +1,15 @@
 package iguanaman.iguanatweakstconstruct.harvestlevels;
 
-import static iguanaman.iguanatweakstconstruct.util.HarvestLevels.*;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._0_stone;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._1_flint;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._2_copper;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._3_iron;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._4_bronze;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._5_diamond;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._6_obsidian;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._7_ardite;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._8_cobalt;
+import static iguanaman.iguanatweakstconstruct.util.HarvestLevels._9_manyullym;
 
 import java.util.Collection;
 import java.util.HashSet;

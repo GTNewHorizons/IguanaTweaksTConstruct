@@ -1,6 +1,10 @@
 package iguanaman.iguanatweakstconstruct.worldgen;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;

@@ -1,6 +1,15 @@
 package iguanaman.iguanatweakstconstruct.util;
 
-import static net.minecraft.util.EnumChatFormatting.*;
+import static net.minecraft.item.ItemArmor.ArmorMaterial.GOLD;
+import static net.minecraft.util.EnumChatFormatting.BLUE;
+import static net.minecraft.util.EnumChatFormatting.DARK_AQUA;
+import static net.minecraft.util.EnumChatFormatting.DARK_GRAY;
+import static net.minecraft.util.EnumChatFormatting.DARK_PURPLE;
+import static net.minecraft.util.EnumChatFormatting.DARK_RED;
+import static net.minecraft.util.EnumChatFormatting.GRAY;
+import static net.minecraft.util.EnumChatFormatting.LIGHT_PURPLE;
+import static net.minecraft.util.EnumChatFormatting.RED;
+import static net.minecraft.util.EnumChatFormatting.WHITE;
 
 import java.util.Map;
 

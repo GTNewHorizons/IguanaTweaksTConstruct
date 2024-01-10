@@ -1,6 +1,9 @@
 package iguanaman.iguanatweakstconstruct.leveling;
 
-import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.*;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.ACCESSORY;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.EXTRA;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HANDLE;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +20,15 @@ import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
-import tconstruct.items.tools.*;
+import tconstruct.items.tools.Cleaver;
+import tconstruct.items.tools.Excavator;
+import tconstruct.items.tools.Hammer;
+import tconstruct.items.tools.Hatchet;
+import tconstruct.items.tools.LumberAxe;
+import tconstruct.items.tools.Mattock;
+import tconstruct.items.tools.Pickaxe;
+import tconstruct.items.tools.Scythe;
+import tconstruct.items.tools.Shovel;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.tools.ToolCore;
 

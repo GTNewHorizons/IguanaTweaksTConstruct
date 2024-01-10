@@ -1,6 +1,9 @@
 package iguanaman.iguanatweakstconstruct.replacing;
 
-import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.*;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.ACCESSORY;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.EXTRA;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HANDLE;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 
 import java.util.Arrays;
 
@@ -46,7 +49,7 @@ public final class ReplacementLogic {
 
         if (getPart(tool, HEAD) != null)
             headStack = new ItemStack(getPart(tool, HEAD), 1, getToolPartMaterial(tags, HEAD));
-        if (getPart(tool, HANDLE) != null)
+        if (getPart(tool, PartTypes.HANDLE) != null)
             handleStack = new ItemStack(getPart(tool, HANDLE), 1, getToolPartMaterial(tags, HANDLE));
         if (getPart(tool, ACCESSORY) != null)
             accessoryStack = new ItemStack(getPart(tool, ACCESSORY), 1, getToolPartMaterial(tags, ACCESSORY));

@@ -1,8 +1,29 @@
 package iguanaman.iguanatweakstconstruct.leveling;
 
-import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.*;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.ATTACK;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.AUTOSMELT;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.BANE;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.BEHEADING;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.BLAZE;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.CRITICAL;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.DIAMOND;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.EMERALD;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.JAGGED;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.KNOCKBACK;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.LAPIS;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.LIFESTEAL;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.REDSTONE;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.REINFORCED;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.REPAIR;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.SILKTOUCH;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.SMITE;
+import static iguanaman.iguanatweakstconstruct.leveling.RandomBonuses.Modifier.STONEBOUND;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
