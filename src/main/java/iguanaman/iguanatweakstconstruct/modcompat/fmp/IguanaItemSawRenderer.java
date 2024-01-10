@@ -11,7 +11,11 @@ import org.lwjgl.opengl.GL11;
 import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.uv.UVTranslation;
-import codechicken.lib.vec.*;
+import codechicken.lib.vec.Rotation;
+import codechicken.lib.vec.Scale;
+import codechicken.lib.vec.SwapYZ;
+import codechicken.lib.vec.TransformationList;
+import codechicken.lib.vec.Translation;
 
 public class IguanaItemSawRenderer implements IItemRenderer {
 
@@ -73,19 +77,19 @@ public class IguanaItemSawRenderer implements IItemRenderer {
             default:
                 return;
         }
-
-        CCRenderState.reset();
-        CCRenderState.useNormals = true;
-        CCRenderState.pullLightmap();
-        CCRenderState.changeTexture(texture);
-        CCRenderState.startDrawing();
+        final CCRenderState state = CCRenderState.instance();
+        state.reset();
+        state.useNormals = true;
+        state.pullLightmap();
+        state.changeTexture(texture);
+        state.startDrawing();
         handle.render(t);
         holder.render(t);
-        CCRenderState.draw();
+        state.draw();
         GL11.glDisable(GL11.GL_CULL_FACE);
-        CCRenderState.startDrawing();
+        state.startDrawing();
         blade.render(t, new UVTranslation(0, uvIndex * 4 / 64D));
-        CCRenderState.draw();
+        state.draw();
         GL11.glEnable(GL11.GL_CULL_FACE);
     }
 }
