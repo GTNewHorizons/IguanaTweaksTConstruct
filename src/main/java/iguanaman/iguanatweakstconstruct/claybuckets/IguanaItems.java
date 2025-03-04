@@ -27,7 +27,6 @@ import static tconstruct.smeltery.TinkerSmeltery.moltenStoneFluid;
 import static tconstruct.smeltery.TinkerSmeltery.moltenTinFluid;
 import static tconstruct.smeltery.TinkerSmeltery.pigIronFluid;
 
-import mods.railcraft.common.fluids.RailcraftFluids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -40,6 +39,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -51,6 +51,7 @@ import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import mantle.pulsar.pulse.Handler;
 import mantle.pulsar.pulse.Pulse;
+import mods.railcraft.common.fluids.RailcraftFluids;
 import tconstruct.smeltery.TinkerSmeltery;
 import tconstruct.world.TinkerWorld;
 
@@ -64,6 +65,7 @@ public class IguanaItems {
     public static Item clayBucketCreosote;
     public static Item clayBucketMilk;
     public static Item clayBucketsTinkers;
+    public static Item clayBucketOil;
 
     @Handler
     public void preInit(FMLPreInitializationEvent event) {
@@ -77,10 +79,15 @@ public class IguanaItems {
         clayBucketFired = new ClayBucket(Blocks.air, "clayBucketFired", "clayBucketFired").setMaxStackSize(16);
         clayBucketWater = new ClayBucket(Blocks.flowing_water, "clayBucket.Water", "clayBucketWater");
         clayBucketLava = new ClayBucket(Blocks.flowing_lava, "clayBucket.Lava", "clayBucketLava");
-        clayBucketCreosote = new ClayBucket(RailcraftFluids.CREOSOTE.getBlock(), "clayBucket.creosote", "clayBucketCreosote");
+        clayBucketCreosote = new ClayBucket(
+                RailcraftFluids.CREOSOTE.getBlock(),
+                "clayBucket.creosote",
+                "clayBucketCreosote");
         clayBucketMilk = new ClayBucketMilk();
 
         clayBucketsTinkers = new ClayBucketTinkerLiquids(null);
+
+        clayBucketOil = new ClayBucket(BuildCraftEnergy.blockOil, "clayBucket.oil", "clayBucketOil");
 
         GameRegistry.registerItem(clayBucketFired, "clayBucketFired");
         GameRegistry.registerItem(clayBucketWater, "clayBucketWater");
@@ -88,6 +95,7 @@ public class IguanaItems {
         GameRegistry.registerItem(clayBucketCreosote, "clayBucketCreosote");
         GameRegistry.registerItem(clayBucketMilk, "clayBucketMilk");
         GameRegistry.registerItem(clayBucketsTinkers, "clayBucketsTinkers");
+        GameRegistry.registerItem(clayBucketOil, "clayBucketOil");
 
         // register milkbucket to the ordictionary
         OreDictionary.registerOre("listAllmilk", clayBucketMilk); // i suppose this is for pams harvestcraft.
@@ -105,6 +113,8 @@ public class IguanaItems {
                 RailcraftFluids.CREOSOTE.standardFluid.get(),
                 new ItemStack(clayBucketCreosote),
                 emptyClayBucket);
+        FluidContainerRegistry
+                .registerFluidContainer(BuildCraftEnergy.fluidOil, new ItemStack(clayBucketOil), emptyClayBucket);
 
         // only integrate tcon metals if they actually exist
         if (TinkerSmeltery.buckets != null) {

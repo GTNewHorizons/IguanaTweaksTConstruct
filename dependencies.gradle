@@ -4,6 +4,7 @@ dependencies {
     api("com.github.GTNewHorizons:TinkersConstruct:1.13.1-GTNH:dev")
     api("com.github.GTNewHorizons:NotEnoughItems:2.7.11-GTNH:dev")
     api("com.github.GTNewHorizons:Railcraft:9.16.3:dev")
+    api("com.github.GTNewHorizons:BuildCraft:7.1.42:dev")
 
     compileOnly("com.github.GTNewHorizons:Battlegear2:1.4.2:dev") {
         transitive = false

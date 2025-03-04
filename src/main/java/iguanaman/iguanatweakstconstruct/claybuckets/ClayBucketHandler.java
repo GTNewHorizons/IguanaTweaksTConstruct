@@ -1,6 +1,5 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
-import mods.railcraft.common.fluids.RailcraftFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
@@ -12,9 +11,11 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mods.railcraft.common.fluids.RailcraftFluids;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
@@ -135,6 +136,13 @@ public class ClayBucketHandler {
             if (bID == RailcraftFluids.CREOSOTE.getBlock()) {
                 event.setResult(Event.Result.ALLOW);
                 event.result = new ItemStack(IguanaItems.clayBucketCreosote);
+                event.world.setBlockToAir(hitX, hitY, hitZ);
+
+                return;
+            }
+            if (bID == BuildCraftEnergy.blockOil) {
+                event.setResult(Event.Result.ALLOW);
+                event.result = new ItemStack(IguanaItems.clayBucketOil);
                 event.world.setBlockToAir(hitX, hitY, hitZ);
 
                 return;
