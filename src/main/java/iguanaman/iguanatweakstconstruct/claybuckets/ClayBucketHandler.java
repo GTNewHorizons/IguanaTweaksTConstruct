@@ -1,5 +1,6 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
+import mods.railcraft.common.fluids.RailcraftFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
@@ -127,6 +128,13 @@ public class ClayBucketHandler {
             if (bID == Blocks.lava || bID == Blocks.flowing_lava) {
                 event.setResult(Event.Result.ALLOW);
                 event.result = new ItemStack(IguanaItems.clayBucketLava);
+                event.world.setBlockToAir(hitX, hitY, hitZ);
+
+                return;
+            }
+            if (bID == RailcraftFluids.CREOSOTE.getBlock()) {
+                event.setResult(Event.Result.ALLOW);
+                event.result = new ItemStack(IguanaItems.clayBucketCreosote);
                 event.world.setBlockToAir(hitX, hitY, hitZ);
 
                 return;

@@ -27,6 +27,7 @@ import static tconstruct.smeltery.TinkerSmeltery.moltenStoneFluid;
 import static tconstruct.smeltery.TinkerSmeltery.moltenTinFluid;
 import static tconstruct.smeltery.TinkerSmeltery.pigIronFluid;
 
+import mods.railcraft.common.fluids.RailcraftFluids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -60,6 +61,7 @@ public class IguanaItems {
     public static Item clayBucketFired;
     public static Item clayBucketWater;
     public static Item clayBucketLava;
+    public static Item clayBucketCreosote;
     public static Item clayBucketMilk;
     public static Item clayBucketsTinkers;
 
@@ -75,6 +77,7 @@ public class IguanaItems {
         clayBucketFired = new ClayBucket(Blocks.air, "clayBucketFired", "clayBucketFired").setMaxStackSize(16);
         clayBucketWater = new ClayBucket(Blocks.flowing_water, "clayBucket.Water", "clayBucketWater");
         clayBucketLava = new ClayBucket(Blocks.flowing_lava, "clayBucket.Lava", "clayBucketLava");
+        clayBucketCreosote = new ClayBucket(RailcraftFluids.CREOSOTE.getBlock(), "clayBucket.creosote", "clayBucketCreosote");
         clayBucketMilk = new ClayBucketMilk();
 
         clayBucketsTinkers = new ClayBucketTinkerLiquids(null);
@@ -82,6 +85,7 @@ public class IguanaItems {
         GameRegistry.registerItem(clayBucketFired, "clayBucketFired");
         GameRegistry.registerItem(clayBucketWater, "clayBucketWater");
         GameRegistry.registerItem(clayBucketLava, "clayBucketLava");
+        GameRegistry.registerItem(clayBucketCreosote, "clayBucketCreosote");
         GameRegistry.registerItem(clayBucketMilk, "clayBucketMilk");
         GameRegistry.registerItem(clayBucketsTinkers, "clayBucketsTinkers");
 
@@ -97,6 +101,10 @@ public class IguanaItems {
                 FluidRegistry.LAVA,
                 new ItemStack(clayBucketLava),
                 new ItemStack(clayBucketFired, 0));
+        FluidContainerRegistry.registerFluidContainer(
+                RailcraftFluids.CREOSOTE.standardFluid.get(),
+                new ItemStack(clayBucketCreosote),
+                emptyClayBucket);
 
         // only integrate tcon metals if they actually exist
         if (TinkerSmeltery.buckets != null) {
