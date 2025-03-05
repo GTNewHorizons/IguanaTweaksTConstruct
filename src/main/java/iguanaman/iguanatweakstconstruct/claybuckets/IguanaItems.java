@@ -39,6 +39,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import biomesoplenty.api.content.BOPCBlocks;
+import biomesoplenty.api.content.BOPCFluids;
 import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -66,6 +68,8 @@ public class IguanaItems {
     public static Item clayBucketMilk;
     public static Item clayBucketsTinkers;
     public static Item clayBucketOil;
+    public static Item clayBucketPoison;
+    public static Item clayBucketBlood;
 
     @Handler
     public void preInit(FMLPreInitializationEvent event) {
@@ -89,6 +93,9 @@ public class IguanaItems {
 
         clayBucketOil = new ClayBucket(BuildCraftEnergy.blockOil, "clayBucket.oil", "clayBucketOil");
 
+        clayBucketPoison = new ClayBucket(BOPCBlocks.poison, "clayBucket.poison", "clayBucketPoison");
+        clayBucketBlood = new ClayBucket(BOPCBlocks.blood, "clayBucket.blood", "clayBucketBlood");
+
         GameRegistry.registerItem(clayBucketFired, "clayBucketFired");
         GameRegistry.registerItem(clayBucketWater, "clayBucketWater");
         GameRegistry.registerItem(clayBucketLava, "clayBucketLava");
@@ -96,6 +103,8 @@ public class IguanaItems {
         GameRegistry.registerItem(clayBucketMilk, "clayBucketMilk");
         GameRegistry.registerItem(clayBucketsTinkers, "clayBucketsTinkers");
         GameRegistry.registerItem(clayBucketOil, "clayBucketOil");
+        GameRegistry.registerItem(clayBucketPoison, "clayBucketPoison");
+        GameRegistry.registerItem(clayBucketBlood, "clayBucketBlood");
 
         // register milkbucket to the ordictionary
         OreDictionary.registerOre("listAllmilk", clayBucketMilk); // i suppose this is for pams harvestcraft.
@@ -115,6 +124,10 @@ public class IguanaItems {
                 emptyClayBucket);
         FluidContainerRegistry
                 .registerFluidContainer(BuildCraftEnergy.fluidOil, new ItemStack(clayBucketOil), emptyClayBucket);
+        FluidContainerRegistry
+                .registerFluidContainer(BOPCFluids.poison, new ItemStack(clayBucketPoison), emptyClayBucket);
+        FluidContainerRegistry
+                .registerFluidContainer(BOPCFluids.blood, new ItemStack(clayBucketBlood), emptyClayBucket);
 
         // only integrate tcon metals if they actually exist
         if (TinkerSmeltery.buckets != null) {

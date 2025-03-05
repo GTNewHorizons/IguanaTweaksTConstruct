@@ -11,6 +11,7 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import biomesoplenty.api.content.BOPCBlocks;
 import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -143,6 +144,20 @@ public class ClayBucketHandler {
             if (bID == BuildCraftEnergy.blockOil) {
                 event.setResult(Event.Result.ALLOW);
                 event.result = new ItemStack(IguanaItems.clayBucketOil);
+                event.world.setBlockToAir(hitX, hitY, hitZ);
+
+                return;
+            }
+            if (bID == BOPCBlocks.poison) {
+                event.setResult(Event.Result.ALLOW);
+                event.result = new ItemStack(IguanaItems.clayBucketPoison);
+                event.world.setBlockToAir(hitX, hitY, hitZ);
+
+                return;
+            }
+            if (bID == BOPCBlocks.blood) {
+                event.setResult(Event.Result.ALLOW);
+                event.result = new ItemStack(IguanaItems.clayBucketBlood);
                 event.world.setBlockToAir(hitX, hitY, hitZ);
 
                 return;
