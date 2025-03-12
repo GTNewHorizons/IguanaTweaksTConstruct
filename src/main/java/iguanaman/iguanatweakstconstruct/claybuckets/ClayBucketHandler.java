@@ -21,7 +21,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucket;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.BaseClayBucket;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
@@ -30,16 +30,18 @@ public class ClayBucketHandler {
 
     /**
      * Register a clay bucket for a given fluid and it's fluid block.
-     * 
-     * @param bucketName The name of the item, this will be used to load its texture and add it to the item registry
-     * @param langKey    The lang key for the displayed name of this item
+     *
+     * @param itemName   The name of the item, this will be used to load its texture and add it to the item registry
+     * @param langKey    The full lang key for the displayed name of this bucket
+     * @param texture    The full path to the texture for this bucket
      * @param fluid      The fluid this bucket contains
      * @param fluidBlock The fluid block this bucket can pick up and place
      * @return The clay bucket item that was added to the game registry
      */
-    public static Item registerClayBucket(String bucketName, String langKey, Fluid fluid, Block fluidBlock) {
-        Item newClayBucket = new ClayBucket(fluidBlock, langKey, bucketName);
-        GameRegistry.registerItem(newClayBucket, bucketName);
+    public static Item registerClayBucket(String itemName, String langKey, String texture, Fluid fluid,
+            Block fluidBlock) {
+        Item newClayBucket = new BaseClayBucket(fluidBlock, langKey, texture);
+        GameRegistry.registerItem(newClayBucket, itemName);
         FluidContainerRegistry.registerFluidContainer(
                 fluid,
                 new ItemStack(newClayBucket),

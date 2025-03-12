@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCFluids;
+import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class BopClayBuckets {
 
@@ -11,9 +12,19 @@ public class BopClayBuckets {
     public static Item clayBucketBlood;
 
     public static void register() {
-        clayBucketPoison = ClayBucketHandler
-                .registerClayBucket("clayBucketPoison", "clayBucket.poison", BOPCFluids.poison, BOPCBlocks.poison);
-        clayBucketBlood = ClayBucketHandler
-                .registerClayBucket("clayBucketBlood", "clayBucket.blood", BOPCFluids.blood, BOPCBlocks.blood);
+        String poisonClayBucketName = "clayBucketPoison";
+        clayBucketPoison = ClayBucketHandler.registerClayBucket(
+                poisonClayBucketName,
+                Reference.prefix("clayBucket.poison"),
+                Reference.resource(poisonClayBucketName),
+                BOPCFluids.poison,
+                BOPCBlocks.poison);
+        String bloodClayBucketName = "clayBucketBlood";
+        clayBucketBlood = ClayBucketHandler.registerClayBucket(
+                bloodClayBucketName,
+                Reference.prefix("clayBucket.blood"),
+                Reference.resource(bloodClayBucketName),
+                BOPCFluids.blood,
+                BOPCBlocks.blood);
     }
 }
