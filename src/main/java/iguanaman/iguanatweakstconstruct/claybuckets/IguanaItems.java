@@ -1,31 +1,6 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
-import static tconstruct.smeltery.TinkerSmeltery.bloodFluid;
-import static tconstruct.smeltery.TinkerSmeltery.glueFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenAlubrassFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenAluminumFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenAlumiteFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenArditeFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenBronzeFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenCobaltFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenCopperFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenElectrumFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenEmeraldFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenEnderFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenGlassFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenGoldFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenInvarFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenIronFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenLeadFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenManyullynFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenNickelFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenObsidianFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenShinyFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenSilverFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenSteelFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenStoneFluid;
-import static tconstruct.smeltery.TinkerSmeltery.moltenTinFluid;
-import static tconstruct.smeltery.TinkerSmeltery.pigIronFluid;
+import static tconstruct.smeltery.TinkerSmeltery.*;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -39,9 +14,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import biomesoplenty.api.content.BOPCBlocks;
-import biomesoplenty.api.content.BOPCFluids;
-import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -53,7 +25,6 @@ import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import mantle.pulsar.pulse.Handler;
 import mantle.pulsar.pulse.Pulse;
-import mods.railcraft.common.fluids.RailcraftFluids;
 import tconstruct.smeltery.TinkerSmeltery;
 import tconstruct.world.TinkerWorld;
 
@@ -64,12 +35,8 @@ public class IguanaItems {
     public static Item clayBucketFired;
     public static Item clayBucketWater;
     public static Item clayBucketLava;
-    public static Item clayBucketCreosote;
     public static Item clayBucketMilk;
     public static Item clayBucketsTinkers;
-    public static Item clayBucketOil;
-    public static Item clayBucketPoison;
-    public static Item clayBucketBlood;
 
     @Handler
     public void preInit(FMLPreInitializationEvent event) {
@@ -83,28 +50,25 @@ public class IguanaItems {
         clayBucketFired = new ClayBucket(Blocks.air, "clayBucketFired", "clayBucketFired").setMaxStackSize(16);
         clayBucketWater = new ClayBucket(Blocks.flowing_water, "clayBucket.Water", "clayBucketWater");
         clayBucketLava = new ClayBucket(Blocks.flowing_lava, "clayBucket.Lava", "clayBucketLava");
-        clayBucketCreosote = new ClayBucket(
-                RailcraftFluids.CREOSOTE.getBlock(),
-                "clayBucket.creosote",
-                "clayBucketCreosote");
         clayBucketMilk = new ClayBucketMilk();
 
+        if (Loader.isModLoaded("Railcraft")) {
+            RailcraftClayBuckets.register();
+        }
+        if (Loader.isModLoaded("BuildCraft|Core")) {
+            BuildcraftClayBuckets.register();
+        }
+        if (Loader.isModLoaded("BiomesOPlenty")) {
+            BopClayBuckets.register();
+        }
+
         clayBucketsTinkers = new ClayBucketTinkerLiquids(null);
-
-        clayBucketOil = new ClayBucket(BuildCraftEnergy.blockOil, "clayBucket.oil", "clayBucketOil");
-
-        clayBucketPoison = new ClayBucket(BOPCBlocks.poison, "clayBucket.poison", "clayBucketPoison");
-        clayBucketBlood = new ClayBucket(BOPCBlocks.blood, "clayBucket.blood", "clayBucketBlood");
 
         GameRegistry.registerItem(clayBucketFired, "clayBucketFired");
         GameRegistry.registerItem(clayBucketWater, "clayBucketWater");
         GameRegistry.registerItem(clayBucketLava, "clayBucketLava");
-        GameRegistry.registerItem(clayBucketCreosote, "clayBucketCreosote");
         GameRegistry.registerItem(clayBucketMilk, "clayBucketMilk");
         GameRegistry.registerItem(clayBucketsTinkers, "clayBucketsTinkers");
-        GameRegistry.registerItem(clayBucketOil, "clayBucketOil");
-        GameRegistry.registerItem(clayBucketPoison, "clayBucketPoison");
-        GameRegistry.registerItem(clayBucketBlood, "clayBucketBlood");
 
         // register milkbucket to the ordictionary
         OreDictionary.registerOre("listAllmilk", clayBucketMilk); // i suppose this is for pams harvestcraft.
@@ -118,16 +82,6 @@ public class IguanaItems {
                 FluidRegistry.LAVA,
                 new ItemStack(clayBucketLava),
                 new ItemStack(clayBucketFired, 0));
-        FluidContainerRegistry.registerFluidContainer(
-                RailcraftFluids.CREOSOTE.standardFluid.get(),
-                new ItemStack(clayBucketCreosote),
-                emptyClayBucket);
-        FluidContainerRegistry
-                .registerFluidContainer(BuildCraftEnergy.fluidOil, new ItemStack(clayBucketOil), emptyClayBucket);
-        FluidContainerRegistry
-                .registerFluidContainer(BOPCFluids.poison, new ItemStack(clayBucketPoison), emptyClayBucket);
-        FluidContainerRegistry
-                .registerFluidContainer(BOPCFluids.blood, new ItemStack(clayBucketBlood), emptyClayBucket);
 
         // only integrate tcon metals if they actually exist
         if (TinkerSmeltery.buckets != null) {

@@ -1,25 +1,52 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 
-import biomesoplenty.api.content.BOPCBlocks;
-import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import mods.railcraft.common.fluids.RailcraftFluids;
+import cpw.mods.fml.common.registry.GameRegistry;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucket;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
+
+    private static final Map<Block, Item> customClayBuckets = new IdentityHashMap<>();
+
+    /**
+     * Register a clay bucket for a given fluid and it's fluid block.
+     * 
+     * @param bucketName The name of the item, this will be used to load its texture and add it to the item registry
+     * @param langKey    The lang key for the displayed name of this item
+     * @param fluid      The fluid this bucket contains
+     * @param fluidBlock The fluid block this bucket can pick up and place
+     * @return The clay bucket item that was added to the game registry
+     */
+    public static Item registerClayBucket(String bucketName, String langKey, Fluid fluid, Block fluidBlock) {
+        Item newClayBucket = new ClayBucket(fluidBlock, langKey, bucketName);
+        GameRegistry.registerItem(newClayBucket, bucketName);
+        FluidContainerRegistry.registerFluidContainer(
+                fluid,
+                new ItemStack(newClayBucket),
+                new ItemStack(IguanaItems.clayBucketFired));
+        customClayBuckets.put(fluidBlock, newClayBucket);
+        return newClayBucket;
+    }
 
     @SubscribeEvent
     public void onRightClickBlock(PlayerInteractEvent event) {
@@ -134,32 +161,12 @@ public class ClayBucketHandler {
 
                 return;
             }
-            if (bID == RailcraftFluids.CREOSOTE.getBlock()) {
-                event.setResult(Event.Result.ALLOW);
-                event.result = new ItemStack(IguanaItems.clayBucketCreosote);
-                event.world.setBlockToAir(hitX, hitY, hitZ);
 
-                return;
-            }
-            if (bID == BuildCraftEnergy.blockOil) {
+            Item customFilledBucket = customClayBuckets.get(bID);
+            if (customFilledBucket != null) {
                 event.setResult(Event.Result.ALLOW);
-                event.result = new ItemStack(IguanaItems.clayBucketOil);
+                event.result = new ItemStack(customFilledBucket);
                 event.world.setBlockToAir(hitX, hitY, hitZ);
-
-                return;
-            }
-            if (bID == BOPCBlocks.poison) {
-                event.setResult(Event.Result.ALLOW);
-                event.result = new ItemStack(IguanaItems.clayBucketPoison);
-                event.world.setBlockToAir(hitX, hitY, hitZ);
-
-                return;
-            }
-            if (bID == BOPCBlocks.blood) {
-                event.setResult(Event.Result.ALLOW);
-                event.result = new ItemStack(IguanaItems.clayBucketBlood);
-                event.world.setBlockToAir(hitX, hitY, hitZ);
-
                 return;
             }
 
