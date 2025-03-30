@@ -20,8 +20,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import iguanaman.iguanatweakstconstruct.claybuckets.items.BaseClayBucket;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
@@ -31,23 +29,17 @@ public class ClayBucketHandler {
     /**
      * Register a clay bucket for a given fluid and it's fluid block.
      *
-     * @param itemName   The name of the item, this will be used to load its texture and add it to the item registry
-     * @param langKey    The full lang key for the displayed name of this bucket
-     * @param texture    The full path to the texture for this bucket
+     * @param item       A clay bucket item you have added to the Game Registry
      * @param fluid      The fluid this bucket contains
      * @param fluidBlock The fluid block this bucket can pick up and place
-     * @return The clay bucket item that was added to the game registry
      */
-    public static Item registerClayBucket(String itemName, String langKey, String texture, Fluid fluid,
-            Block fluidBlock) {
-        Item newClayBucket = new BaseClayBucket(fluidBlock, langKey, texture);
-        GameRegistry.registerItem(newClayBucket, itemName);
+    public static void registerClayBucket(Item item, Fluid fluid, Block fluidBlock) {
+        ItemStack filledContainer = new ItemStack(item);
         FluidContainerRegistry.registerFluidContainer(
                 fluid,
-                new ItemStack(newClayBucket),
-                new ItemStack(IguanaItems.clayBucketFired));
-        customClayBuckets.put(fluidBlock, newClayBucket);
-        return newClayBucket;
+                filledContainer,
+                new ItemStack(IguanaItems.clayBucketFired, item.hasContainerItem(filledContainer) ? 1 : 0));
+        customClayBuckets.put(fluidBlock, item);
     }
 
     @SubscribeEvent

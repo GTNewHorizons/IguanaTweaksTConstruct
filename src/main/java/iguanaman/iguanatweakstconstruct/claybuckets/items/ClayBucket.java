@@ -11,6 +11,6 @@ public class ClayBucket extends BaseClayBucket {
     }
 
     public ClayBucket(Block contents) {
-        super(contents);
+        super(contents, null, null);
     }
 }

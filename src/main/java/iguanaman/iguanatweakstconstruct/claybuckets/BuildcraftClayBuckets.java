@@ -3,7 +3,8 @@ package iguanaman.iguanatweakstconstruct.claybuckets;
 import net.minecraft.item.Item;
 
 import buildcraft.BuildCraftEnergy;
-import iguanaman.iguanatweakstconstruct.reference.Reference;
+import cpw.mods.fml.common.registry.GameRegistry;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucket;
 
 public class BuildcraftClayBuckets {
 
@@ -11,11 +12,8 @@ public class BuildcraftClayBuckets {
 
     public static void register() {
         String oilClayBucketName = "clayBucketOil";
-        clayBucketOil = ClayBucketHandler.registerClayBucket(
-                oilClayBucketName,
-                Reference.prefix("clayBucket.oil"),
-                Reference.resource(oilClayBucketName),
-                BuildCraftEnergy.fluidOil,
-                BuildCraftEnergy.blockOil);
+        clayBucketOil = new ClayBucket(BuildCraftEnergy.blockOil, "clayBucket.oil", oilClayBucketName);
+        GameRegistry.registerItem(clayBucketOil, oilClayBucketName);
+        ClayBucketHandler.registerClayBucket(clayBucketOil, BuildCraftEnergy.fluidOil, BuildCraftEnergy.blockOil);
     }
 }

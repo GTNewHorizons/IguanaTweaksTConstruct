@@ -19,6 +19,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucket;
+import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketHot;
 import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketMilk;
 import iguanaman.iguanatweakstconstruct.claybuckets.items.ClayBucketTinkerLiquids;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
@@ -49,7 +50,10 @@ public class IguanaItems {
 
         clayBucketFired = new ClayBucket(Blocks.air, "clayBucketFired", "clayBucketFired").setMaxStackSize(16);
         clayBucketWater = new ClayBucket(Blocks.flowing_water, "clayBucket.Water", "clayBucketWater");
-        clayBucketLava = new ClayBucket(Blocks.flowing_lava, "clayBucket.Lava", "clayBucketLava");
+        clayBucketLava = new ClayBucketHot(
+                Blocks.flowing_lava,
+                Reference.prefix("clayBucket.Lava"),
+                Reference.resource("clayBucketLava"));
         clayBucketMilk = new ClayBucketMilk();
 
         if (Loader.isModLoaded("Railcraft")) {
