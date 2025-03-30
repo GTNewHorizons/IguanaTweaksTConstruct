@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -44,9 +43,4 @@ public class ClayBucketTinkerLiquids extends FilledBucket {
         }
     }
 
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        int arr = MathHelper.clamp_int(stack.getItemDamage(), 0, materialNames.length);
-        return getUnlocalizedName() + "." + materialNames[arr];
-    }
 }
