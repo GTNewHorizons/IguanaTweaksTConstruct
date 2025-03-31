@@ -3,10 +3,14 @@
 dependencies {
     api("com.github.GTNewHorizons:TinkersConstruct:1.13.1-GTNH:dev")
     api("com.github.GTNewHorizons:NotEnoughItems:2.7.11-GTNH:dev")
+    compileOnly("com.github.GTNewHorizons:Railcraft:9.16.3:dev")
+    compileOnly("com.github.GTNewHorizons:BuildCraft:7.1.42:dev")
 
     compileOnly("com.github.GTNewHorizons:Battlegear2:1.4.2:dev") {
         transitive = false
     }
+
+    compileOnly rfg.deobf("curse.maven:biomes-o-plenty-220318:2499612")
 
     compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev") {
         transitive = false

@@ -1,15 +1,21 @@
 package iguanaman.iguanatweakstconstruct.claybuckets;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -17,6 +23,24 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import tconstruct.smeltery.TinkerSmeltery;
 
 public class ClayBucketHandler {
+
+    private static final Map<Block, Item> customClayBuckets = new IdentityHashMap<>();
+
+    /**
+     * Register a clay bucket for a given fluid and it's fluid block.
+     *
+     * @param item       A clay bucket item you have added to the Game Registry
+     * @param fluid      The fluid this bucket contains
+     * @param fluidBlock The fluid block this bucket can pick up and place
+     */
+    public static void registerClayBucket(Item item, Fluid fluid, Block fluidBlock) {
+        ItemStack filledContainer = new ItemStack(item);
+        FluidContainerRegistry.registerFluidContainer(
+                fluid,
+                filledContainer,
+                new ItemStack(IguanaItems.clayBucketFired, item.hasContainerItem(filledContainer) ? 1 : 0));
+        customClayBuckets.put(fluidBlock, item);
+    }
 
     @SubscribeEvent
     public void onRightClickBlock(PlayerInteractEvent event) {
@@ -129,6 +153,14 @@ public class ClayBucketHandler {
                 event.result = new ItemStack(IguanaItems.clayBucketLava);
                 event.world.setBlockToAir(hitX, hitY, hitZ);
 
+                return;
+            }
+
+            Item customFilledBucket = customClayBuckets.get(bID);
+            if (customFilledBucket != null) {
+                event.setResult(Event.Result.ALLOW);
+                event.result = new ItemStack(customFilledBucket);
+                event.world.setBlockToAir(hitX, hitY, hitZ);
                 return;
             }
 
