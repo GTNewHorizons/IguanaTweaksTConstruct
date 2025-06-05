@@ -1,12 +1,12 @@
 // Add your dependencies here
 
 dependencies {
-    api("com.github.GTNewHorizons:TinkersConstruct:1.13.13-GTNH:dev")
-    api("com.github.GTNewHorizons:NotEnoughItems:2.7.34-GTNH:dev")
-    compileOnly("com.github.GTNewHorizons:Railcraft:9.16.7:dev")
-    compileOnly("com.github.GTNewHorizons:BuildCraft:7.1.42:dev")
+    api("com.github.GTNewHorizons:TinkersConstruct:1.13.32-GTNH:dev")
+    api("com.github.GTNewHorizons:NotEnoughItems:2.7.51-GTNH:dev")
+    compileOnly("com.github.GTNewHorizons:Railcraft:9.16.30:dev")
+    compileOnly("com.github.GTNewHorizons:BuildCraft:7.1.43:dev")
 
-    compileOnly("com.github.GTNewHorizons:Battlegear2:1.4.2:dev") {
+    compileOnly("com.github.GTNewHorizons:Battlegear2:1.4.3:dev") {
         transitive = false
     }
 
