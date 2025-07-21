@@ -1,8 +1,7 @@
 package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-
-import com.mojang.realmsclient.gui.ChatFormatting;
 
 import codechicken.microblock.Saw;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -17,7 +16,7 @@ public class SawStrengthHandler {
         event.toolTip.add(
                 String.format(
                         "%sCutting Strength: %s",
-                        ChatFormatting.GOLD.toString(),
+                        EnumChatFormatting.GOLD,
                         HarvestLevels.getHarvestLevelName(
                                 ((Saw) event.itemStack.getItem()).getCuttingStrength(event.itemStack))));
     }
