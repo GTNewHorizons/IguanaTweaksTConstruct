@@ -6,11 +6,14 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import tconstruct.library.crafting.ModifyBuilder;
 import tconstruct.library.modifier.ItemModifier;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.modifiers.tools.ModToolRepair;
+import vexatos.tgregworks.integration.modifiers.ModTGregRepair;
 
 public class RepairCraftingRecipe implements IRecipe {
 
@@ -23,18 +26,33 @@ public class RepairCraftingRecipe implements IRecipe {
                 "");
     }
 
-    private ModToolRepair modifier = null;
+    private ItemModifier modifier = null;
     private ItemStack modifiedTool = null;
 
     public RepairCraftingRecipe() {
-        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) if (mod instanceof ModToolRepair) {
-            modifier = (ModToolRepair) mod;
-            break;
+        boolean gregworksLoaded = Loader.isModLoaded("TGregworks");
+        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) {
+            // If TGregworks is present, use ModTGregRepair instead of ModToolRepair
+            if (gregworksLoaded && isTGregRepairModifier(mod)) {
+                modifier = mod;
+                break;
+            } else if (mod instanceof ModToolRepair) {
+                modifier = mod;
+                break;
+            }
         }
+    }
+
+    @Optional.Method(modid = "TGregworks")
+    private boolean isTGregRepairModifier(ItemModifier mod) {
+        return mod instanceof ModTGregRepair;
     }
 
     @Override
     public boolean matches(InventoryCrafting inventoryCrafting, World world) {
+        // if no compatible repair modifier was found during init, this recipe can't work
+        if (modifier == null) return false;
+
         ItemStack tool = null;
         ItemStack[] input = new ItemStack[inventoryCrafting.getSizeInventory()];
 
