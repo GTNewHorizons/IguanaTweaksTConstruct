@@ -7,7 +7,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import tconstruct.library.crafting.ModifyBuilder;
