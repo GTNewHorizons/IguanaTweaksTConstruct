@@ -1,6 +1,5 @@
 package iguanaman.iguanatweakstconstruct.tweaks;
 
-import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -9,6 +8,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.Optional;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
+import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import tconstruct.library.crafting.ModifyBuilder;
 import tconstruct.library.modifier.ItemModifier;
 import tconstruct.library.tools.ToolCore;
