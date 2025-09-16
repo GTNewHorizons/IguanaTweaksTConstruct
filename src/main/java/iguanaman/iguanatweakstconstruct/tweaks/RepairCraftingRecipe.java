@@ -1,5 +1,6 @@
 package iguanaman.iguanatweakstconstruct.tweaks;
 
+import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -30,10 +31,9 @@ public class RepairCraftingRecipe implements IRecipe {
     private ItemStack modifiedTool = null;
 
     public RepairCraftingRecipe() {
-        boolean gregworksLoaded = Loader.isModLoaded("TGregworks");
         for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) {
             // If TGregworks is present, use ModTGregRepair instead of ModToolRepair
-            if (gregworksLoaded && isTGregRepairModifier(mod)) {
+            if (ModSupportHelper.TGregworks && isTGregRepairModifier(mod)) {
                 modifier = mod;
                 break;
             } else if (mod instanceof ModToolRepair) {
