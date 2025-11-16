@@ -48,8 +48,7 @@ public class LevelingEventHandler {
         // only players
         if (!(event.source.getEntity() instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) event.source.getEntity();
-        // but no fake players
-        if (player instanceof FakePlayer) return;
+        if (player instanceof FakePlayer && !Config.allowFakePlayerLeveling) return;
 
         ItemStack stack = player.getCurrentEquippedItem();
         if (event.source.getSourceOfDamage() instanceof ShurikenEntity) {
@@ -142,8 +141,7 @@ public class LevelingEventHandler {
     @SubscribeEvent
     public void onUseHoe(UseHoeEvent event) {
         EntityPlayer player = event.entityPlayer;
-        // no fake players
-        if (player instanceof FakePlayer) return;
+        if (player instanceof FakePlayer && !Config.allowFakePlayerLeveling) return;
 
         // can hoe?
         Block block = event.world.getBlock(event.x, event.y, event.z);

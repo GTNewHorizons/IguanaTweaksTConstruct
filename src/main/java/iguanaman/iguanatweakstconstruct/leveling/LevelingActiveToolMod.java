@@ -16,6 +16,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
 import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
+import iguanaman.iguanatweakstconstruct.reference.Config;
 import tconstruct.library.ActiveToolMod;
 import tconstruct.library.tools.HarvestTool;
 import tconstruct.library.tools.ToolCore;
@@ -29,8 +30,8 @@ public class LevelingActiveToolMod extends ActiveToolMod {
     @Override
     public boolean beforeBlockBreak(ToolCore tool, ItemStack stack, int x, int y, int z, EntityLivingBase entity) {
         if (!(entity instanceof EntityPlayer)) return false;
-        // nope, you don't use an autonomous activator!
-        if (entity instanceof FakePlayer) return false;
+        // nope, you don't use an autonomous activator! Or you do, depending on your config...
+        if (entity instanceof FakePlayer && !Config.allowFakePlayerLeveling) return false;
         // why are you breaking this block with that tool! It's not a harvest tool derp!
         if (!(tool instanceof HarvestTool)) return false;
 

@@ -32,6 +32,7 @@ public class Config {
     public static boolean randomBonusesAreUseful;
     public static boolean randomBonusesAreRandom;
     public static boolean onlyHeadsChangeXPRequirement;
+    public static boolean allowFakePlayerLeveling;
 
     // random bonuses deactivation
     public static Set<RandomBonuses.Modifier> deactivatedModifiers = new HashSet<RandomBonuses.Modifier>();
@@ -57,6 +58,7 @@ public class Config {
     // heads
     public static int baseHeadDropChance;
     public static int beheadingHeadDropChance;
+    public static boolean headsFromFakePlayerKills;
 
     // tweaks
     public static boolean nerfVanillaTools;
@@ -147,6 +149,11 @@ public class Config {
                 CATEGORY_Leveling,
                 true,
                 "If true, only the heads of tools are examined when determining how much XP it takes to level up. (This only matters if you manually specify that some material types level faster than others using the override module)");
+        allowFakePlayerLeveling = configfile.getBoolean(
+                "allowFakePlayerLeveling",
+                CATEGORY_Leveling,
+                false,
+                "Allow tool leveling through fake players");
 
         // tooltip things
         showTooltipXP = configfile
@@ -310,6 +317,12 @@ public class Config {
                 1,
                 100,
                 "Percentage added to base percentage per level of Beheading modifier");
+
+        headsFromFakePlayerKills = configfile.getBoolean(
+                "headsFromFakePlayerKills",
+                CATEGORY_Heads,
+                false,
+                "Drop heads when mobs are killed by a fake player");
 
         /** Vanilla/TConstruct Tweaks **/
         configfile.setCategoryComment(
