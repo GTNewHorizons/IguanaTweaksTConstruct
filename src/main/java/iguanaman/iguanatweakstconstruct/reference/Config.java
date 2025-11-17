@@ -152,7 +152,7 @@ public class Config {
         allowFakePlayerLeveling = configfile.getBoolean(
                 "allowFakePlayerLeveling",
                 CATEGORY_Leveling,
-                false,
+                true,
                 "Allow tool leveling through fake players");
 
         // tooltip things
