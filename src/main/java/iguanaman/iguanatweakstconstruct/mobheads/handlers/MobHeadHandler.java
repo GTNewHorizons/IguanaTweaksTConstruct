@@ -42,10 +42,11 @@ public class MobHeadHandler {
             }
         }
 
-        // add our own drops if the damage source was a player (and no fake player)
+        // add our own drops if the damage source was a (fake) player
         Entity entity = event.source.getEntity();
         if (entity == null) return;
-        if (!(entity instanceof EntityPlayer) || entity instanceof FakePlayer) return;
+        if (!(entity instanceof EntityPlayer)) return;
+        if (entity instanceof FakePlayer && !Config.headsFromFakePlayerKills) return;
 
         // how much beheading chance do we have?
         EntityPlayer player = (EntityPlayer) event.source.getEntity();
