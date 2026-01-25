@@ -1,12 +1,14 @@
 package iguanaman.iguanatweakstconstruct.harvestlevels.modifiers;
 
-import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
+import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import tconstruct.library.modifier.ItemModifier;
 
 public class ModBonusMiningLevel extends ItemModifier {
+
     public final String parentTag;
 
     public ModBonusMiningLevel(ItemStack[] recipe, String parentTag) {
@@ -20,16 +22,13 @@ public class ModBonusMiningLevel extends ItemModifier {
         NBTTagCompound tags = input.getTagCompound().getCompoundTag("InfiTool");
 
         // only on bronze harvest level
-        if(LevelingLogic.getHarvestLevel(tags) != HarvestLevels._4_bronze)
-            return false;
+        if (LevelingLogic.getHarvestLevel(tags) != HarvestLevels._4_bronze) return false;
 
         // already applied? (actually impossible, but maybe we'll change something in the future
-        if (tags.getBoolean(key))
-            return false;
+        if (tags.getBoolean(key)) return false;
 
         // can be applied without modifier if diamond/emerald modifier is already present
-        if(tags.getInteger("Modifiers") <= 0 && !tags.getBoolean(parentTag))
-            return false;
+        if (tags.getInteger("Modifiers") <= 0 && !tags.getBoolean(parentTag)) return false;
 
         // only if harvestlevel is bronze and can NOT be boosted anymore
         return !LevelingLogic.canBoostMiningLevel(tags);
@@ -41,7 +40,8 @@ public class ModBonusMiningLevel extends ItemModifier {
         // set harvestlevel to diamond
         tags.setInteger("HarvestLevel", HarvestLevels._5_diamond);
 
-        // no need to remove a modifier, since we either already have a diamond modifier or get it added together with this modifier
+        // no need to remove a modifier, since we either already have a diamond modifier or get it added together with
+        // this modifier
         // but we have to add the key
         tags.setBoolean(key, true);
     }

@@ -1,10 +1,11 @@
 package iguanaman.iguanatweakstconstruct.tweaks.modifiers;
 
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import tconstruct.modifiers.tools.ModFlux;
 
-import java.util.ArrayList;
+import tconstruct.modifiers.tools.ModFlux;
 
 public class ModFluxExpensive extends ModFlux {
 
@@ -21,7 +22,8 @@ public class ModFluxExpensive extends ModFlux {
     @Override
     protected boolean canModify(ItemStack tool, ItemStack[] input) {
         NBTTagCompound tags = tool.getTagCompound().getCompoundTag("InfiTool");
-        return tags.getInteger("Modifiers") > 1 && !tags.getBoolean(key); //Will fail if the modifier is false or the tag doesn't exist
+        return tags.getInteger("Modifiers") > 1 && !tags.getBoolean(key); // Will fail if the modifier is false or the
+                                                                          // tag doesn't exist
     }
 
     @Override

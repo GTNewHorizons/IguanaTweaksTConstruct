@@ -1,15 +1,15 @@
 package iguanaman.iguanatweakstconstruct.mobheads.models;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelSkeletonHead;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
-public class ModelHeadwear extends ModelSkeletonHead
-{
-    public ModelHeadwear(int offsetX, int offsetY, int width, int height)
-    {
+public class ModelHeadwear extends ModelSkeletonHead {
+
+    public ModelHeadwear(int offsetX, int offsetY, int width, int height) {
         this.textureWidth = width;
         this.textureHeight = height;
         this.skeletonHead = new ModelRenderer(this, offsetX, offsetY);
