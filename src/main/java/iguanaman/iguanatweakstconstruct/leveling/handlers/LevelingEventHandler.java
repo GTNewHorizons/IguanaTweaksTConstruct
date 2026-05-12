@@ -66,8 +66,11 @@ public class LevelingEventHandler {
 
         int xp = 0;
         // is a weapon?
-        if (Arrays.asList(((ToolCore) stack.getItem()).getTraits()).contains("weapon")) xp = Math.round(event.ammount);
-        else xp = Math.round((event.ammount - 0.1f) / 2);
+        if (Arrays.asList(((ToolCore) stack.getItem()).getTraits()).contains("weapon")) {
+            int damageDealt = Math.round(event.ammount);
+            int mobHealth = Math.round(event.entityLiving.prevHealth);
+            xp = Math.min(damageDealt, mobHealth);
+        } else xp = Math.round((event.ammount - 0.1f) / 2);
 
         // reduce xp for hitting poor animals
         if (event.entityLiving instanceof EntityAnimal) xp = Math.max(1, xp / 2);
