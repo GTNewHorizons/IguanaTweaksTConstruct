@@ -64,16 +64,17 @@ public class LevelingEventHandler {
 
         if (stack.getItem() == null || !(stack.getItem() instanceof ToolCore)) return;
 
-        int xp = 0;
-        // is a weapon?
-        if (Arrays.asList(((ToolCore) stack.getItem()).getTraits()).contains("weapon")) {
-            int damageDealt = Math.round(event.ammount);
-            int mobHealth = Math.round(event.entityLiving.prevHealth);
-            xp = Math.min(damageDealt, mobHealth);
-        } else xp = Math.round((event.ammount - 0.1f) / 2);
-
+        int damageDealt = Math.round(event.ammount);
+        int mobHealth = Math.round(event.entityLiving.prevHealth);
+        int xp = Math.min(damageDealt, mobHealth);
+        // non-weapons get half xp
+        if (!(Arrays.asList(((ToolCore) stack.getItem()).getTraits()).contains("weapon"))) {
+            xp = Math.max(1, Math.round((float) xp / 2));
+        }
         // reduce xp for hitting poor animals
-        if (event.entityLiving instanceof EntityAnimal) xp = Math.max(1, xp / 2);
+        if (event.entityLiving instanceof EntityAnimal) {
+            xp = Math.max(1, Math.round((float) xp / 2));
+        }
 
         // dead stuff gives little xp
         boolean cheatyXP = false;
