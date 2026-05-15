@@ -28,6 +28,7 @@ import tconstruct.library.modifier.ItemModifier;
 import tconstruct.library.tools.DualMaterialToolPart;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.library.tools.ToolMaterial;
+import tconstruct.library.weaponry.AmmoWeapon;
 import tconstruct.library.weaponry.IAmmo;
 import tconstruct.modifiers.tools.ModAttack;
 import tconstruct.modifiers.tools.ModRedstone;
@@ -140,7 +141,7 @@ public final class ReplacementLogic {
         updateTag(newTags, tags, "HarvestLevelHandle");
         updateTag(newTags, tags, "HarvestLevelExtra");
 
-        // ranged weapons have have additional tags to consider
+        // ranged weapons have additional tags to consider
         updateTag(newTags, tags, "DrawSpeed");
         updateTag(newTags, tags, "BaseDrawSpeed");
         updateTag(newTags, tags, "FlightSpeed");
@@ -219,12 +220,13 @@ public final class ReplacementLogic {
             // apply transition
             xp *= newRequiredXp / (float) oldRequiredXp;
 
-            // xp penality?
-            if (Config.partReplacementXpPenality > 0) {
+            // xp penality except on AmmoWeapon restock (ThrowingKnife, Shuriken, Javelin)
+            if (Config.partReplacementXpPenality > 0
+                    && !(tool instanceof AmmoWeapon && partMaterialId == oldMaterialId)) {
                 xp *= (100.0f - Config.partReplacementXpPenality) / 100.0f;
             }
 
-            tags.setInteger(LevelingLogic.TAG_EXP, Math.round(xp));
+            tags.setLong(LevelingLogic.TAG_EXP, Math.round(xp));
         }
 
         // handle boost leveling/xp
@@ -235,8 +237,9 @@ public final class ReplacementLogic {
             // apply transition
             xp *= newRequiredBoostXp / (float) oldRequiredBoostXp;
 
-            // xp penality?
-            if (Config.partReplacementBoostXpPenality > 0 && type == HEAD) {
+            // xp penality except on AmmoWeapon restock (ThrowingKnife, Shuriken, Javelin)
+            if (Config.partReplacementBoostXpPenality > 0 && type == HEAD
+                    && !(tool instanceof AmmoWeapon && partMaterialId == oldMaterialId)) {
                 if (LevelingLogic.isBoosted(tags)) {
                     tags.setBoolean(LevelingLogic.TAG_IS_BOOSTED, false);
                     xp = newRequiredBoostXp;
@@ -245,7 +248,7 @@ public final class ReplacementLogic {
                 xp *= (100.0f - Config.partReplacementBoostXpPenality) / 100.0f;
             }
 
-            tags.setInteger(LevelingLogic.TAG_BOOST_EXP, Math.round(xp));
+            tags.setLong(LevelingLogic.TAG_BOOST_EXP, Math.round(xp));
 
             // already full xp?
             if (LevelingLogic.isBoosted(tags)) tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + 1);
