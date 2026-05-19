@@ -2,6 +2,7 @@ package iguanaman.iguanatweakstconstruct.leveling.handlers;
 
 import java.util.Arrays;
 
+import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.EntityBlaze;
@@ -52,8 +53,10 @@ public class LevelingEventHandler {
         if (player instanceof FakePlayer && !Config.allowFakePlayerLeveling) return;
 
         ItemStack stack = player.getCurrentEquippedItem();
-        if (stack == null || !(stack.getItem() instanceof ToolCore)) {
-            stack = BackhandUtils.getOffhandItem(player);
+        if (Loader.isModLoaded("backhand")){
+            if (stack == null || !(stack.getItem() instanceof ToolCore)) {
+                stack = BackhandUtils.getOffhandItem(player);
+            }
         }
 
         if (event.source.getSourceOfDamage() instanceof ShurikenEntity) {
