@@ -28,6 +28,7 @@ import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
 import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import tconstruct.items.tools.Chisel;
 import tconstruct.items.tools.Hammer;
 import tconstruct.items.tools.Pickaxe;
@@ -37,6 +38,7 @@ import tconstruct.library.tools.ToolCore;
 import tconstruct.library.weaponry.ProjectileWeapon;
 import tconstruct.weaponry.entity.ShurikenEntity;
 import tconstruct.weaponry.weapons.Shuriken;
+import xonin.backhand.api.core.BackhandUtils;
 
 public class LevelingEventHandler {
 
@@ -51,6 +53,12 @@ public class LevelingEventHandler {
         if (player instanceof FakePlayer && !Config.allowFakePlayerLeveling) return;
 
         ItemStack stack = player.getCurrentEquippedItem();
+        if (ModSupportHelper.Backhand) {
+            if (stack == null || !(stack.getItem() instanceof ToolCore)) {
+                stack = BackhandUtils.getOffhandItem(player);
+            }
+        }
+
         if (event.source.getSourceOfDamage() instanceof ShurikenEntity) {
             if (stack == null || !(stack.getItem() instanceof Shuriken)) {
                 if (player.inventory.currentItem == 0) stack = player.inventory.getStackInSlot(8);
