@@ -2,7 +2,6 @@ package iguanaman.iguanatweakstconstruct.leveling.handlers;
 
 import java.util.Arrays;
 
-import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.EntityBlaze;
@@ -29,6 +28,7 @@ import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingTooltips;
 import iguanaman.iguanatweakstconstruct.leveling.RandomBonuses;
 import iguanaman.iguanatweakstconstruct.reference.Config;
+import iguanaman.iguanatweakstconstruct.util.ModSupportHelper;
 import tconstruct.items.tools.Chisel;
 import tconstruct.items.tools.Hammer;
 import tconstruct.items.tools.Pickaxe;
@@ -53,7 +53,7 @@ public class LevelingEventHandler {
         if (player instanceof FakePlayer && !Config.allowFakePlayerLeveling) return;
 
         ItemStack stack = player.getCurrentEquippedItem();
-        if (ModSupportHelper.Backhand){
+        if (ModSupportHelper.Backhand) {
             if (stack == null || !(stack.getItem() instanceof ToolCore)) {
                 stack = BackhandUtils.getOffhandItem(player);
             }
