@@ -14,7 +14,7 @@ public final class ModSupportHelper {
     public static final boolean Natura = Loader.isModLoaded("Natura");
     public static final boolean AppliedEnergistics2 = Loader.isModLoaded("appliedenergistics2");
     public static final boolean TGregworks = Loader.isModLoaded("TGregworks");
-    public static final boolean Backhand = Loader.isModLoaded("Backhand");
+    public static final boolean Backhand = Loader.isModLoaded("backhand");
 
     public static final boolean ThermalFoundation = Loader.isModLoaded("ThermalFoundation");
 }
