@@ -284,7 +284,7 @@ public class Config {
                 1,
                 0,
                 9999,
-                "Changes the amount of mining levels Diamond and Emerald modifier add. Default 1. Will not exceed diamond/bronze level, respectively. Range: 0~9999");
+                "Changes the amount of mining levels Diamond and Emerald modifier add. Default 1. Will not exceed diamond/bronze level, respectively.");
 
         // change if it can be applied multiple times
         diamondLevelBoostMultiple = configfile.getBoolean(
