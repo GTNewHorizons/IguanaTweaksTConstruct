@@ -27,12 +27,20 @@ public class ModBonusMiningLevel extends ItemModifier {
     protected boolean canModify(ItemStack input, ItemStack[] recipe) {
         NBTTagCompound tags = input.getTagCompound().getCompoundTag("InfiTool");
 
+        int curLevel = LevelingLogic.getHarvestLevel(tags);
+
         // only on bronze harvest level, if the config is true
-        if (LevelingLogic.getHarvestLevel(tags) != HarvestLevels._4_bronze && Config.diamondMinMiningLevelRequired)
-            return false;
+        if (curLevel != HarvestLevels._4_bronze && Config.diamondMinMiningLevelRequired) return false;
 
         // already applied? Only apply again if config is true
         if (tags.getBoolean(key) && !Config.diamondLevelBoostMultiple) return false;
+
+        // don't apply if boost is already maxxed out (prevents the consumption of without applying an effect)
+        int maxLevel = HarvestLevels._5_diamond;
+        // if it's emerald and it can be applied to any tool, not just bronze
+        maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired ? HarvestLevels._4_bronze
+                : HarvestLevels._5_diamond;
+        if (curLevel >= maxLevel) return false;
 
         // can be applied without modifier only if diamond/emerald modifier is already present
         if (tags.getInteger("Modifiers") <= 0 && !tags.getBoolean(parentTag)) return false;
