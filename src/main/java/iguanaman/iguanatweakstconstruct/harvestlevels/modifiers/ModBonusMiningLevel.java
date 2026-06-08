@@ -36,9 +36,9 @@ public class ModBonusMiningLevel extends ItemModifier {
         if (tags.getBoolean(key) && !Config.diamondLevelBoostMultiple) return false;
 
         // don't apply if boost is already maxxed out (prevents the consumption of without applying an effect)
-        int maxLevel = HarvestLevels._5_diamond;
         // if it's emerald and it can be applied to any tool, not just bronze
-        maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired ? HarvestLevels._4_bronze
+        int maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired
+                ? HarvestLevels._4_bronze
                 : HarvestLevels._5_diamond;
         if (curLevel >= maxLevel) return false;
 
@@ -53,14 +53,14 @@ public class ModBonusMiningLevel extends ItemModifier {
     @Override
     public void modify(ItemStack[] input, ItemStack tool) {
         NBTTagCompound tags = tool.getTagCompound().getCompoundTag("InfiTool");
-        int maxLevel = HarvestLevels._5_diamond;
 
         // if it's an emerald, max is bronze, not diamond.
         // but only as long as the config to make it applied to only bronze level tools is not true
         // because then we just keep the base iguana tweaks logic,
         // in which both diamond and emerald increased it to diamond mining level
-        if (this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired)
-            maxLevel = HarvestLevels._4_bronze;
+        int maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired
+                ? HarvestLevels._4_bronze
+                : HarvestLevels._5_diamond;
 
         // set to new harvest level, clamp to max
         int curLevel = LevelingLogic.getHarvestLevel(tags);
