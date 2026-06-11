@@ -47,6 +47,9 @@ public class Config {
 
     // Harvest Leveling
     public static boolean changeDiamondModifier;
+    public static boolean diamondMinMiningLevelRequired;
+    public static boolean diamondLevelBoostMultiple;
+    public static int diamondLevelAddition;
     public static int durabilityPercentage;
     public static int miningSpeedPercentage;
 
@@ -260,12 +263,35 @@ public class Config {
                 CATEGORY_HarvestLevels,
                 "Harvest Level Tweak Module: Introduces a slower mining level progression.");
 
-        // changed diamond/emerald modifier
+        // change diamond/emerald modifier acting capacity
         changeDiamondModifier = configfile.getBoolean(
-                "diamondRequired",
+                "changeDiamondModifier",
                 CATEGORY_HarvestLevels,
-                true,
-                "Changes the Diamond and Emerald modifier: Apply it to a bronze level tool to obtain diamond level. Required unless you have steel or similar.");
+                false,
+                "Whether to override Tinkers' Construct logic for diamond/emerald mining level increase.");
+
+        // change diamond/emerald modifier acting capacity
+        diamondMinMiningLevelRequired = configfile.getBoolean(
+                "diamondMinMiningLevelRequired",
+                CATEGORY_HarvestLevels,
+                false,
+                "Increases the mining level by diamondLevelAddition config of ONLY a tool with bronze (mines redstone) mining level. For when you do not have a steel or other alternative for diamond mining level, and have the other config off.");
+
+        // change amount of levels diamond/emerald modifier add
+        diamondLevelAddition = configfile.getInt(
+                "diamondLevelAddition",
+                CATEGORY_HarvestLevels,
+                1,
+                0,
+                9999,
+                "Changes the amount of mining levels Diamond and Emerald modifier add. Default 1. Will not exceed diamond/bronze level, respectively.");
+
+        // change if it can be applied multiple times
+        diamondLevelBoostMultiple = configfile.getBoolean(
+                "diamondLevelBoostMultiple",
+                CATEGORY_HarvestLevels,
+                false,
+                "Allows the boost from diamond/emerald to be applied multiple times, each time costing a diamond/emerald, but not a modifier");
 
         // Tool durability/speed changes
         durabilityPercentage = configfile.getInt(
