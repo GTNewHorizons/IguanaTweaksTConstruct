@@ -68,11 +68,10 @@ public class OldToolConversionHandler {
         // we don't need to check for xp, since if it has a level, it has xp.
         // but we need to check for boosting xp
         int hlvl = tags.getInteger("HarvestLevel");
-        if (hlvl > 0 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer))
-            if (!LevelingLogic.hasBoostXp(tags) && Config.pickaxeBoostRequired) return true;
-
-        // check mining level.
+        // actual mining level of head, pre-boosts
         int realHlvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
+        if (hlvl > 0 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer))
+            if (!LevelingLogic.hasBoostXp(tags) && Config.pickaxeBoostRequired && realHlvl != 0) return true;
 
         // unboosted but boost required -> we need to reduce the hlvl by 1
         if (Config.pickaxeBoostRequired && !LevelingLogic.isBoosted(tags)
@@ -83,9 +82,8 @@ public class OldToolConversionHandler {
             if (PHConstruct.miningLevelIncrease) {
                 if (tags.getBoolean("Diamond")) min = 3;
                 else if (tags.getBoolean("Emerald")) min = 2;
-            }
-            // Iguana logic, which is a bit more modular
-            else if (Config.changeDiamondModifier) {
+            } else if (Config.changeDiamondModifier) {
+                // Iguana logic, which is a bit more modular
                 min = ModBonusMiningLevel.gemBoostedLevel(tags);
             }
 
@@ -118,6 +116,7 @@ public class OldToolConversionHandler {
     public static void updateItem(ItemStack itemStack) {
         ToolCore tool = (ToolCore) itemStack.getItem();
         NBTTagCompound tags = itemStack.getTagCompound().getCompoundTag("InfiTool");
+        int gemBoost = tags.hasKey("GemBoost") ? tags.getInteger("GemBoost") : 0;
 
         // Special check for broken attack-modifier from ITT levelups (see above)
         // Special check for all the weapons that got broken from the Attack-Modifier bug
@@ -153,6 +152,11 @@ public class OldToolConversionHandler {
         Config.partReplacementBoostXpPenality = 0;
 
         ReplacementLogic.exchangeToolPart(tool, tags, ReplacementLogic.PartTypes.HEAD, newHead, itemStack);
+        // re-add gem boost, since it's not an actual part replacement
+        if (gemBoost > 0) {
+            tags.setInteger("GemBoost", gemBoost);
+            tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + gemBoost);
+        }
 
         Config.partReplacementXpPenality = oldXpPenality;
         Config.partReplacementBoostXpPenality = oldBoostXpPenality;

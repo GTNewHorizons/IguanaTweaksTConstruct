@@ -38,7 +38,15 @@ public class ModBonusMiningLevel extends ItemModifier {
         if (tags.getInteger(key) > 0 && !Config.diamondLevelBoostMultiple) return false;
 
         // don't apply if boost is already maxxed out (prevents the consumption of without applying an effect)
-        if (curLevel >= this.maxHarvestLvl(tags)) return false;
+        // if it's emerald and it can be applied to any tool, not just bronze
+        int maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired
+                ? HarvestLevels._4_bronze
+                : HarvestLevels._5_diamond;
+        // if it's not boosted, subtract 1 so it doesn't do more than it should
+        if (!LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired) {
+            maxLevel -= 1;
+        }
+        if (curLevel >= maxLevel) return false;
 
         // can be applied without modifier only if diamond/emerald modifier is already present
         if (tags.getInteger("Modifiers") <= 0 && !tags.getBoolean(parentTag)) return false;
@@ -52,7 +60,19 @@ public class ModBonusMiningLevel extends ItemModifier {
     public void modify(ItemStack[] input, ItemStack tool) {
         NBTTagCompound tags = tool.getTagCompound().getCompoundTag("InfiTool");
 
-        int maxLevel = this.maxHarvestLvl(tags);
+        // if it's an emerald, max is bronze, not diamond.
+        // but only as long as the config to make it applied to only bronze level tools is not true
+        // because then we just keep the base iguana tweaks logic,
+        // in which both diamond and emerald increased it to diamond mining level
+        int maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired
+                ? HarvestLevels._4_bronze
+                : HarvestLevels._5_diamond;
+        // if it's not boosted, subtract 1 so it doesn't do more than it should
+        // I.e., you boost it to diamond with a bunch of diamonds, then boost it with
+        // boostXP or a head, it'll have obsidian harvest level (mines ardite)
+        if (!LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired) {
+            maxLevel -= 1;
+        }
         int actualBoost = 0;
 
         // set to new harvest level, clamp to max
@@ -73,32 +93,11 @@ public class ModBonusMiningLevel extends ItemModifier {
         } else tags.setInteger(key, Config.diamondLevelAddition);
     }
 
-    public int maxHarvestLvl(NBTTagCompound tags) {
-        /*
-         * if it's an emerald, max is bronze, not diamond. but only as long as the config to make it applied to only
-         * bronze level tools is not true because then we just keep the base iguana tweaks logic, in which both diamond
-         * and emerald increased it to diamond
-         */
-        int maxLvl = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired ? HarvestLevels._4_bronze
-                : HarvestLevels._5_diamond;
-
-        /*
-         * if boosting is needed, and the pick isn't boosted yet, lower max by 1. Prevents it from getting an extra
-         * mining level when it shouldn't. I.e., you boost it to diamond with a bunch of diamonds, then boost it with
-         * boostXP or a head, it'll have obsidian harvest level (mines ardite)
-         */
-        if (LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired) {
-            maxLvl -= 1;
-        }
-
-        return maxLvl;
-    }
-
     public static int gemBoostedLevel(NBTTagCompound tags) {
         int headLvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
         boolean isBoosted = LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired;
 
-        if (!isBoosted) {
+        if (!isBoosted && headLvl != 0) {
             headLvl -= 1;
         }
 
@@ -110,7 +109,7 @@ public class ModBonusMiningLevel extends ItemModifier {
             else if (tags.getBoolean("Emerald"))
                 max = !Config.diamondMinMiningLevelRequired ? HarvestLevels._4_bronze : HarvestLevels._5_diamond;
 
-            if (!isBoosted) {
+            if (!isBoosted && max != 0) {
                 max--;
             }
 
