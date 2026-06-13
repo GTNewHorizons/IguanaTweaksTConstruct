@@ -90,7 +90,7 @@ public class ModBonusMiningLevel extends ItemModifier {
         // but we have to add the key, and how many levels it has added
         if (tags.hasKey(key)) {
             tags.setInteger(key, tags.getInteger(key) + actualBoost);
-        } else tags.setInteger(key, Config.diamondLevelAddition);
+        } else tags.setInteger(key, actualBoost);
     }
 
     // The level it should be with the gem boosts
