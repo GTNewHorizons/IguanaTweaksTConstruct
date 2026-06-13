@@ -191,6 +191,7 @@ public final class ReplacementLogic {
         if (Config.removeMobHeadOnPartReplacement && type == HEAD) removeMobHeadModifier(tags);
 
         // if boosted, remove boost tag
+        // you're removing the head that had the reinforced tips or w/e after all
         if (tags.hasKey("GemBoost")) tags.removeTag("GemBoost");
 
         // if boosted by vanilla diamond modifier, then we have to respect that if vanilla tcon allows harvestlevel

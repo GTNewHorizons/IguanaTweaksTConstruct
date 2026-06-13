@@ -9,12 +9,12 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import iguanaman.iguanatweakstconstruct.harvestlevels.modifiers.ModBonusMiningLevel;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import tconstruct.armor.player.TPlayerStats;
 import tconstruct.items.tools.Hammer;
@@ -68,27 +68,31 @@ public class OldToolConversionHandler {
         // we don't need to check for xp, since if it has a level, it has xp.
         // but we need to check for boosting xp
         int hlvl = tags.getInteger("HarvestLevel");
-        if (hlvl > 0 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer))
-            if (!LevelingLogic.hasBoostXp(tags) && Config.pickaxeBoostRequired) return true;
-
-        // check mining level.
+        // actual mining level of head, pre-boosts
         int realHlvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
+        if (hlvl > 0 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer))
+            if (!LevelingLogic.hasBoostXp(tags) && Config.pickaxeBoostRequired && realHlvl != 0) return true;
 
-        // unboosted but boost requires -> we need to reduce the hlvl by 1
+        // unboosted but boost required -> we need to reduce the hlvl by 1
         if (Config.pickaxeBoostRequired && !LevelingLogic.isBoosted(tags)
                 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer)) {
             int min = 0;
+
+            // Tinkers' native logic, which sets the level
             if (PHConstruct.miningLevelIncrease) {
                 if (tags.getBoolean("Diamond")) min = 3;
                 else if (tags.getBoolean("Emerald")) min = 2;
+            } else if (Config.changeDiamondModifier) {
+                // Iguana logic, which is a bit more modular
+                min = ModBonusMiningLevel.gemBoostedLevel(tags);
             }
 
             return hlvl != Math.max(realHlvl - 1, min);
         }
 
-        // if it's boosted, check if it's boosted by a diamond from bronze level
-        if (tags.hasKey("GemBoost") && realHlvl == HarvestLevels._4_bronze) {
-            return hlvl != HarvestLevels._5_diamond;
+        // check if it's boosted by a gemBoost
+        if (tags.hasKey("GemBoost")) {
+            return hlvl != ModBonusMiningLevel.gemBoostedLevel(tags);
         }
 
         // vanilla tcon allows harvestlevel change
@@ -112,6 +116,7 @@ public class OldToolConversionHandler {
     public static void updateItem(ItemStack itemStack) {
         ToolCore tool = (ToolCore) itemStack.getItem();
         NBTTagCompound tags = itemStack.getTagCompound().getCompoundTag("InfiTool");
+        int gemBoost = tags.hasKey("GemBoost") ? tags.getInteger("GemBoost") : 0;
 
         // Special check for broken attack-modifier from ITT levelups (see above)
         // Special check for all the weapons that got broken from the Attack-Modifier bug
@@ -135,7 +140,7 @@ public class OldToolConversionHandler {
         // recreate the head itemstack
         ItemStack newHead = new ItemStack(tool.getHeadItem(), 1, tags.getInteger("Head"));
 
-        // bolts are special..
+        // bolts are special
         if (tool instanceof BoltAmmo) newHead = DualMaterialToolPart
                 .createDualMaterial(tool.getHeadItem(), tags.getInteger("Handle"), tags.getInteger("Head"));
 
@@ -147,6 +152,11 @@ public class OldToolConversionHandler {
         Config.partReplacementBoostXpPenality = 0;
 
         ReplacementLogic.exchangeToolPart(tool, tags, ReplacementLogic.PartTypes.HEAD, newHead, itemStack);
+        // re-add gem boost, since it's not an actual part replacement
+        if (gemBoost > 0) {
+            tags.setInteger("GemBoost", gemBoost);
+            tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + gemBoost);
+        }
 
         Config.partReplacementXpPenality = oldXpPenality;
         Config.partReplacementBoostXpPenality = oldBoostXpPenality;

@@ -95,7 +95,7 @@ public final class LevelingLogic {
     /**
      * Add the leveling specific NBT.
      * 
-     * @param tag The tag that should recieve the data. Usually InfiTool Tag.
+     * @param tag The tag that should receive the data. Usually InfiTool Tag.
      */
     public static void addLevelingTags(NBTTagCompound tag, ToolCore tool) {
         // we start with level 1
