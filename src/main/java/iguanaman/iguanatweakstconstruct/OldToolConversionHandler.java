@@ -9,12 +9,12 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import iguanaman.iguanatweakstconstruct.harvestlevels.modifiers.ModBonusMiningLevel;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.mobheads.IguanaMobHeads;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic;
-import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
 import iguanaman.iguanatweakstconstruct.util.Log;
 import tconstruct.armor.player.TPlayerStats;
 import tconstruct.items.tools.Hammer;
@@ -74,21 +74,27 @@ public class OldToolConversionHandler {
         // check mining level.
         int realHlvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
 
-        // unboosted but boost requires -> we need to reduce the hlvl by 1
+        // unboosted but boost required -> we need to reduce the hlvl by 1
         if (Config.pickaxeBoostRequired && !LevelingLogic.isBoosted(tags)
                 && (itemStack.getItem() instanceof Pickaxe || itemStack.getItem() instanceof Hammer)) {
             int min = 0;
+
+            // Tinkers' native logic, which sets the level
             if (PHConstruct.miningLevelIncrease) {
                 if (tags.getBoolean("Diamond")) min = 3;
                 else if (tags.getBoolean("Emerald")) min = 2;
+            }
+            // Iguana logic, which is a bit more modular
+            else if (Config.changeDiamondModifier) {
+                min = ModBonusMiningLevel.gemBoostedLevel(tags);
             }
 
             return hlvl != Math.max(realHlvl - 1, min);
         }
 
-        // if it's boosted, check if it's boosted by a diamond from bronze level
-        if (tags.hasKey("GemBoost") && realHlvl == HarvestLevels._4_bronze) {
-            return hlvl != HarvestLevels._5_diamond;
+        // check if it's boosted by a gemBoost
+        if (tags.hasKey("GemBoost")) {
+            return hlvl != ModBonusMiningLevel.gemBoostedLevel(tags);
         }
 
         // vanilla tcon allows harvestlevel change
@@ -135,7 +141,7 @@ public class OldToolConversionHandler {
         // recreate the head itemstack
         ItemStack newHead = new ItemStack(tool.getHeadItem(), 1, tags.getInteger("Head"));
 
-        // bolts are special..
+        // bolts are special
         if (tool instanceof BoltAmmo) newHead = DualMaterialToolPart
                 .createDualMaterial(tool.getHeadItem(), tags.getInteger("Handle"), tags.getInteger("Head"));
 
