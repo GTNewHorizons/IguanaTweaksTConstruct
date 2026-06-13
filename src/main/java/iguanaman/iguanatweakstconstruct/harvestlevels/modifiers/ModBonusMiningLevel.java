@@ -93,6 +93,7 @@ public class ModBonusMiningLevel extends ItemModifier {
         } else tags.setInteger(key, Config.diamondLevelAddition);
     }
 
+    // The level it should be with the gem boosts
     public static int gemBoostedLevel(NBTTagCompound tags) {
         int headLvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
         boolean isBoosted = LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired;
