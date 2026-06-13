@@ -1,5 +1,6 @@
 package iguanaman.iguanatweakstconstruct.harvestlevels.modifiers;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import tconstruct.library.TConstructRegistry;
 import tconstruct.library.modifier.ItemModifier;
 
 public class ModBonusMiningLevel extends ItemModifier {
@@ -33,13 +35,17 @@ public class ModBonusMiningLevel extends ItemModifier {
         if (curLevel != HarvestLevels._4_bronze && Config.diamondMinMiningLevelRequired) return false;
 
         // already applied? Only apply again if config is true
-        if (tags.getBoolean(key) && !Config.diamondLevelBoostMultiple) return false;
+        if (tags.getInteger(key) > 0 && !Config.diamondLevelBoostMultiple) return false;
 
         // don't apply if boost is already maxxed out (prevents the consumption of without applying an effect)
         // if it's emerald and it can be applied to any tool, not just bronze
         int maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired
                 ? HarvestLevels._4_bronze
                 : HarvestLevels._5_diamond;
+        // if it's not boosted, subtract 1 so it doesn't do more than it should
+        if (!LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired) {
+            maxLevel -= 1;
+        }
         if (curLevel >= maxLevel) return false;
 
         // can be applied without modifier only if diamond/emerald modifier is already present
@@ -61,20 +67,59 @@ public class ModBonusMiningLevel extends ItemModifier {
         int maxLevel = this.parentTag.equals("Emerald") && !Config.diamondMinMiningLevelRequired
                 ? HarvestLevels._4_bronze
                 : HarvestLevels._5_diamond;
+        // if it's not boosted, subtract 1 so it doesn't do more than it should
+        // I.e., you boost it to diamond with a bunch of diamonds, then boost it with
+        // boostXP or a head, it'll have obsidian harvest level (mines ardite)
+        if (!LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired) {
+            maxLevel -= 1;
+        }
+        int actualBoost = 0;
 
         // set to new harvest level, clamp to max
         int curLevel = LevelingLogic.getHarvestLevel(tags);
         if (curLevel < maxLevel) {
-            int modifiedLevel = curLevel + Config.diamondLevelAddition;
-            // just in case it's more than 1 level per diamond/emerald
-            modifiedLevel = min(modifiedLevel, maxLevel);
+            // get how many levels are being added, if less than config amount
+            actualBoost = Math.min(maxLevel - curLevel, Config.diamondLevelAddition);
+            // use the actual boost, so we don't go over the max
+            int modifiedLevel = curLevel + actualBoost;
             tags.setInteger("HarvestLevel", modifiedLevel);
         }
 
         // no need to remove a modifier, since we either already have a diamond modifier or get it added together with
         // this modifier
-        // but we have to add the key
-        tags.setBoolean(key, true);
+        // but we have to add the key, and how many levels it has added
+        if (tags.hasKey(key)) {
+            tags.setInteger(key, tags.getInteger(key) + actualBoost);
+        } else tags.setInteger(key, Config.diamondLevelAddition);
+    }
+
+    // The level it should be with the gem boosts
+    public static int gemBoostedLevel(NBTTagCompound tags) {
+        int headLvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
+        boolean isBoosted = LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired;
+
+        if (!isBoosted && headLvl != 0) {
+            headLvl -= 1;
+        }
+
+        if (tags.hasKey("GemBoost")) {
+            int boostedLvl = headLvl + tags.getInteger("GemBoost");
+
+            int max = 0;
+            if (tags.getBoolean("Diamond")) max = HarvestLevels._5_diamond;
+            else if (tags.getBoolean("Emerald"))
+                max = !Config.diamondMinMiningLevelRequired ? HarvestLevels._4_bronze : HarvestLevels._5_diamond;
+
+            if (!isBoosted && max != 0) {
+                max--;
+            }
+
+            // return head level if it's the highest
+            // otherwise, clamp it to the max between head + boost and the max boost
+            return max(headLvl, min(boostedLvl, max));
+        }
+
+        return headLvl;
     }
 
     @Override
