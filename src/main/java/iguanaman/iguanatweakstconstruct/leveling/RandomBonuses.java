@@ -31,8 +31,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.IChatComponent;
 
 import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModCritical;
 import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModShoddy;
@@ -459,16 +460,13 @@ public class RandomBonuses {
 
         // message!
         if (player != null && !player.worldObj.isRemote) {
-            player.addChatMessage(
-                    new ChatComponentText(
-                            LevelingTooltips.getInfoString(
-                                    StatCollector.translateToLocal(message),
-                                    EnumChatFormatting.DARK_AQUA,
-                                    String.format(
-                                            "+%d %s",
-                                            displayedTimes,
-                                            StatCollector.translateToLocal(message + ".tag")),
-                                    modColor)));
+            IChatComponent bonusMsg = new ChatComponentText(EnumChatFormatting.DARK_AQUA.toString())
+                    .appendSibling(new ChatComponentTranslation(message))
+                    .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_AQUA + " ("))
+                    .appendSibling(new ChatComponentText(modColor + "+" + displayedTimes + " "))
+                    .appendSibling(new ChatComponentTranslation(message + ".tag"))
+                    .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_AQUA + ")"));
+            player.addChatMessage(bonusMsg);
         }
 
         // apply modifier

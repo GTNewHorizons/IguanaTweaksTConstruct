@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
@@ -48,7 +49,7 @@ public class CommandIAmADirtyCheater extends CommandBase {
             }
 
             if (arg.toLowerCase().trim().equals(sb.toString().toLowerCase().trim())) {
-                sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("message.apologyaccepted")));
+                sender.addChatMessage(new ChatComponentTranslation("message.apologyaccepted"));
                 convertTool(sender, getCurrentItem(sender));
             } else {
                 sender.addChatMessage(

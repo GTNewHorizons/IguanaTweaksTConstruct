@@ -2,7 +2,9 @@ package iguanaman.iguanatweakstconstruct.leveling;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 
 import iguanaman.iguanatweakstconstruct.reference.Config;
@@ -84,6 +86,54 @@ public final class LevelingTooltips {
 
     public static String getLevelString(int level) {
         return getLevelColor(level) + getRawLevelString(level) + EnumChatFormatting.RESET;
+    }
+
+    public static IChatComponent getLevelComponent(int level) {
+        int i = 1;
+        while (StatCollector.canTranslate("tooltip.level.skill." + i)) i++;
+        int modulo = i - 1;
+        int keyLevel = modulo > 0 ? ((level - 1) % modulo) + 1 : level;
+        int plusses = modulo > 0 ? (level - 1) / modulo : 0;
+
+        IChatComponent comp = new ChatComponentTranslation("tooltip.level.skill." + keyLevel);
+        comp.getChatStyle().setColor(levelChatFormatting(level));
+        if (plusses > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < plusses; j++) sb.append('+');
+            comp.appendText(sb.toString());
+        }
+        return comp;
+    }
+
+    private static EnumChatFormatting levelChatFormatting(int level) {
+        switch (level % 12) {
+            case 0:
+                return EnumChatFormatting.GRAY;
+            case 1:
+                return EnumChatFormatting.DARK_RED;
+            case 2:
+                return EnumChatFormatting.GOLD;
+            case 3:
+                return EnumChatFormatting.YELLOW;
+            case 4:
+                return EnumChatFormatting.DARK_GREEN;
+            case 5:
+                return EnumChatFormatting.DARK_AQUA;
+            case 6:
+                return EnumChatFormatting.LIGHT_PURPLE;
+            case 7:
+                return EnumChatFormatting.WHITE;
+            case 8:
+                return EnumChatFormatting.RED;
+            case 9:
+                return EnumChatFormatting.DARK_PURPLE;
+            case 10:
+                return EnumChatFormatting.AQUA;
+            case 11:
+                return EnumChatFormatting.GREEN;
+            default:
+                return EnumChatFormatting.RESET;
+        }
     }
 
     private static String getRawLevelString(int level) {

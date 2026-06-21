@@ -11,7 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -147,8 +149,9 @@ public final class LevelingLogic {
                 if (cxp * 2 >= getRequiredXp(tool, tags)) {
                     // you just got rubber chicken'd
                     if (player != null && !player.worldObj.isRemote) {
-                        String text = StatCollector.translateToLocal("message.levelup.chicken");
-                        player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + text));
+                        IChatComponent chickenMsg = new ChatComponentTranslation("message.levelup.chicken");
+                        chickenMsg.getChatStyle().setColor(EnumChatFormatting.DARK_RED);
+                        player.addChatMessage(chickenMsg);
                         player.worldObj.playSoundAtEntity(player, Reference.RESOURCE + ":chicken", 0.9f, 1.0f);
                     }
 
@@ -366,18 +369,17 @@ public final class LevelingLogic {
         // tell the player how awesome he is
         if (!world.isRemote) {
             // special message
-            if (StatCollector.canTranslate("message.levelup." + level)) player.addChatMessage(
-                    new ChatComponentText(
-                            EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocalFormatted(
-                                    "message.levelup." + level,
-                                    stack.getDisplayName() + EnumChatFormatting.DARK_AQUA)));
-            // generic message
-            else player.addChatMessage(
-                    new ChatComponentText(
-                            EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocalFormatted(
-                                    "message.levelup.generic",
-                                    stack.getDisplayName() + EnumChatFormatting.DARK_AQUA,
-                                    LevelingTooltips.getLevelString(level))));
+            IChatComponent levelMsg;
+            if (StatCollector.canTranslate("message.levelup." + level)) {
+                levelMsg = new ChatComponentTranslation("message.levelup." + level, stack.getDisplayName());
+            } else {
+                levelMsg = new ChatComponentTranslation(
+                        "message.levelup.generic",
+                        stack.getDisplayName(),
+                        LevelingTooltips.getLevelComponent(level));
+            }
+            levelMsg.getChatStyle().setColor(EnumChatFormatting.DARK_AQUA);
+            player.addChatMessage(levelMsg);
         }
 
         // Add random bonuses on leveling up?
@@ -409,26 +411,15 @@ public final class LevelingLogic {
 
             // fancy message on clientside
             if (!world.isRemote) {
-                if (world.rand.nextInt(10) < modifiersToAdd) player.addChatMessage(
-                        new ChatComponentText(
-                                LevelingTooltips.getInfoString(
-                                        StatCollector.translateToLocal("message.levelup.newmodifier.2"),
-                                        EnumChatFormatting.DARK_AQUA,
-                                        String.format(
-                                                "+%d %s",
-                                                modifiersToAdd,
-                                                StatCollector.translateToLocal("message.levelup.modifier")),
-                                        EnumChatFormatting.GOLD)));
-                else player.addChatMessage(
-                        new ChatComponentText(
-                                LevelingTooltips.getInfoString(
-                                        StatCollector.translateToLocal("message.levelup.newmodifier.1"),
-                                        EnumChatFormatting.DARK_AQUA,
-                                        String.format(
-                                                "+%d %s",
-                                                modifiersToAdd,
-                                                StatCollector.translateToLocal("message.levelup.modifier")),
-                                        EnumChatFormatting.GOLD)));
+                String modLabelKey = world.rand.nextInt(10) < modifiersToAdd ? "message.levelup.newmodifier.2"
+                        : "message.levelup.newmodifier.1";
+                IChatComponent modMsg = new ChatComponentText(EnumChatFormatting.DARK_AQUA.toString())
+                        .appendSibling(new ChatComponentTranslation(modLabelKey))
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_AQUA + " ("))
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + "+" + modifiersToAdd + " "))
+                        .appendSibling(new ChatComponentTranslation("message.levelup.modifier"))
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_AQUA + ")"));
+                player.addChatMessage(modMsg);
             }
         }
     }
@@ -445,18 +436,14 @@ public final class LevelingLogic {
         // fancy message
         if (player != null) {
             if (!player.worldObj.isRemote) {
-                player.addChatMessage(
-                        new ChatComponentText(
-                                LevelingTooltips.getInfoString(
-                                        StatCollector.translateToLocalFormatted(
-                                                "message.levelup.miningboost",
-                                                stack.getDisplayName()),
-                                        EnumChatFormatting.DARK_AQUA,
-                                        String.format(
-                                                "+%d %s",
-                                                1,
-                                                StatCollector.translateToLocal("message.levelup.mininglevel")),
-                                        EnumChatFormatting.GOLD)));
+                IChatComponent miningMsg = new ChatComponentText(EnumChatFormatting.DARK_AQUA.toString())
+                        .appendSibling(
+                                new ChatComponentTranslation("message.levelup.miningboost", stack.getDisplayName()))
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_AQUA + " ("))
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + "+1 "))
+                        .appendSibling(new ChatComponentTranslation("message.levelup.mininglevel"))
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_AQUA + ")"));
+                player.addChatMessage(miningMsg);
             }
         }
 
