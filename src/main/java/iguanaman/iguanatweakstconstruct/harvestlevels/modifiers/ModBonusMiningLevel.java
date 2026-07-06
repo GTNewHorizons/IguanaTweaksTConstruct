@@ -9,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
+import tconstruct.items.tools.Hammer;
+import tconstruct.items.tools.Pickaxe;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.modifier.ItemModifier;
 
@@ -70,7 +72,10 @@ public class ModBonusMiningLevel extends ItemModifier {
         // if it's not boosted, subtract 1 so it doesn't do more than it should
         // I.e., you boost it to diamond with a bunch of diamonds, then boost it with
         // boostXP or a head, it'll have obsidian harvest level (mines ardite)
-        if (!LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired) {
+        if ((!LevelingLogic.isBoosted(tags) && (tool.getItem() instanceof Pickaxe || tool.getItem() instanceof Hammer))
+                // if not boosted and instance of pick/hammer (isBoosted returns false even if tool doesn't need
+                // boosting)
+                && Config.pickaxeBoostRequired) {
             maxLevel -= 1;
         }
         int actualBoost = 0;
@@ -94,9 +99,21 @@ public class ModBonusMiningLevel extends ItemModifier {
     }
 
     // The level it should be with the gem boosts
-    public static int gemBoostedLevel(NBTTagCompound tags) {
+    public static int gemBoostedLevel(ItemStack input) {
+        NBTTagCompound tags = input.getTagCompound().getCompoundTag("InfiTool");
         int headLvl = TConstructRegistry.getMaterial(tags.getInteger("Head")).harvestLevel();
-        boolean isBoosted = LevelingLogic.isBoosted(tags) && Config.pickaxeBoostRequired;
+        boolean isBoosted = (LevelingLogic.isBoosted(tags)
+                || !(input.getItem() instanceof Pickaxe || input.getItem() instanceof Hammer))
+                && Config.pickaxeBoostRequired;
+
+        if (isBoosted && headLvl == HarvestLevels._4_bronze
+                && tags.getInteger("HarvestLevel") == HarvestLevels._5_diamond
+                && (tags.getBoolean("Emerald") || tags.getBoolean("Diamond"))) {
+            // old iguana tools had a level added if they were bronze AND boosted or didn't need boost.
+            // so, bronze shovels would become obsidian level when given a diamond or emerald.
+            // which is annoying because emerald goes to 1 less than diamond, except then.
+            return HarvestLevels._5_diamond;
+        }
 
         if (!isBoosted && headLvl != 0) {
             headLvl -= 1;
