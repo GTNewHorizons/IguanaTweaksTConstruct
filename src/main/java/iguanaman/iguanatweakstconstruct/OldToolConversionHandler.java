@@ -84,7 +84,7 @@ public class OldToolConversionHandler {
                 else if (tags.getBoolean("Emerald")) min = 2;
             } else if (Config.changeDiamondModifier) {
                 // Iguana logic, which is a bit more modular
-                min = ModBonusMiningLevel.gemBoostedLevel(tags);
+                min = ModBonusMiningLevel.gemBoostedLevel(itemStack);
             }
 
             return hlvl != Math.max(realHlvl - 1, min);
@@ -92,7 +92,7 @@ public class OldToolConversionHandler {
 
         // check if it's boosted by a gemBoost
         if (tags.hasKey("GemBoost")) {
-            return hlvl != ModBonusMiningLevel.gemBoostedLevel(tags);
+            return hlvl != ModBonusMiningLevel.gemBoostedLevel(itemStack);
         }
 
         // vanilla tcon allows harvestlevel change
