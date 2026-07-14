@@ -57,6 +57,7 @@ public class Config {
     public static boolean removeMobHeadOnPartReplacement;
     public static int partReplacementXpPenality;
     public static int partReplacementBoostXpPenality;
+    public static boolean partReplacementHandleMagicalWood;
 
     // heads
     public static int baseHeadDropChance;
@@ -329,6 +330,11 @@ public class Config {
                 0,
                 100,
                 "How much of the current XP% to the next mining level shall be removed when replacing the pickaxe head. Useful to remove the mining level boost on part replacement.");
+        partReplacementHandleMagicalWood = configfile.getBoolean(
+                "HandleMagicalWood",
+                CATEGORY_PartReplacement,
+                true,
+                "If modifiers from magical wood parts should be properly handled.");
 
         /** MobHeads **/
         configfile.setCategoryComment(CATEGORY_Heads, "Mob Head Module: Adds additional Mob heads and drops");

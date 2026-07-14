@@ -7,8 +7,8 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.detectAdditionalPartType;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.exchangeToolPart;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getToolPartMaterial;
-import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.hasExtraModifier;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -135,9 +135,7 @@ public class ModPartReplacement extends ItemModifier {
 
         // do we have enough modifiers left if we exchange this part?
         // This probably doesn't work right for bolts (which replace two parts at a time).
-        if (hasExtraModifier(oldMatId)) // paper or thaumium. sadly hardcoded.
-            modifiers--;
-        if (hasExtraModifier(newMatId)) modifiers++;
+        modifiers = getResultingModifierCount(tags, oldMatId, newMatId, partType);
         if (modifiers < 0) return false;
 
         // is it the same material as the one we want to replace?
