@@ -135,7 +135,7 @@ public class ModPartReplacement extends ItemModifier {
 
         // do we have enough modifiers left if we exchange this part?
         // This probably doesn't work right for bolts (which replace two parts at a time).
-        modifiers = getResultingModifierCount(tags, oldMatId, newMatId, partType);
+        modifiers = getResultingModifierCount(tool, tags, oldMatId, newMatId, partType);
         if (modifiers < 0) return false;
 
         // is it the same material as the one we want to replace?

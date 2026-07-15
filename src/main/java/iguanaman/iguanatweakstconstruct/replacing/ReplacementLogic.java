@@ -7,6 +7,7 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.Map.Entry;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -171,7 +172,7 @@ public final class ReplacementLogic {
         // reinforced tooltip is handled internally by tcon automagically
 
         // now for the scary part... handle material traits >_<
-        handleMaterialTraits(tags, oldMaterialId, partMaterialId, type);
+        handleMaterialTraits(tool, tags, oldMaterialId, partMaterialId, type);
         // fiery blaze arrows has to be handled separately.. meh
         if (tool == TinkerWeaponry.arrowAmmo && type == HANDLE) if (oldMaterialId == 3 && partMaterialId != 3) {
             // remove fiery
@@ -279,12 +280,12 @@ public final class ReplacementLogic {
         if (to.hasKey(tag)) to.setTag(tag, from.getTag(tag));
     }
 
-    private static void handleMaterialTraits(NBTTagCompound tags, int oldMaterialId, int newMaterialId,
+    private static void handleMaterialTraits(ToolCore tool, NBTTagCompound tags, int oldMaterialId, int newMaterialId,
             PartTypes partType) {
         // nothing to do if they're the same :)
         if (oldMaterialId == newMaterialId) return;
 
-        int modifiers = getResultingModifierCount(tags, oldMaterialId, newMaterialId, partType);
+        int modifiers = getResultingModifierCount(tool, tags, oldMaterialId, newMaterialId, partType);
         // Shouldn't happen, but just in case
         if (modifiers < 0) modifiers = 0;
         tags.setInteger("Modifiers", modifiers);
@@ -451,19 +452,22 @@ public final class ReplacementLogic {
     }
 
     /**
-     * Returns true if all the values in the map are the magical wood id or -1
+     * Returns true if the given material ids are valid for an "all magic wood" tool
      */
     public static boolean isAllMagicWood(EnumMap<PartTypes, Integer> map) {
         if (!IguanaToolPartReplacing.extraUtilsLoaded) return false;
         int magicWoodId = ExtraUtils.tcon_magical_wood_id;
-        for (int value : map.values()) {
-            boolean isValid = value == -1 || value == magicWoodId;
+        for (Entry<PartTypes, Integer> entry : map.entrySet()) {
+            boolean allowsMat0 = entry.getKey() == ACCESSORY || entry.getKey() == EXTRA;
+            int value = entry.getValue();
+            boolean isValid = value == magicWoodId || (value <= 0 && allowsMat0);
             if (!isValid) return false;
         }
         return true;
     }
 
-    public static int getResultingModifierCount(NBTTagCompound tags, int oldMatId, int newMatId, PartTypes partType) {
+    public static int getResultingModifierCount(ToolCore tool, NBTTagCompound tags, int oldMatId, int newMatId,
+            PartTypes partType) {
         int modifiers = tags.getInteger("Modifiers");
         if (oldMatId == newMatId) return modifiers;
         if (hasExtraModifier(oldMatId)) modifiers--;
@@ -471,30 +475,35 @@ public final class ReplacementLogic {
 
         // Handle magic wood modifiers
         if (IguanaToolPartReplacing.extraUtilsLoaded && Config.partReplacementHandleMagicalWood) {
+            int extraModifiers = tool == TinkerTools.battlesign ? 11 : 8;
             EnumMap<PartTypes, Integer> map = new EnumMap<>(PartTypes.class);
             int magicWoodId = ExtraUtils.tcon_magical_wood_id;
-            int totalBonusChange = 8;
+            int oldToolMagicWoodCount = 0;
             for (PartTypes type : PartTypes.values()) {
                 // We use oldMatId as tags could be from post-tool part swapping
-                int partId = type == partType ? oldMatId : getToolPartMaterial(tags, type, -1);
-                if (partId == magicWoodId) totalBonusChange--;
+                int partId = type == partType ? oldMatId : getToolPartMaterial(tags, type);
+                if (partId == magicWoodId) oldToolMagicWoodCount++;
                 map.put(type, partId);
             }
-            // Old tool was all magical wood
-            if (isAllMagicWood(map)) {
-                // Subtract 1 more for the tool part we are swapping right now
-                modifiers -= totalBonusChange + 1;
-            } else {
-                // Update with new material
-                map.put(partType, newMatId);
-                // New tool is all magical wood
-                if (isAllMagicWood(map)) {
-                    modifiers += totalBonusChange;
-                } else if (newMatId == magicWoodId) {
-                    modifiers++;
-                } else if (oldMatId == magicWoodId) {
-                    modifiers--;
+            boolean wasUniformMagicalWood = isAllMagicWood(map); // The past
+            map.put(partType, newMatId);
+            boolean isUniformMagicalWood = isAllMagicWood(map); // The present
+
+            if (wasUniformMagicalWood == isUniformMagicalWood) {
+                // If it's a full magical wood tool, don't change the modifier count
+                if (!wasUniformMagicalWood) {
+                    if (oldMatId == magicWoodId) {
+                        modifiers--;
+                    } else if (newMatId == magicWoodId) {
+                        modifiers++;
+                    }
                 }
+                // Head or handle changed
+            } else if (wasUniformMagicalWood) {
+                modifiers -= extraModifiers - oldToolMagicWoodCount;
+                if (oldMatId == magicWoodId) modifiers--;
+            } else {
+                modifiers += extraModifiers - oldToolMagicWoodCount;
             }
         }
         return modifiers;
@@ -524,10 +533,6 @@ public final class ReplacementLogic {
      * @param tags InfiTool Tagcompount of the tool
      */
     public static int getToolPartMaterial(NBTTagCompound tags, PartTypes type) {
-        return getToolPartMaterial(tags, type, 0);
-    }
-
-    public static int getToolPartMaterial(NBTTagCompound tags, PartTypes type, int fallback) {
         String key = null;
         switch (type) {
             case HEAD:
@@ -544,7 +549,7 @@ public final class ReplacementLogic {
                 break;
         }
 
-        if (key == null || !tags.hasKey(key)) return fallback;
+        if (key == null) return 0;
 
         return tags.getInteger(key);
     }
