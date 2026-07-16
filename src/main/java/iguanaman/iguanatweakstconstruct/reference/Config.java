@@ -334,7 +334,7 @@ public class Config {
                 "HandleMagicalWood",
                 CATEGORY_PartReplacement,
                 true,
-                "If modifiers from magical wood parts should be properly handled.");
+                "If the bonus modifiers from magical wood parts should be properly removed or added from tool part swapping. If a uniform magical wood tool no longer becomes uniform, it will lose the +8/+11 bonus modifiers and vice versa.");
 
         /** MobHeads **/
         configfile.setCategoryComment(CATEGORY_Heads, "Mob Head Module: Adds additional Mob heads and drops");
