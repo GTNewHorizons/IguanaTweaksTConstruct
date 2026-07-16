@@ -103,6 +103,10 @@ public class ModPartReplacement extends ItemModifier {
             else if (recipe.validExtra(item)) partType = EXTRA;
             else return false;
 
+            if (partType == HEAD && tool == TinkerWeaponry.boltAmmo && item instanceof DualMaterialToolPart) {
+                partType = HANDLE;
+            }
+
             replacementPartItem = item;
             partIndex = i;
         }
@@ -134,24 +138,25 @@ public class ModPartReplacement extends ItemModifier {
                 return false;
 
         // do we have enough modifiers left if we exchange this part?
-        // This probably doesn't work right for bolts (which replace two parts at a time).
-        modifiers = getResultingModifierCount(tool, tags, oldMatId, newMatId, partType);
+        modifiers = getResultingModifierCount(tool, modifiers, tags, oldMatId, newMatId, partType);
         if (modifiers < 0) return false;
 
-        // is it the same material as the one we want to replace?
-        if (newMatId == oldMatId) {
-            // Special case for bolts, which have two materials.
-            if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
-                int newHeadMatId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
-                int oldHeadMatId = getToolPartMaterial(tags, HEAD);
+        boolean sameMaterial = newMatId == oldMatId;
 
-                return newHeadMatId != oldHeadMatId;
+        // Special case for bolts, which have two materials.
+        if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
+            int newHandleId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
+            int oldHandleId = getToolPartMaterial(tags, HEAD);
+
+            modifiers = getResultingModifierCount(tool, modifiers, tags, oldHandleId, newHandleId, HEAD);
+            if (modifiers < 0) return false;
+
+            if (sameMaterial) {
+                sameMaterial = newHandleId == oldHandleId;
             }
-
-            return false;
         }
 
-        return true;
+        return !sameMaterial;
     }
 
     @Override
