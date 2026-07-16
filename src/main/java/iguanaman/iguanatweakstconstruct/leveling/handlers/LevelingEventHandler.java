@@ -36,6 +36,8 @@ import tconstruct.library.TConstructRegistry;
 import tconstruct.library.event.ToolCraftEvent;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.library.weaponry.ProjectileWeapon;
+import tconstruct.weaponry.ammo.ArrowAmmo;
+import tconstruct.weaponry.ammo.BoltAmmo;
 import tconstruct.weaponry.entity.ShurikenEntity;
 import tconstruct.weaponry.weapons.Shuriken;
 import xonin.backhand.api.core.BackhandUtils;
@@ -192,9 +194,9 @@ public class LevelingEventHandler {
         LevelingLogic.addLevelingTags(toolTag, event.tool);
 
         // remove modifiers
-        toolTag.setInteger(
-                "Modifiers",
-                Math.max(toolTag.getInteger("Modifiers") - (3 - Config.toolLevelingExtraModifiers), 0));
+        int toolBaseModifiers = event.tool instanceof ArrowAmmo || event.tool instanceof BoltAmmo ? 2 : 3;
+        int result = toolTag.getInteger("Modifiers") - (toolBaseModifiers - Config.toolLevelingExtraModifiers);
+        toolTag.setInteger("Modifiers", Math.max(result, 0));
     }
 
     // Display XP of held tool in debug (F3) if config is set
