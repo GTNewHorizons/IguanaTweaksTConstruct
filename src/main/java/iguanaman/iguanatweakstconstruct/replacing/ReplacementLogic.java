@@ -486,35 +486,35 @@ public final class ReplacementLogic {
             if (tool == TinkerWeaponry.boltAmmo) {
                 if (oldMatId == magicWoodId) modifiers--;
                 if (newMatId == magicWoodId) modifiers++;
-            } else {
-                int extraModifiers = tool == TinkerTools.battlesign ? 11 : 8;
-                EnumMap<PartTypes, Integer> map = new EnumMap<>(PartTypes.class);
-                int oldToolMagicWoodCount = 0;
-                for (PartTypes type : PartTypes.values()) {
-                    int partId = getToolPartMaterial(tags, type);
-                    if (partId == magicWoodId) oldToolMagicWoodCount++;
-                    map.put(type, partId);
-                }
-                boolean wasUniformMagicalWood = isAllMagicWood(map); // The past
-                map.put(partType, newMatId);
-                boolean isUniformMagicalWood = isAllMagicWood(map); // The present
+                return modifiers;
+            }
+            int extraModifiers = tool == TinkerTools.battlesign ? 11 : 8;
+            EnumMap<PartTypes, Integer> map = new EnumMap<>(PartTypes.class);
+            int oldToolMagicWoodCount = 0;
+            for (PartTypes type : PartTypes.values()) {
+                int partId = getToolPartMaterial(tags, type);
+                if (partId == magicWoodId) oldToolMagicWoodCount++;
+                map.put(type, partId);
+            }
+            boolean wasUniformMagicalWood = isAllMagicWood(map); // The past
+            map.put(partType, newMatId);
+            boolean isUniformMagicalWood = isAllMagicWood(map); // The present
 
-                if (wasUniformMagicalWood == isUniformMagicalWood) {
-                    // If it's a full magical wood tool, don't change the modifier count
-                    if (!wasUniformMagicalWood) {
-                        if (oldMatId == magicWoodId) {
-                            modifiers--;
-                        } else if (newMatId == magicWoodId) {
-                            modifiers++;
-                        }
+            if (wasUniformMagicalWood == isUniformMagicalWood) {
+                // If it's a full magical wood tool, don't change the modifier count
+                if (!wasUniformMagicalWood) {
+                    if (oldMatId == magicWoodId) {
+                        modifiers--;
+                    } else if (newMatId == magicWoodId) {
+                        modifiers++;
                     }
-                    // Head or handle changed
-                } else if (wasUniformMagicalWood) {
-                    modifiers -= extraModifiers - oldToolMagicWoodCount;
-                    if (oldMatId == magicWoodId) modifiers--;
-                } else {
-                    modifiers += extraModifiers - oldToolMagicWoodCount;
                 }
+                // Head or handle changed
+            } else if (wasUniformMagicalWood) {
+                modifiers -= extraModifiers - oldToolMagicWoodCount;
+                if (oldMatId == magicWoodId) modifiers--;
+            } else {
+                modifiers += extraModifiers - oldToolMagicWoodCount;
             }
         }
         return modifiers;

@@ -103,7 +103,7 @@ public class ModPartReplacement extends ItemModifier {
             else if (recipe.validExtra(item)) partType = EXTRA;
             else return false;
 
-            if (partType == HEAD && item instanceof DualMaterialToolPart) {
+            if (partType == HEAD && tool == TinkerWeaponry.boltAmmo && item instanceof DualMaterialToolPart) {
                 partType = HANDLE;
             }
 
