@@ -6,11 +6,15 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map.Entry;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.rwtema.extrautils.ExtraUtils;
 
 import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
@@ -27,11 +31,11 @@ import tconstruct.library.crafting.ToolRecipe;
 import tconstruct.library.modifier.ItemModifier;
 import tconstruct.library.tools.DualMaterialToolPart;
 import tconstruct.library.tools.ToolCore;
-import tconstruct.library.tools.ToolMaterial;
 import tconstruct.library.weaponry.IAmmo;
 import tconstruct.modifiers.tools.ModAttack;
 import tconstruct.modifiers.tools.ModRedstone;
 import tconstruct.tools.TinkerTools;
+import tconstruct.tools.TinkerTools.MaterialID;
 import tconstruct.util.config.PHConstruct;
 import tconstruct.weaponry.TinkerWeaponry;
 
@@ -168,7 +172,7 @@ public final class ReplacementLogic {
         // reinforced tooltip is handled internally by tcon automagically
 
         // now for the scary part... handle material traits >_<
-        handleMaterialTraits(tags, oldMaterialId, partMaterialId);
+        handleMaterialTraits(tool, tags, oldMaterialId, partMaterialId, type);
         // fiery blaze arrows has to be handled separately.. meh
         if (tool == TinkerWeaponry.arrowAmmo && type == HANDLE) if (oldMaterialId == 3 && partMaterialId != 3) {
             // remove fiery
@@ -276,36 +280,15 @@ public final class ReplacementLogic {
         if (to.hasKey(tag)) to.setTag(tag, from.getTag(tag));
     }
 
-    // List of known material traits:
-    // - Writeable
-    // - Thaumic
-    private static void handleMaterialTraits(NBTTagCompound tags, int oldMaterialId, int newMaterialId) {
-        // nothing to do fi they're the same :)
+    private static void handleMaterialTraits(ToolCore tool, NBTTagCompound tags, int oldMaterialId, int newMaterialId,
+            PartTypes partType) {
+        // nothing to do if they're the same :)
         if (oldMaterialId == newMaterialId) return;
 
-        ToolMaterial oldMat = TConstructRegistry.getMaterial(oldMaterialId);
-        ToolMaterial newMat = TConstructRegistry.getMaterial(newMaterialId);
-
-        // stonebound/jagged has to be handeled separately, see exchangeToolPart
-
-        /************ first add the new traits *************/
-        // todo: rewrite this to use material IDs.
-        String ability = newMat.ability();
-        // writeable & thaumic (equal since we only exchange 1 part)
-        if (newMaterialId == TinkerTools.MaterialID.Paper || newMaterialId == TinkerTools.MaterialID.Thaumium) {
-            tags.setInteger("Modifiers", tags.getInteger("Modifiers") + 1);
-        }
-
-        /************ then remove the old traits *************/
-        ability = oldMat.ability();
-        // writeable & thaumic (equal since we only exchange 1 part)
-        if (oldMaterialId == TinkerTools.MaterialID.Paper || oldMaterialId == TinkerTools.MaterialID.Thaumium) {
-            int newMods = tags.getInteger("Modifiers") - 1;
-            // theoretically this should never happen, but.. rather be safe than sorry
-            if (newMods < 0) newMods = 0;
-            tags.setInteger("Modifiers", newMods);
-        }
-        // tasty - handled per ActiveToolMod, no NBT required
+        int modifiers = getResultingModifierCount(tool, tags, oldMaterialId, newMaterialId, partType);
+        // Shouldn't happen, but just in case
+        if (modifiers < 0) modifiers = 0;
+        tags.setInteger("Modifiers", modifiers);
     }
 
     // strips the redstone modifier off a tool and reapplies it (to get the correct mining level modification)
@@ -465,8 +448,65 @@ public final class ReplacementLogic {
      * Checks if the material has an extra modifier.
      */
     public static boolean hasExtraModifier(int materialId) {
-        // paper = 9, thaumium = 31
-        return materialId == 9 || materialId == 31;
+        return materialId == TinkerTools.MaterialID.Paper || materialId == MaterialID.Thaumium;
+    }
+
+    /**
+     * Returns true if the given material ids are valid for an "all magic wood" tool
+     */
+    public static boolean isAllMagicWood(EnumMap<PartTypes, Integer> map) {
+        if (!IguanaToolPartReplacing.extraUtilsLoaded) return false;
+        int magicWoodId = ExtraUtils.tcon_magical_wood_id;
+        for (Entry<PartTypes, Integer> entry : map.entrySet()) {
+            boolean allowsMat0 = entry.getKey() == ACCESSORY || entry.getKey() == EXTRA;
+            int value = entry.getValue();
+            boolean isValid = value == magicWoodId || (value <= 0 && allowsMat0);
+            if (!isValid) return false;
+        }
+        return true;
+    }
+
+    public static int getResultingModifierCount(ToolCore tool, NBTTagCompound tags, int oldMatId, int newMatId,
+            PartTypes partType) {
+        int modifiers = tags.getInteger("Modifiers");
+        if (oldMatId == newMatId) return modifiers;
+        if (hasExtraModifier(oldMatId)) modifiers--;
+        if (hasExtraModifier(newMatId)) modifiers++;
+
+        // Handle magic wood modifiers
+        if (IguanaToolPartReplacing.extraUtilsLoaded && Config.partReplacementHandleMagicalWood) {
+            int extraModifiers = tool == TinkerTools.battlesign ? 11 : 8;
+            EnumMap<PartTypes, Integer> map = new EnumMap<>(PartTypes.class);
+            int magicWoodId = ExtraUtils.tcon_magical_wood_id;
+            int oldToolMagicWoodCount = 0;
+            for (PartTypes type : PartTypes.values()) {
+                // We use oldMatId as tags could be from post-tool part swapping
+                int partId = type == partType ? oldMatId : getToolPartMaterial(tags, type);
+                if (partId == magicWoodId) oldToolMagicWoodCount++;
+                map.put(type, partId);
+            }
+            boolean wasUniformMagicalWood = isAllMagicWood(map); // The past
+            map.put(partType, newMatId);
+            boolean isUniformMagicalWood = isAllMagicWood(map); // The present
+
+            if (wasUniformMagicalWood == isUniformMagicalWood) {
+                // If it's a full magical wood tool, don't change the modifier count
+                if (!wasUniformMagicalWood) {
+                    if (oldMatId == magicWoodId) {
+                        modifiers--;
+                    } else if (newMatId == magicWoodId) {
+                        modifiers++;
+                    }
+                }
+                // Head or handle changed
+            } else if (wasUniformMagicalWood) {
+                modifiers -= extraModifiers - oldToolMagicWoodCount;
+                if (oldMatId == magicWoodId) modifiers--;
+            } else {
+                modifiers += extraModifiers - oldToolMagicWoodCount;
+            }
+        }
+        return modifiers;
     }
 
     /**
@@ -493,23 +533,25 @@ public final class ReplacementLogic {
      * @param tags InfiTool Tagcompount of the tool
      */
     public static int getToolPartMaterial(NBTTagCompound tags, PartTypes type) {
-        int mat = -1;
+        String key = null;
         switch (type) {
             case HEAD:
-                mat = tags.getInteger("Head");
+                key = "Head";
                 break;
             case HANDLE:
-                mat = tags.getInteger("Handle");
+                key = "Handle";
                 break;
             case ACCESSORY:
-                mat = tags.getInteger("Accessory");
+                key = "Accessory";
                 break;
             case EXTRA:
-                mat = tags.getInteger("Extra");
+                key = "Extra";
                 break;
         }
 
-        return mat;
+        if (key == null) return 0;
+
+        return tags.getInteger(key);
     }
 
     /**
