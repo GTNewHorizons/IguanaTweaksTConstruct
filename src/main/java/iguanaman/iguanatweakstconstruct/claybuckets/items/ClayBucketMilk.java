@@ -20,7 +20,8 @@ public class ClayBucketMilk extends ItemBucketMilk {
 
     @Override
     public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-        ItemStack result = super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+        ItemStack vanillaMilkStack = new ItemStack(Items.milk_bucket);
+        ItemStack result = super.onEaten(vanillaMilkStack, par2World, par3EntityPlayer);
         if (result.getItem() == Items.bucket) return new ItemStack(IguanaItems.clayBucketFired);
         return result;
     }
