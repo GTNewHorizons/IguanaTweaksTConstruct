@@ -65,8 +65,8 @@ public final class ReplacementLogic {
         long oldRequiredXp = LevelingLogic.getRequiredXp(toolStack, tags);
         long oldRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
 
-        // Shouldn't go below 0, but just in case
-        tags.setInteger("Modifiers", Math.max(getResultingModifierCount(tags, originalTags, newTags), 0));
+        // can be negative until the mob head refund below, clamped there
+        tags.setInteger("Modifiers", getResultingModifierCount(tags, originalTags, newTags));
 
         // update part materials and rendering
         updateTag(newTags, tags, "Head");
@@ -150,6 +150,9 @@ public final class ReplacementLogic {
         reapplySilktouch(tags, toolStack);
 
         if (Config.removeMobHeadOnPartReplacement && type == HEAD) removeMobHeadModifier(tags);
+
+        // Shouldn't go below 0, but just in case
+        tags.setInteger("Modifiers", Math.max(tags.getInteger("Modifiers"), 0));
 
         if (tags.hasKey("GemBoost")) {
             // if boosted, remove boost tag
@@ -239,8 +242,12 @@ public final class ReplacementLogic {
     // update tag if it already exists.
     // this saves us lots of hasFoo code,since there should be no general situation where a tag doesn't exist on the
     // target
+    // tags the rebuilt tool doesn't have are removed, like the DrawSpeed older versions added to non-bows.
+    // copying them would store null, which crashes when the tool is copied or saved
     private static void updateTag(NBTTagCompound from, NBTTagCompound to, String tag) {
-        if (to.hasKey(tag)) to.setTag(tag, from.getTag(tag));
+        if (!to.hasKey(tag)) return;
+        if (from.hasKey(tag)) to.setTag(tag, from.getTag(tag));
+        else to.removeTag(tag);
     }
 
     // keeps what was added to a mining speed after crafting
@@ -466,6 +473,17 @@ public final class ReplacementLogic {
         if (newTool == null) return null;
 
         return new ItemStack[] { originalTool, newTool };
+    }
+
+    /**
+     * Checks if the material has an extra modifier.
+     *
+     * @deprecated Only covers paper and thaumium, kept because TinkersGregworks still calls it. Use
+     *             {@link #rebuildTool} and {@link #getResultingModifierCount} instead.
+     */
+    @Deprecated
+    public static boolean hasExtraModifier(int materialId) {
+        return materialId == TinkerTools.MaterialID.Paper || materialId == TinkerTools.MaterialID.Thaumium;
     }
 
     /**
