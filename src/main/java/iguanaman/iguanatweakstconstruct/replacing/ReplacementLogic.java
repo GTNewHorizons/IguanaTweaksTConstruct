@@ -42,7 +42,7 @@ public final class ReplacementLogic {
         type = getBuildPartType(tool, type);
         ItemStack[] rebuilt = rebuildTool(tool, tags, type, partStack);
         if (rebuilt == null) {
-            Log.debug("External source prevents creation of tool with replaced parts.");
+            Log.warn("Couldn't rebuild " + toolStack.getDisplayName() + " to replace its part, nothing was changed.");
             return;
         }
         NBTTagCompound originalTags = rebuilt[0].getTagCompound().getCompoundTag("InfiTool");
@@ -117,6 +117,8 @@ public final class ReplacementLogic {
 
         // stonebound/jagged. Leveling bonuses add to the material value, so keep what was added after crafting
         float shoddy = tags.getFloat("Shoddy") + newTags.getFloat("Shoddy") - originalTags.getFloat("Shoddy");
+        // float rounding can leave a tiny value instead of 0, which would block jagged/stonebound level up bonuses
+        if (Math.abs(shoddy) < 0.0001f) shoddy = 0f;
         tags.setFloat("Shoddy", shoddy);
 
         // update ammo, full ammo stays full like an undamaged tool keeps full durability
@@ -149,7 +151,9 @@ public final class ReplacementLogic {
         // silktouch
         reapplySilktouch(tags, toolStack);
 
-        if (Config.removeMobHeadOnPartReplacement && type == HEAD) removeMobHeadModifier(tags);
+        boolean mobHeadRemoved = Config.removeMobHeadOnPartReplacement && type == HEAD
+                && tags.hasKey("Mining Level Boost");
+        if (mobHeadRemoved) removeMobHeadModifier(tags);
 
         // Shouldn't go below 0, but just in case
         tags.setInteger("Modifiers", Math.max(tags.getInteger("Modifiers"), 0));
@@ -217,6 +221,8 @@ public final class ReplacementLogic {
 
                 tags.setLong(LevelingLogic.TAG_BOOST_EXP, Math.round(xp));
             }
+            // without boost xp the boost can only come from the mob head, so it goes with it and can be reapplied
+            else if (mobHeadRemoved) tags.setBoolean(LevelingLogic.TAG_IS_BOOSTED, false);
 
             // already full xp, or boosted by a mob head?
             if (LevelingLogic.isBoosted(tags)) tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + 1);
@@ -381,8 +387,8 @@ public final class ReplacementLogic {
             }
 
             int effectId = tags.getInteger(effect);
-            // mobheads occupy id's 20 to 26. see IguanaToolLeveling.registerBoostModifiers
-            if (effectId >= 20 && effectId <= 26) {
+            // mobheads and the nether star occupy id's 20 to 28. see IguanaToolLeveling.registerBoostModifiers
+            if (effectId >= 20 && effectId <= 28) {
                 tags.removeTag(effect);
                 removed = true;
             }
@@ -473,6 +479,15 @@ public final class ReplacementLogic {
         if (newTool == null) return null;
 
         return new ItemStack[] { originalTool, newTool };
+    }
+
+    /**
+     * Returns true if both tools are made of the same materials, e.g. a stick replacing a wooden tool rod.
+     */
+    public static boolean hasSameParts(NBTTagCompound tags, NBTTagCompound otherTags) {
+        for (PartTypes type : PartTypes.values())
+            if (getToolPartMaterial(tags, type) != getToolPartMaterial(otherTags, type)) return false;
+        return true;
     }
 
     /**

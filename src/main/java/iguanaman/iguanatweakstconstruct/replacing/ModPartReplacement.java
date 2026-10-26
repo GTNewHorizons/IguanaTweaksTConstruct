@@ -10,6 +10,7 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.exchan
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getBuildPartType;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getToolPartMaterial;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.hasSameParts;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.rebuildTool;
 
 import net.minecraft.init.Items;
@@ -156,6 +157,9 @@ public class ModPartReplacement extends ItemModifier {
 
         NBTTagCompound originalTags = rebuilt[0].getTagCompound().getCompoundTag("InfiTool");
         NBTTagCompound newTags = rebuilt[1].getTagCompound().getCompoundTag("InfiTool");
+        // vanilla items like sticks only turn into their material once built
+        if (hasSameParts(originalTags, newTags)) return false;
+
         int modifiers = getResultingModifierCount(tags, originalTags, newTags);
 
         // replacing the head gives back the modifier used by the mob head boost
