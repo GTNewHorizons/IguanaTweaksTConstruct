@@ -65,7 +65,8 @@ public final class ReplacementLogic {
         long oldRequiredXp = LevelingLogic.getRequiredXp(toolStack, tags);
         long oldRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
 
-        // can be negative until the mob head refund below, clamped there
+        // can be negative until the mob head refund below. Not clamped, ModifyBuilder rejects the swap if still
+        // negative, e.g. when TinkersGregworks' looser check let it through
         tags.setInteger("Modifiers", getResultingModifierCount(tags, originalTags, newTags));
 
         // update part materials and rendering
@@ -155,9 +156,6 @@ public final class ReplacementLogic {
         boolean mobHeadRemoved = Config.removeMobHeadOnPartReplacement && type == HEAD
                 && tags.hasKey("Mining Level Boost");
         if (mobHeadRemoved) removeMobHeadModifier(tags);
-
-        // Shouldn't go below 0, but just in case
-        tags.setInteger("Modifiers", Math.max(tags.getInteger("Modifiers"), 0));
 
         if (tags.hasKey("GemBoost")) {
             // if boosted, remove boost tag
