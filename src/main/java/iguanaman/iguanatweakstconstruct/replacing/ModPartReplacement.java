@@ -7,9 +7,11 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.detectAdditionalPartType;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.exchangeToolPart;
-import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingBoltModifierCount;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getBuildPartType;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getToolPartMaterial;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.hasSameParts;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.rebuildTool;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -119,7 +121,6 @@ public class ModPartReplacement extends ItemModifier {
         // determine materials
         int newMatId = ToolBuilder.instance.getMaterialID(parts[partIndex]);
         int oldMatId = getToolPartMaterial(tags, partType);
-        int modifiers = tags.getInteger("Modifiers");
 
         // detect possible secondary position for part (e.g. hammer has 2 plates, etc.)
         // index 0 = handle
@@ -140,20 +141,34 @@ public class ModPartReplacement extends ItemModifier {
 
         boolean sameMaterial = newMatId == oldMatId;
 
-        // do we have enough modifiers left if we exchange this part?
         // Special case for bolts, which have two materials.
         if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
             int newHeadId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
             int oldHeadId = getToolPartMaterial(tags, HEAD);
 
-            modifiers = getResultingBoltModifierCount(tool, modifiers, tags, oldHeadId, newHeadId, oldMatId, newMatId);
             sameMaterial = sameMaterial && newHeadId == oldHeadId;
-        } else {
-            modifiers = getResultingModifierCount(tool, modifiers, tags, oldMatId, newMatId, partType);
         }
-        if (modifiers < 0) return false;
+        if (sameMaterial) return false;
 
-        return !sameMaterial;
+        // can the tool be built with the new part, and do we have enough modifiers left if we exchange it?
+        PartTypes buildPartType = getBuildPartType(tool, partType);
+        ItemStack[] rebuilt = rebuildTool(tool, tags, buildPartType, parts[partIndex]);
+        if (rebuilt == null) return false;
+
+        NBTTagCompound originalTags = rebuilt[0].getTagCompound().getCompoundTag("InfiTool");
+        NBTTagCompound newTags = rebuilt[1].getTagCompound().getCompoundTag("InfiTool");
+        // vanilla items like sticks only turn into their material once built
+        if (hasSameParts(originalTags, newTags)) return false;
+
+        int modifiers = getResultingModifierCount(tags, originalTags, newTags);
+
+        // replacing the head gives back the modifier used by the mob head boost
+        if (buildPartType == HEAD && Config.removeMobHeadOnPartReplacement
+                && Config.mobHeadRequiresModifier
+                && tags.hasKey("Mining Level Boost"))
+            modifiers++;
+
+        return modifiers >= 0;
     }
 
     @Override

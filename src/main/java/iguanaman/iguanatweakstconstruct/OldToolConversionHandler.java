@@ -148,18 +148,25 @@ public class OldToolConversionHandler {
         // reduction
         int oldXpPenality = Config.partReplacementXpPenality;
         int oldBoostXpPenality = Config.partReplacementBoostXpPenality;
+        boolean oldRemoveMobHead = Config.removeMobHeadOnPartReplacement;
         Config.partReplacementXpPenality = 0;
         Config.partReplacementBoostXpPenality = 0;
+        // same head, so the mob head stays too
+        Config.removeMobHeadOnPartReplacement = false;
 
-        ReplacementLogic.exchangeToolPart(tool, tags, ReplacementLogic.PartTypes.HEAD, newHead, itemStack);
-        // re-add gem boost, since it's not an actual part replacement
-        if (gemBoost > 0) {
-            tags.setInteger("GemBoost", gemBoost);
-            tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + gemBoost);
+        try {
+            ReplacementLogic.exchangeToolPart(tool, tags, ReplacementLogic.PartTypes.HEAD, newHead, itemStack);
+            // re-add gem boost, since it's not an actual part replacement
+            // still there if the tool couldn't be rebuilt, nothing was changed then
+            if (gemBoost > 0 && !tags.hasKey("GemBoost")) {
+                tags.setInteger("GemBoost", gemBoost);
+                tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + gemBoost);
+            }
+        } finally {
+            Config.partReplacementXpPenality = oldXpPenality;
+            Config.partReplacementBoostXpPenality = oldBoostXpPenality;
+            Config.removeMobHeadOnPartReplacement = oldRemoveMobHead;
         }
-
-        Config.partReplacementXpPenality = oldXpPenality;
-        Config.partReplacementBoostXpPenality = oldBoostXpPenality;
         Log.debug("Updated Tool " + itemStack.getDisplayName());
     }
 
