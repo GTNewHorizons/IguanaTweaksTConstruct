@@ -6,19 +6,14 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 
 import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map.Entry;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.rwtema.extrautils.ExtraUtils;
-
 import iguanaman.iguanatweakstconstruct.IguanaTweaksTConstruct;
 import iguanaman.iguanatweakstconstruct.leveling.LevelingLogic;
-import iguanaman.iguanatweakstconstruct.leveling.modifiers.ModXpAwareRedstone;
 import iguanaman.iguanatweakstconstruct.reference.Config;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 import iguanaman.iguanatweakstconstruct.util.HarvestLevels;
@@ -33,9 +28,8 @@ import tconstruct.library.tools.DualMaterialToolPart;
 import tconstruct.library.tools.ToolCore;
 import tconstruct.library.weaponry.IAmmo;
 import tconstruct.modifiers.tools.ModAttack;
-import tconstruct.modifiers.tools.ModRedstone;
+import tconstruct.modifiers.tools.ModWindup;
 import tconstruct.tools.TinkerTools;
-import tconstruct.tools.TinkerTools.MaterialID;
 import tconstruct.util.config.PHConstruct;
 import tconstruct.weaponry.TinkerWeaponry;
 
@@ -45,52 +39,14 @@ public final class ReplacementLogic {
 
     public static void exchangeToolPart(ToolCore tool, NBTTagCompound tags, PartTypes type, ItemStack partStack,
             ItemStack toolStack) {
-        // create a new tool that'd be the old one with the new part exchanged
-        ItemStack headStack = null;
-        ItemStack handleStack = null;
-        ItemStack accessoryStack = null;
-        ItemStack extraStack = null;
-
-        if (getPart(tool, HEAD) != null)
-            headStack = new ItemStack(getPart(tool, HEAD), 1, getToolPartMaterial(tags, HEAD));
-        if (getPart(tool, PartTypes.HANDLE) != null)
-            handleStack = new ItemStack(getPart(tool, HANDLE), 1, getToolPartMaterial(tags, HANDLE));
-        if (getPart(tool, ACCESSORY) != null)
-            accessoryStack = new ItemStack(getPart(tool, ACCESSORY), 1, getToolPartMaterial(tags, ACCESSORY));
-        if (getPart(tool, EXTRA) != null)
-            extraStack = new ItemStack(getPart(tool, EXTRA), 1, getToolPartMaterial(tags, EXTRA));
-
-        // extra hack for bolt crafting..
-        if (tool == TinkerWeaponry.boltAmmo) {
-            headStack = DualMaterialToolPart.createDualMaterial(
-                    TinkerWeaponry.partBolt,
-                    getToolPartMaterial(tags, HANDLE),
-                    getToolPartMaterial(tags, HEAD));
-            handleStack = accessoryStack;
-            accessoryStack = null;
-            if (type == ACCESSORY) type = HANDLE;
-            else type = HEAD;
-        }
-
-        ItemStack originalTool = ToolBuilder.instance
-                .buildTool(headStack, handleStack, accessoryStack, extraStack, "Original Tool");
-        if (originalTool == null) {
-            Log.error("Tool to modify is impossible?");
-            return;
-        }
-
-        if (type == HEAD && headStack != null) headStack = partStack;
-        if (type == HANDLE && handleStack != null) handleStack = partStack;
-        if (type == ACCESSORY && accessoryStack != null) accessoryStack = partStack;
-        if (type == EXTRA && extraStack != null) extraStack = partStack;
-
-        ItemStack newTool = ToolBuilder.instance
-                .buildTool(headStack, handleStack, accessoryStack, extraStack, "Modified Tool");
-        if (newTool == null) {
+        type = getBuildPartType(tool, type);
+        ItemStack[] rebuilt = rebuildTool(tool, tags, type, partStack);
+        if (rebuilt == null) {
             Log.debug("External source prevents creation of tool with replaced parts.");
             return;
         }
-        NBTTagCompound newTags = newTool.getTagCompound().getCompoundTag("InfiTool");
+        NBTTagCompound originalTags = rebuilt[0].getTagCompound().getCompoundTag("InfiTool");
+        NBTTagCompound newTags = rebuilt[1].getTagCompound().getCompoundTag("InfiTool");
 
         int partMaterialId = getToolPartMaterial(newTags, type);
         int oldMaterialId = getToolPartMaterial(tags, type);
@@ -109,25 +65,8 @@ public final class ReplacementLogic {
         long oldRequiredXp = LevelingLogic.getRequiredXp(toolStack, tags);
         long oldRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
 
-        int modifiers = tags.getInteger("Modifiers");
-        // special case for bolts
-        if (tool == TinkerWeaponry.boltAmmo && partStack.getItem() instanceof DualMaterialToolPart) {
-            int oldHandleId = getToolPartMaterial(tags, HANDLE);
-            int newHandleId = ((DualMaterialToolPart) partStack.getItem()).getMaterialID(partStack);
-
-            modifiers = getResultingBoltModifierCount(
-                    tool,
-                    modifiers,
-                    tags,
-                    oldMaterialId,
-                    partMaterialId,
-                    oldHandleId,
-                    newHandleId);
-        } else {
-            modifiers = getResultingModifierCount(tool, modifiers, tags, oldMaterialId, partMaterialId, type);
-        }
-        // Shouldn't happen, but just in case
-        tags.setInteger("Modifiers", Math.max(modifiers, 0));
+        // Shouldn't go below 0, but just in case
+        tags.setInteger("Modifiers", Math.max(getResultingModifierCount(tags, originalTags, newTags), 0));
 
         // update part materials and rendering
         updateTag(newTags, tags, "Head");
@@ -138,6 +77,10 @@ public final class ReplacementLogic {
         updateTag(newTags, tags, "RenderAccessory");
         updateTag(newTags, tags, "Extra");
         updateTag(newTags, tags, "RenderExtra");
+
+        // max ammo comes from the durability, check it before updating
+        boolean fullAmmo = tool instanceof IAmmo
+                && ((IAmmo) tool).getAmmoCount(toolStack) >= ((IAmmo) tool).getMaxAmmo(toolStack);
 
         // update durability
         int base = newTags.getInteger("BaseDurability");
@@ -152,11 +95,11 @@ public final class ReplacementLogic {
         updateTag(newTags, tags, "Attack");
         updateTag(newTags, tags, "BaseAttack");
 
-        // update mining speed
-        updateTag(newTags, tags, "MiningSpeed");
-        updateTag(newTags, tags, "MiningSpeed2");
-        updateTag(newTags, tags, "MiningSpeedHandle");
-        updateTag(newTags, tags, "MiningSpeedExtra");
+        // update mining speed, keeping what was added after crafting (redstone, silk touch)
+        updateMiningSpeed(tool, tags, originalTags, newTags, "MiningSpeed", true);
+        updateMiningSpeed(tool, tags, originalTags, newTags, "MiningSpeed2", true);
+        updateMiningSpeed(tool, tags, originalTags, newTags, "MiningSpeedHandle", false);
+        updateMiningSpeed(tool, tags, originalTags, newTags, "MiningSpeedExtra", false);
 
         // update harvest level (boosting/xp will be applied later)
         updateTag(newTags, tags, "HarvestLevel");
@@ -172,39 +115,35 @@ public final class ReplacementLogic {
         updateTag(newTags, tags, "BreakChance");
         updateTag(newTags, tags, "Accuracy");
 
-        // stonebound. Shoddy is always present and never changed, we can simply update it.
-        updateTag(newTags, tags, "Shoddy");
+        // stonebound/jagged. Leveling bonuses add to the material value, so keep what was added after crafting
+        float shoddy = tags.getFloat("Shoddy") + newTags.getFloat("Shoddy") - originalTags.getFloat("Shoddy");
+        tags.setFloat("Shoddy", shoddy);
 
-        // update ammo
+        // update ammo, full ammo stays full like an undamaged tool keeps full durability
         if (tool instanceof IAmmo) {
             IAmmo ammo = (IAmmo) tool;
-            if (ammo.getAmmoCount(toolStack) > ammo.getMaxAmmo(toolStack))
+            if (fullAmmo || ammo.getAmmoCount(toolStack) > ammo.getMaxAmmo(toolStack))
                 ammo.setAmmo(ammo.getMaxAmmo(toolStack), toolStack);
         }
 
         // reinforced is kinda complicated, since the actual level you get out of the materials is complicated
         // simply calculate difference between current and newly built tool to know how much has been added afterwards
         int currentReinforced = tags.getInteger("Unbreaking");
-        int oldReinforced = originalTool.getTagCompound().getCompoundTag("InfiTool").getInteger("Unbreaking");
+        int oldReinforced = originalTags.getInteger("Unbreaking");
         int newReinforced = newTags.getInteger("Unbreaking");
         newReinforced += currentReinforced - oldReinforced;
         tags.setInteger("Unbreaking", newReinforced);
         // reinforced tooltip is handled internally by tcon automagically
 
-        // fiery blaze arrows has to be handled separately.. meh
-        if (tool == TinkerWeaponry.arrowAmmo && type == HANDLE) if (oldMaterialId == 3 && partMaterialId != 3) {
-            // remove fiery
-            if (tags.getInteger("Fiery") > 5) tags.setInteger("Fiery", tags.getInteger("Fiery") - 5);
-            else tags.removeTag("Fiery");
-        } else if (partMaterialId == 3 && oldMaterialId != 3) {
-            // add fiery
-            tags.setInteger("Fiery", 5);
-        }
+        // fiery from blaze arrow shafts, keep what the blaze modifier added after crafting
+        int fiery = tags.getInteger("Fiery") + newTags.getInteger("Fiery") - originalTags.getInteger("Fiery");
+        if (fiery > 0) tags.setInteger("Fiery", fiery);
+        else tags.removeTag("Fiery");
 
         // material tooltips are handled by tcon internally
 
-        // redstone modifier
-        reapplyRedstone(tags, toolStack);
+        // redstone modifier on bows
+        reapplyWindup(tags, toolStack);
         // quartz/attack modifier
         reapplyAttack(tags, toolStack);
         // silktouch
@@ -212,9 +151,13 @@ public final class ReplacementLogic {
 
         if (Config.removeMobHeadOnPartReplacement && type == HEAD) removeMobHeadModifier(tags);
 
-        // if boosted, remove boost tag
-        // you're removing the head that had the reinforced tips or w/e after all
-        if (tags.hasKey("GemBoost")) tags.removeTag("GemBoost");
+        if (tags.hasKey("GemBoost")) {
+            // if boosted, remove boost tag
+            // you're removing the head that had the reinforced tips or w/e after all
+            if (type == HEAD) tags.removeTag("GemBoost");
+            // the harvest level only comes from the head, so reapply the boost on top of the rebuilt one
+            else tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + tags.getInteger("GemBoost"));
+        }
 
         // if boosted by vanilla diamond modifier, then we have to respect that if vanilla tcon allows harvestlevel
         // change
@@ -251,26 +194,28 @@ public final class ReplacementLogic {
         }
 
         // handle boost leveling/xp
-        if (LevelingLogic.hasBoostXp(tags) && Config.levelingPickaxeBoost) {
-            float newRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
-            float xp = LevelingLogic.getBoostXp(tags);
+        if (LevelingLogic.hasBoostXp(tags)) {
+            if (Config.levelingPickaxeBoost) {
+                float newRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
+                float xp = LevelingLogic.getBoostXp(tags);
 
-            // apply transition
-            xp *= newRequiredBoostXp / (float) oldRequiredBoostXp;
+                // apply transition
+                xp *= newRequiredBoostXp / (float) oldRequiredBoostXp;
 
-            // xp penality?
-            if (Config.partReplacementBoostXpPenality > 0 && type == HEAD) {
-                if (LevelingLogic.isBoosted(tags)) {
-                    tags.setBoolean(LevelingLogic.TAG_IS_BOOSTED, false);
-                    xp = newRequiredBoostXp;
+                // xp penality?
+                if (Config.partReplacementBoostXpPenality > 0 && type == HEAD) {
+                    if (LevelingLogic.isBoosted(tags)) {
+                        tags.setBoolean(LevelingLogic.TAG_IS_BOOSTED, false);
+                        xp = newRequiredBoostXp;
+                    }
+
+                    xp *= (100.0f - Config.partReplacementBoostXpPenality) / 100.0f;
                 }
 
-                xp *= (100.0f - Config.partReplacementBoostXpPenality) / 100.0f;
+                tags.setLong(LevelingLogic.TAG_BOOST_EXP, Math.round(xp));
             }
 
-            tags.setLong(LevelingLogic.TAG_BOOST_EXP, Math.round(xp));
-
-            // already full xp?
+            // already full xp, or boosted by a mob head?
             if (LevelingLogic.isBoosted(tags)) tags.setInteger("HarvestLevel", tags.getInteger("HarvestLevel") + 1);
         }
         // The original tool did not have mining XP boost. Check if the new part should have it.
@@ -298,18 +243,47 @@ public final class ReplacementLogic {
         if (to.hasKey(tag)) to.setTag(tag, from.getTag(tag));
     }
 
-    // strips the redstone modifier off a tool and reapplies it (to get the correct mining level modification)
-    private static void reapplyRedstone(NBTTagCompound tags, ItemStack itemStack) {
+    // keeps what was added to a mining speed after crafting
+    // redstone's bonus depends on how much was added at once, so it can't be reapplied exactly
+    private static void updateMiningSpeed(ToolCore tool, NBTTagCompound tags, NBTTagCompound originalTags,
+            NBTTagCompound newTags, String key, boolean silkTouchAffected) {
+        if (!tags.hasKey(key)) return;
+
+        int added = tags.getInteger(key) - originalTags.getInteger(key);
+        // silk touch can't go below 0, so on slow materials the redstone bonus may be partly hidden.
+        // estimate it as if it was added one by one instead
+        if (silkTouchAffected && tags.hasKey("Silk Touch") && originalTags.getInteger(key) < 300)
+            added = getRedstoneSpeedBonus(tool, tags) - 300;
+
+        tags.setInteger(key, Math.max(newTags.getInteger(key) + added, 0));
+    }
+
+    // mining speed added by the redstone modifier if it was added one by one, see ModRedstone
+    private static int getRedstoneSpeedBonus(ToolCore tool, NBTTagCompound tags) {
+        if (!tags.hasKey("Redstone")) return 0;
+
+        int partBonus = 0;
+        if (tool.durabilityTypeHandle() == 2) partBonus += 2;
+        if (tool.durabilityTypeAccessory() == 2) partBonus += 2;
+        if (tool.durabilityTypeExtra() == 2) partBonus += 2;
+
+        int redstone = tags.getIntArray("Redstone")[0];
+        int bonus = 0;
+        for (int i = 1; i <= redstone; i++) bonus += 8 + (i - 1) / 50 * 2 + partBonus;
+        return bonus;
+    }
+
+    // strips the windup (redstone on bows) modifier off a tool and reapplies it (to get the correct draw speed)
+    private static void reapplyWindup(NBTTagCompound tags, ItemStack itemStack) {
         // only do if we actually have redstone
         if (!tags.hasKey("Redstone")) return;
 
         int modifiers = tags.getInteger("Modifiers"); // backup modifiers
 
-        // find the redstone modifier
-        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) if (mod instanceof ModRedstone) {
-            ModRedstone modRedstone = (ModRedstone) mod;
-            if (modRedstone instanceof ModXpAwareRedstone)
-                modRedstone = ((ModXpAwareRedstone) modRedstone).originalModifier;
+        // find the windup modifier, tools share the Redstone key but their speed is kept by updateMiningSpeed
+        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) if (mod instanceof ModWindup) {
+            ModWindup modWindup = (ModWindup) mod;
+            if (!modWindup.validType((ToolCore) itemStack.getItem())) continue;
             int[] keyPair = tags.getIntArray("Redstone");
             // get amount of redstone applied
             int rLvl = keyPair[0];
@@ -322,17 +296,16 @@ public final class ReplacementLogic {
             tags.removeTag("ModifierTip" + tipIndex);
 
             // reapply redstone
-            while (rLvl-- > 0) modRedstone.modify(new ItemStack[] { new ItemStack(Items.redstone) }, itemStack); // tags
-                                                                                                                 // belong
-                                                                                                                 // to
-                                                                                                                 // oldTool
+            // tags belong to oldTool
+            while (rLvl-- > 0) modWindup.modify(new ItemStack[] { new ItemStack(Items.redstone) }, itemStack);
+            break;
         }
 
         // restore modifiers
         tags.setInteger("Modifiers", modifiers);
     }
 
-    // same as reapplyRedstone but for Attack modifier
+    // same as reapplyWindup but for Attack modifier
     private static void reapplyAttack(NBTTagCompound tags, ItemStack itemStack) {
         // only do if we actually have attack modifier
         if (!tags.hasKey("ModAttack")) return;
@@ -364,7 +337,7 @@ public final class ReplacementLogic {
         tags.setInteger("Modifiers", modifiers);
     }
 
-    // Reapplies the changes to stats done by the silktouch modifier
+    // Reapplies the attack change done by the silktouch modifier, mining speed is kept by updateMiningSpeed
     private static void reapplySilktouch(NBTTagCompound tags, ItemStack itemStack) {
         // only do if we actually have attack modifier
         if (!tags.hasKey("Silk Touch")) return;
@@ -373,18 +346,6 @@ public final class ReplacementLogic {
         attack -= 3;
         if (attack < 0) attack = 0;
         tags.setInteger("Attack", attack);
-
-        int miningSpeed = tags.getInteger("MiningSpeed");
-        miningSpeed -= 300;
-        if (miningSpeed < 0) miningSpeed = 0;
-        tags.setInteger("MiningSpeed", miningSpeed);
-
-        if (tags.hasKey("MiningSpeed2")) {
-            int miningSpeed2 = tags.getInteger("MiningSpeed2");
-            miningSpeed2 -= 300;
-            if (miningSpeed2 < 0) miningSpeed2 = 0;
-            tags.setInteger("MiningSpeed2", miningSpeed2);
-        }
     }
 
     // removes the mobhead modifier and rendering
@@ -452,77 +413,68 @@ public final class ReplacementLogic {
     }
 
     /**
-     * Checks if the material has an extra modifier.
+     * Bolts are built from the dual material bolt core (head) and the fletching (handle).
      */
-    public static boolean hasExtraModifier(int materialId) {
-        return materialId == TinkerTools.MaterialID.Paper || materialId == MaterialID.Thaumium;
+    public static PartTypes getBuildPartType(ToolCore tool, PartTypes type) {
+        if (tool != TinkerWeaponry.boltAmmo) return type;
+        return type == ACCESSORY ? HANDLE : HEAD;
     }
 
     /**
-     * Returns true if the given material ids are valid for an "all magic wood" tool
+     * Builds the tool from its current parts, and with the given part exchanged. Building fires the regular craft
+     * events, so material bonuses (paper, thaumium, magical wood, ...) are the same as on a freshly crafted tool.
+     *
+     * @param type Where the new part goes, as returned by {@link #getBuildPartType}
+     * @return The original and the new tool, or null if either can't be built
      */
-    public static boolean isAllMagicWood(EnumMap<PartTypes, Integer> map) {
-        if (!IguanaToolPartReplacing.extraUtilsLoaded) return false;
-        int magicWoodId = ExtraUtils.tcon_magical_wood_id;
-        for (Entry<PartTypes, Integer> entry : map.entrySet()) {
-            boolean allowsMat0 = entry.getKey() == ACCESSORY || entry.getKey() == EXTRA;
-            int value = entry.getValue();
-            boolean isValid = value == magicWoodId || (value <= 0 && allowsMat0);
-            if (!isValid) return false;
+    public static ItemStack[] rebuildTool(ToolCore tool, NBTTagCompound tags, PartTypes type, ItemStack partStack) {
+        ItemStack headStack = null;
+        ItemStack handleStack = null;
+        ItemStack accessoryStack = null;
+        ItemStack extraStack = null;
+
+        if (getPart(tool, HEAD) != null)
+            headStack = new ItemStack(getPart(tool, HEAD), 1, getToolPartMaterial(tags, HEAD));
+        if (getPart(tool, HANDLE) != null)
+            handleStack = new ItemStack(getPart(tool, HANDLE), 1, getToolPartMaterial(tags, HANDLE));
+        if (getPart(tool, ACCESSORY) != null)
+            accessoryStack = new ItemStack(getPart(tool, ACCESSORY), 1, getToolPartMaterial(tags, ACCESSORY));
+        if (getPart(tool, EXTRA) != null)
+            extraStack = new ItemStack(getPart(tool, EXTRA), 1, getToolPartMaterial(tags, EXTRA));
+
+        // extra hack for bolt crafting..
+        if (tool == TinkerWeaponry.boltAmmo) {
+            headStack = DualMaterialToolPart.createDualMaterial(
+                    TinkerWeaponry.partBolt,
+                    getToolPartMaterial(tags, HANDLE),
+                    getToolPartMaterial(tags, HEAD));
+            handleStack = accessoryStack;
+            accessoryStack = null;
         }
-        return true;
-    }
 
-    public static int getResultingModifierCount(ToolCore tool, int modifiers, NBTTagCompound tags, int oldMatId,
-            int newMatId, PartTypes partType) {
-        if (oldMatId == newMatId) return modifiers;
-        if (hasExtraModifier(oldMatId)) modifiers--;
-        if (hasExtraModifier(newMatId)) modifiers++;
+        ItemStack originalTool = ToolBuilder.instance
+                .buildTool(headStack, handleStack, accessoryStack, extraStack, "Original Tool");
+        if (originalTool == null) return null;
 
-        // Handle magic wood modifiers
-        if (IguanaToolPartReplacing.extraUtilsLoaded && Config.partReplacementHandleMagicalWood) {
-            int magicWoodId = ExtraUtils.tcon_magical_wood_id;
-            int extraModifiers = tool == TinkerTools.battlesign ? 11 : 8;
-            EnumMap<PartTypes, Integer> map = new EnumMap<>(PartTypes.class);
-            int oldToolMagicWoodCount = 0;
-            for (PartTypes type : PartTypes.values()) {
-                int partId = getToolPartMaterial(tags, type);
-                if (partId == magicWoodId) oldToolMagicWoodCount++;
-                map.put(type, partId);
-            }
-            boolean wasUniformMagicalWood = isAllMagicWood(map); // The past
-            map.put(partType, newMatId);
-            boolean isUniformMagicalWood = isAllMagicWood(map); // The present
+        if (type == HEAD && headStack != null) headStack = partStack;
+        if (type == HANDLE && handleStack != null) handleStack = partStack;
+        if (type == ACCESSORY && accessoryStack != null) accessoryStack = partStack;
+        if (type == EXTRA && extraStack != null) extraStack = partStack;
 
-            if (wasUniformMagicalWood == isUniformMagicalWood) {
-                // If it's a full magical wood tool, don't change the modifier count
-                if (!wasUniformMagicalWood) {
-                    if (oldMatId == magicWoodId) {
-                        modifiers--;
-                    } else if (newMatId == magicWoodId) {
-                        modifiers++;
-                    }
-                }
-                // Head or handle changed
-            } else if (wasUniformMagicalWood) {
-                modifiers -= extraModifiers - oldToolMagicWoodCount;
-                if (oldMatId == magicWoodId) modifiers--;
-            } else {
-                modifiers += extraModifiers - oldToolMagicWoodCount;
-            }
-        }
-        return modifiers;
+        ItemStack newTool = ToolBuilder.instance
+                .buildTool(headStack, handleStack, accessoryStack, extraStack, "Modified Tool");
+        if (newTool == null) return null;
+
+        return new ItemStack[] { originalTool, newTool };
     }
 
     /**
-     * Bolts swap head and handle at once, so the handle lookup has to see the new head.
+     * Keeps the modifiers spent or gained since crafting, and applies the difference in crafting bonuses between the
+     * original and the new tool.
      */
-    public static int getResultingBoltModifierCount(ToolCore tool, int modifiers, NBTTagCompound tags, int oldHeadId,
-            int newHeadId, int oldHandleId, int newHandleId) {
-        modifiers = getResultingModifierCount(tool, modifiers, tags, oldHeadId, newHeadId, HEAD);
-        NBTTagCompound swapped = (NBTTagCompound) tags.copy();
-        swapped.setInteger("Head", newHeadId);
-        return getResultingModifierCount(tool, modifiers, swapped, oldHandleId, newHandleId, HANDLE);
+    public static int getResultingModifierCount(NBTTagCompound tags, NBTTagCompound originalTags,
+            NBTTagCompound newTags) {
+        return tags.getInteger("Modifiers") + newTags.getInteger("Modifiers") - originalTags.getInteger("Modifiers");
     }
 
     /**

@@ -2,7 +2,6 @@ package iguanaman.iguanatweakstconstruct.replacing;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -17,12 +16,8 @@ import tconstruct.library.crafting.ModifyBuilder;
 @Pulse(id = Reference.PULSE_REPLACING, description = "Replace parts of tools")
 public class IguanaToolPartReplacing {
 
-    public static boolean extraUtilsLoaded;
-
     @Handler
-    public void preInit(FMLPreInitializationEvent event) {
-        extraUtilsLoaded = Loader.isModLoaded("ExtraUtilities");
-    }
+    public void preInit(FMLPreInitializationEvent event) {}
 
     @Handler
     public void init(FMLInitializationEvent event) {
