@@ -87,7 +87,8 @@ public final class ReplacementLogic {
         int bonus = tags.getInteger("BonusDurability"); // not changed through material, modifier
         float modDur = tags.getFloat("ModDurability"); // not changed through material, modifier
 
-        int total = Math.max((int) ((base + bonus) * (modDur + 1f)), 1);
+        // long so maxed out durabilities don't wrap around, float multiply like tcon's ModDurability
+        int total = Math.max(ToolBuilder.clampDurability((long) (((long) base + bonus) * (modDur + 1f))), 1);
         tags.setInteger("BaseDurability", base);
         tags.setInteger("TotalDurability", total);
 

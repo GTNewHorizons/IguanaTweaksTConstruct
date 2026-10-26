@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    api("com.github.GTNewHorizons:TinkersConstruct:1.14.91-GTNH:dev")
+    api("com.github.GTNewHorizons:TinkersConstruct:1.14.121-GTNH:dev")
     api("com.github.GTNewHorizons:NotEnoughItems:2.8.102-GTNH:dev")
     compileOnly("com.github.GTNewHorizons:TinkersGregworks:GTNH-1.0.35:dev")
     compileOnly("com.github.GTNewHorizons:Railcraft:9.17.26:dev")
