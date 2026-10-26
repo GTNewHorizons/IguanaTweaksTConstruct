@@ -7,6 +7,7 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.detectAdditionalPartType;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.exchangeToolPart;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingBoltModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getToolPartMaterial;
 
@@ -103,6 +104,10 @@ public class ModPartReplacement extends ItemModifier {
             else if (recipe.validExtra(item)) partType = EXTRA;
             else return false;
 
+            if (partType == HEAD && tool == TinkerWeaponry.boltAmmo && item instanceof DualMaterialToolPart) {
+                partType = HANDLE;
+            }
+
             replacementPartItem = item;
             partIndex = i;
         }
@@ -133,25 +138,22 @@ public class ModPartReplacement extends ItemModifier {
             if (TConstructRegistry.getMaterial(newMatId).harvestLevel == 0 && LevelingLogic.hasBoostXp(tags))
                 return false;
 
+        boolean sameMaterial = newMatId == oldMatId;
+
         // do we have enough modifiers left if we exchange this part?
-        // This probably doesn't work right for bolts (which replace two parts at a time).
-        modifiers = getResultingModifierCount(tool, tags, oldMatId, newMatId, partType);
+        // Special case for bolts, which have two materials.
+        if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
+            int newHeadId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
+            int oldHeadId = getToolPartMaterial(tags, HEAD);
+
+            modifiers = getResultingBoltModifierCount(tool, modifiers, tags, oldHeadId, newHeadId, oldMatId, newMatId);
+            sameMaterial = sameMaterial && newHeadId == oldHeadId;
+        } else {
+            modifiers = getResultingModifierCount(tool, modifiers, tags, oldMatId, newMatId, partType);
+        }
         if (modifiers < 0) return false;
 
-        // is it the same material as the one we want to replace?
-        if (newMatId == oldMatId) {
-            // Special case for bolts, which have two materials.
-            if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
-                int newHeadMatId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
-                int oldHeadMatId = getToolPartMaterial(tags, HEAD);
-
-                return newHeadMatId != oldHeadMatId;
-            }
-
-            return false;
-        }
-
-        return true;
+        return !sameMaterial;
     }
 
     @Override

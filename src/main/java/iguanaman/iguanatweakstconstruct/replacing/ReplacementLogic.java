@@ -109,6 +109,26 @@ public final class ReplacementLogic {
         long oldRequiredXp = LevelingLogic.getRequiredXp(toolStack, tags);
         long oldRequiredBoostXp = LevelingLogic.getRequiredBoostXp(toolStack);
 
+        int modifiers = tags.getInteger("Modifiers");
+        // special case for bolts
+        if (tool == TinkerWeaponry.boltAmmo && partStack.getItem() instanceof DualMaterialToolPart) {
+            int oldHandleId = getToolPartMaterial(tags, HANDLE);
+            int newHandleId = ((DualMaterialToolPart) partStack.getItem()).getMaterialID(partStack);
+
+            modifiers = getResultingBoltModifierCount(
+                    tool,
+                    modifiers,
+                    tags,
+                    oldMaterialId,
+                    partMaterialId,
+                    oldHandleId,
+                    newHandleId);
+        } else {
+            modifiers = getResultingModifierCount(tool, modifiers, tags, oldMaterialId, partMaterialId, type);
+        }
+        // Shouldn't happen, but just in case
+        tags.setInteger("Modifiers", Math.max(modifiers, 0));
+
         // update part materials and rendering
         updateTag(newTags, tags, "Head");
         updateTag(newTags, tags, "RenderHead");
@@ -171,8 +191,6 @@ public final class ReplacementLogic {
         tags.setInteger("Unbreaking", newReinforced);
         // reinforced tooltip is handled internally by tcon automagically
 
-        // now for the scary part... handle material traits >_<
-        handleMaterialTraits(tool, tags, oldMaterialId, partMaterialId, type);
         // fiery blaze arrows has to be handled separately.. meh
         if (tool == TinkerWeaponry.arrowAmmo && type == HANDLE) if (oldMaterialId == 3 && partMaterialId != 3) {
             // remove fiery
@@ -278,17 +296,6 @@ public final class ReplacementLogic {
     // target
     private static void updateTag(NBTTagCompound from, NBTTagCompound to, String tag) {
         if (to.hasKey(tag)) to.setTag(tag, from.getTag(tag));
-    }
-
-    private static void handleMaterialTraits(ToolCore tool, NBTTagCompound tags, int oldMaterialId, int newMaterialId,
-            PartTypes partType) {
-        // nothing to do if they're the same :)
-        if (oldMaterialId == newMaterialId) return;
-
-        int modifiers = getResultingModifierCount(tool, tags, oldMaterialId, newMaterialId, partType);
-        // Shouldn't happen, but just in case
-        if (modifiers < 0) modifiers = 0;
-        tags.setInteger("Modifiers", modifiers);
     }
 
     // strips the redstone modifier off a tool and reapplies it (to get the correct mining level modification)
@@ -466,22 +473,20 @@ public final class ReplacementLogic {
         return true;
     }
 
-    public static int getResultingModifierCount(ToolCore tool, NBTTagCompound tags, int oldMatId, int newMatId,
-            PartTypes partType) {
-        int modifiers = tags.getInteger("Modifiers");
+    public static int getResultingModifierCount(ToolCore tool, int modifiers, NBTTagCompound tags, int oldMatId,
+            int newMatId, PartTypes partType) {
         if (oldMatId == newMatId) return modifiers;
         if (hasExtraModifier(oldMatId)) modifiers--;
         if (hasExtraModifier(newMatId)) modifiers++;
 
         // Handle magic wood modifiers
         if (IguanaToolPartReplacing.extraUtilsLoaded && Config.partReplacementHandleMagicalWood) {
+            int magicWoodId = ExtraUtils.tcon_magical_wood_id;
             int extraModifiers = tool == TinkerTools.battlesign ? 11 : 8;
             EnumMap<PartTypes, Integer> map = new EnumMap<>(PartTypes.class);
-            int magicWoodId = ExtraUtils.tcon_magical_wood_id;
             int oldToolMagicWoodCount = 0;
             for (PartTypes type : PartTypes.values()) {
-                // We use oldMatId as tags could be from post-tool part swapping
-                int partId = type == partType ? oldMatId : getToolPartMaterial(tags, type);
+                int partId = getToolPartMaterial(tags, type);
                 if (partId == magicWoodId) oldToolMagicWoodCount++;
                 map.put(type, partId);
             }
@@ -507,6 +512,17 @@ public final class ReplacementLogic {
             }
         }
         return modifiers;
+    }
+
+    /**
+     * Bolts swap head and handle at once, so the handle lookup has to see the new head.
+     */
+    public static int getResultingBoltModifierCount(ToolCore tool, int modifiers, NBTTagCompound tags, int oldHeadId,
+            int newHeadId, int oldHandleId, int newHandleId) {
+        modifiers = getResultingModifierCount(tool, modifiers, tags, oldHeadId, newHeadId, HEAD);
+        NBTTagCompound swapped = (NBTTagCompound) tags.copy();
+        swapped.setInteger("Head", newHeadId);
+        return getResultingModifierCount(tool, modifiers, swapped, oldHandleId, newHandleId, HANDLE);
     }
 
     /**
