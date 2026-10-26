@@ -7,6 +7,7 @@ import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTy
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.PartTypes.HEAD;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.detectAdditionalPartType;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.exchangeToolPart;
+import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingBoltModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getResultingModifierCount;
 import static iguanaman.iguanatweakstconstruct.replacing.ReplacementLogic.getToolPartMaterial;
 
@@ -137,24 +138,20 @@ public class ModPartReplacement extends ItemModifier {
             if (TConstructRegistry.getMaterial(newMatId).harvestLevel == 0 && LevelingLogic.hasBoostXp(tags))
                 return false;
 
-        // do we have enough modifiers left if we exchange this part?
-        modifiers = getResultingModifierCount(tool, modifiers, tags, oldMatId, newMatId, partType);
-        if (modifiers < 0) return false;
-
         boolean sameMaterial = newMatId == oldMatId;
 
+        // do we have enough modifiers left if we exchange this part?
         // Special case for bolts, which have two materials.
         if (tool == TinkerWeaponry.boltAmmo && replacementPartItem instanceof DualMaterialToolPart) {
-            int newHandleId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
-            int oldHandleId = getToolPartMaterial(tags, HEAD);
+            int newHeadId = ((DualMaterialToolPart) replacementPartItem).getMaterialID2(parts[partIndex]);
+            int oldHeadId = getToolPartMaterial(tags, HEAD);
 
-            modifiers = getResultingModifierCount(tool, modifiers, tags, oldHandleId, newHandleId, HEAD);
-            if (modifiers < 0) return false;
-
-            if (sameMaterial) {
-                sameMaterial = newHandleId == oldHandleId;
-            }
+            modifiers = getResultingBoltModifierCount(tool, modifiers, tags, oldHeadId, newHeadId, oldMatId, newMatId);
+            sameMaterial = sameMaterial && newHeadId == oldHeadId;
+        } else {
+            modifiers = getResultingModifierCount(tool, modifiers, tags, oldMatId, newMatId, partType);
         }
+        if (modifiers < 0) return false;
 
         return !sameMaterial;
     }
