@@ -29,11 +29,10 @@ public class ToolUpdateRecipe implements IRecipe {
             // empty slot
             if (slot == null) continue;
 
-            // is it the tool?
-            if (slot.getItem() instanceof ToolCore) {
-                if (tool != null) return false;
-                tool = slot;
-            }
+            // only the tool is allowed, anything else would be consumed
+            if (!(slot.getItem() instanceof ToolCore)) return false;
+            if (tool != null) return false;
+            tool = slot;
         }
         // no tool found?
         if (tool == null) return false;
