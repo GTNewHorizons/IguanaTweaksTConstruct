@@ -17,6 +17,8 @@ import tconstruct.modifiers.tools.ModExtraModifier;
  */
 public class ModBonusModifierSlots extends ModExtraModifier {
 
+    public static final String KEY_PREFIX = "BonusModifierSlots_";
+
     private final int slots;
 
     public ModBonusModifierSlots(ItemStack[] items, String dataKey, int slots) {
@@ -43,6 +45,12 @@ public class ModBonusModifierSlots extends ModExtraModifier {
             return null;
         }
 
+        String key = parts[0].trim();
+        if (!key.matches("[A-Za-z0-9_]+")) {
+            Log.error("Bonus modifier slot key can only contain letters, numbers and _: " + entry);
+            return null;
+        }
+
         int slots;
         try {
             slots = Integer.parseInt(parts[1].trim());
@@ -65,7 +73,8 @@ public class ModBonusModifierSlots extends ModExtraModifier {
             items.add(stack);
         }
 
-        return new ModBonusModifierSlots(items.toArray(new ItemStack[0]), parts[0].trim(), slots);
+        // prefixed so it can't collide with other InfiTool tags
+        return new ModBonusModifierSlots(items.toArray(new ItemStack[0]), KEY_PREFIX + key, slots);
     }
 
     private static ItemStack parseItem(String id) {

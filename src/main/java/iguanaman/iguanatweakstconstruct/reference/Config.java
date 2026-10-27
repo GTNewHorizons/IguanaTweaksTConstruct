@@ -478,8 +478,8 @@ public class Config {
                 new String[0],
                 "One time use modifiers that add modifier slots, like the Nether Star. Can't be used again on the same tool, even after part replacement.\n"
                         + "Format: key;slots;item;item... with items as modid:name or modid:name:meta (* for any meta). Each item is one ingredient, repeat it to require more.\n"
-                        + "The key is stored on the tool, so it has to be unique and must not change once used. Keep it to 3 items to fit the Tool Station.\n"
-                        + "Example: MagicalWoodFree;2;ExtraUtilities:decorativeBlock1:8;minecraft:nether_star\n"
+                        + "The key (letters, numbers and _) is stored on the tool as BonusModifierSlots_<key>, so it has to be unique and must not change once used. Keep it to 3 items to fit the Tool Station.\n"
+                        + "Example: MagicalWood;2;ExtraUtilities:decorativeBlock1:8;minecraft:nether_star\n"
                         + "Not affected by disableBonusModifierModifiers.");
 
         // repair
