@@ -70,7 +70,9 @@ public class ModBonusModifierSlots extends ModExtraModifier {
                 Log.error("Unknown item " + parts[i].trim() + " in bonus modifier slot entry: " + entry);
                 return null;
             }
-            items.add(stack);
+            // matching takes the first fitting ingredient, so exact meta has to come before wildcards
+            if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) items.add(stack);
+            else items.add(0, stack);
         }
 
         // prefixed so it can't collide with other InfiTool tags
