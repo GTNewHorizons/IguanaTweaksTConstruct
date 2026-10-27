@@ -32,6 +32,7 @@ import iguanaman.iguanatweakstconstruct.tweaks.handlers.VanillaBowNerfHandler;
 import iguanaman.iguanatweakstconstruct.tweaks.handlers.VanillaHoeNerfHandler;
 import iguanaman.iguanatweakstconstruct.tweaks.handlers.VanillaSwordNerfHandler;
 import iguanaman.iguanatweakstconstruct.tweaks.handlers.VanillaToolNerfHandler;
+import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModBonusModifierSlots;
 import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModFluxExpensive;
 import iguanaman.iguanatweakstconstruct.tweaks.modifiers.ModLimitedToolRepair;
 import iguanaman.iguanatweakstconstruct.util.Log;
@@ -217,6 +218,9 @@ public class IguanaTweaks {
 
         if (Config.disableBonusMods) removeBonusModifierModifiers();
 
+        // after removing the bonus modifiers, so the configured ones stay
+        registerBonusModifierSlots();
+
         if (Config.maxToolRepairs > -1) limitToolRepair();
 
         // has to be added after exchanging the repair modifier, to obtain the correct cache
@@ -287,6 +291,23 @@ public class IguanaTweaks {
             if (mod instanceof ModExtraModifier) {
                 iter.remove();
             }
+        }
+    }
+
+    private void registerBonusModifierSlots() {
+        Set<String> keys = new HashSet<String>();
+        for (ItemModifier mod : ModifyBuilder.instance.itemModifiers) keys.add(mod.key);
+
+        for (String entry : Config.bonusModifierSlots) {
+            ModBonusModifierSlots mod = ModBonusModifierSlots.fromConfig(entry);
+            if (mod == null) continue;
+            if (!keys.add(mod.key)) {
+                Log.error("Bonus modifier slot key " + mod.key + " is already used, skipping: " + entry);
+                continue;
+            }
+
+            ModifyBuilder.registerModifier(mod);
+            Log.debug("Registered bonus modifier slots: " + entry);
         }
     }
 

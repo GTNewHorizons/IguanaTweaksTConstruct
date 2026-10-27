@@ -88,6 +88,7 @@ public class Config {
     public static boolean moreExpensiveSilkyCloth;
     public static boolean moreExpensiveSilkyJewel;
     public static boolean moreModifiersForFlux;
+    public static String[] bonusModifierSlots;
     public static int maxToolRepairs;
     // public static float repairAmountMultiplier;
 
@@ -471,6 +472,15 @@ public class Config {
                 CATEGORY_Tweaks,
                 true,
                 "Flux modifier requires 2 Modifiers. Because that stuff is broken.");
+        bonusModifierSlots = configfile.getStringList(
+                "bonusModifierSlots",
+                CATEGORY_Tweaks,
+                new String[0],
+                "One time use modifiers that add modifier slots, like the Nether Star. Can't be used again on the same tool, even after part replacement.\n"
+                        + "Format: key;slots;item;item... with items as modid:name or modid:name:meta (* for any meta). Each item is one ingredient, repeat it to require more.\n"
+                        + "The key is stored on the tool, so it has to be unique and must not change once used. Keep it to 3 items to fit the Tool Station.\n"
+                        + "Example: MagicalWoodFree;2;ExtraUtilities:decorativeBlock1:8;minecraft:nether_star\n"
+                        + "Not affected by disableBonusModifierModifiers.");
 
         // repair
         maxToolRepairs = configfile.getInt(
