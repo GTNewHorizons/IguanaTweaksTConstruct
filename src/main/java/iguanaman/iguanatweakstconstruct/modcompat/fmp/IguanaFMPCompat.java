@@ -1,7 +1,5 @@
 package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 
-import java.lang.reflect.Field;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,24 +69,18 @@ public class IguanaFMPCompat {
 
             // FMP saw
             if (o instanceof ItemSaw) {
-                try {
-                    Field hlvlField = ItemSaw.class.getDeclaredField("harvestLevel");
-                    hlvlField.setAccessible(true);
-                    Integer old = (Integer) hlvlField.get(o);
-                    Integer hlvl = HarvestLevelTweaks.getUpdatedHarvestLevel(old);
+                ItemSaw fmpSaw = (ItemSaw) o;
+                int old = fmpSaw.harvestLevel();
+                int hlvl = HarvestLevelTweaks.getUpdatedHarvestLevel(old);
 
-                    // update the value
-                    hlvlField.set(o, hlvl);
-                    if (Config.logMiningLevelChanges) Log.info(
-                            String.format(
-                                    "Changed Cutting Strength for %s from %d to %d",
-                                    item.getUnlocalizedName(),
-                                    old,
-                                    hlvl));
-                } catch (Exception e) {
-                    // something failed :(
-                    Log.error(String.format("Couldn't update FMP saw %s", item.getUnlocalizedName()));
-                }
+                // update the value
+                fmpSaw.setHarvestLevel(hlvl);
+                if (Config.logMiningLevelChanges) Log.info(
+                        String.format(
+                                "Changed Cutting Strength for %s from %d to %d",
+                                item.getUnlocalizedName(),
+                                old,
+                                hlvl));
             }
         }
 

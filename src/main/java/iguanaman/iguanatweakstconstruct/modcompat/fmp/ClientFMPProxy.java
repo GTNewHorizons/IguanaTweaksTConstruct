@@ -3,18 +3,18 @@ package iguanaman.iguanatweakstconstruct.modcompat.fmp;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import codechicken.microblock.handler.MicroblockProxy$;
+import codechicken.microblock.handler.MicroblockProxy;
 import iguanaman.iguanatweakstconstruct.reference.Reference;
 
 public class ClientFMPProxy extends CommonFMPProxy {
 
     @Override
     public void updateSawRenderers() {
-        Item stoneSaw = MicroblockProxy$.MODULE$.sawStone();
-        Item ironSaw = MicroblockProxy$.MODULE$.sawIron();
-        Item diamondSaw = MicroblockProxy$.MODULE$.sawDiamond();
+        Item stoneSaw = MicroblockProxy.sawStone();
+        Item ironSaw = MicroblockProxy.sawIron();
+        Item diamondSaw = MicroblockProxy.sawDiamond();
 
-        if (MicroblockProxy$.MODULE$.useSawIcons()) {
+        if (MicroblockProxy.useSawIcons()) {
             IguanaFMPCompat.arditeSaw.setTextureName(Reference.resource("sawArdite"));
             IguanaFMPCompat.cobaltSaw.setTextureName(Reference.resource("sawCobalt"));
             IguanaFMPCompat.manyullynSaw.setTextureName(Reference.resource("sawManyullyn"));
