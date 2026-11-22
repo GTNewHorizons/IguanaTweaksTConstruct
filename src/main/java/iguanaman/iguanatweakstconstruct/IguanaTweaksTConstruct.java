@@ -45,7 +45,7 @@ import mantle.pulsar.pulse.PulseMeta;
         name = Reference.MOD_NAME,
         version = "GRADLETOKEN_VERSION",
         dependencies = "required-after:" + Reference.TCON_MOD_ID
-                + "@[1.14.121-GTNH,);after:ForgeMultipart@[1.1.1.321,);after:*")
+                + "@[1.14.121-GTNH,);after:ForgeMultipart@[2.0.0,);after:*")
 public class IguanaTweaksTConstruct {
 
     // The instance of your mod that Forge uses.
